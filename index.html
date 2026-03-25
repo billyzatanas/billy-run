@@ -2,7 +2,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Billy Tap LEADERBOARD 🐱</title>
+<title>Billy Tap ADDICTIVE+ 🐱</title>
 <style>
 body{margin:0;background:linear-gradient(#0f172a,#020617);display:flex;flex-direction:column;align-items:center;justify-content:center;height:100vh;color:#fff;font-family:Arial}
 canvas{background:#1e293b;border-radius:20px}
@@ -20,7 +20,9 @@ button{margin-top:6px;padding:6px 10px;border-radius:10px;border:none;cursor:poi
 
 <button id="upgradeTap">Upgrade Tap</button> <button id="saveScore">Save Score</button> <button id="shareBtn">Share</button>
 
-<div id="leaderboard"></div><script>
+<div id="leaderboard"></div><!-- sonidos más adictivos --><audio id="tap1" src="https://actions.google.com/sounds/v1/cartoon/pop.ogg"></audio> <audio id="tap2" src="https://actions.google.com/sounds/v1/cartoon/wood_plank_flicks.ogg"></audio>
+
+<script>
 const canvas=document.getElementById("gameCanvas");
 const ctx=canvas.getContext("2d");
 
@@ -31,6 +33,9 @@ let energy=100,maxEnergy=100;
 const billyImg=new Image();
 billyImg.src="billy.gif";
 
+const tap1=document.getElementById("tap1");
+const tap2=document.getElementById("tap2");
+
 let billy={x:175,y:250,size:90,scale:1};
 let effects=[];
 let t=0;
@@ -40,14 +45,16 @@ function drawBilly(){
  ctx.translate(billy.x,billy.y);
  ctx.scale(billy.scale,billy.scale);
 
- // recorte circular para evitar fondo cuadrado
+ // glow
+ ctx.shadowColor="#22c55e";
+ ctx.shadowBlur=20;
+
+ // recorte circular
  ctx.beginPath();
  ctx.arc(0,0,billy.size/2,0,Math.PI*2);
- ctx.closePath();
  ctx.clip();
 
  ctx.drawImage(billyImg,-billy.size/2,-billy.size/2,billy.size,billy.size);
-
  ctx.restore();
 }
 
@@ -63,8 +70,8 @@ function updateEffects(){
 }
 
 function animateTap(){
- billy.scale=1.2;
- setTimeout(()=>billy.scale=1,70);
+ billy.scale=1.25;
+ setTimeout(()=>billy.scale=1,60);
 }
 
 function updateUI(){
@@ -83,9 +90,19 @@ canvas.addEventListener("click",()=>{
  let gain=tapPower*multiplier;
  coins+=gain;
  energy-=1;
+
  updateLevel();
  updateUI();
  animateTap();
+
+ // sonido alternado (más adictivo)
+ let s=Math.random()>0.5?tap1:tap2;
+ s.currentTime=0;
+ s.play();
+
+ // vibración móvil
+ if(navigator.vibrate) navigator.vibrate(10);
+
  effects.push({x:billy.x-10,y:billy.y,life:30,value:gain});
 });
 
@@ -101,10 +118,7 @@ setInterval(()=>{
  }
 
 // leaderboard local
-function getScores(){
- return JSON.parse(localStorage.getItem("billyScores")||"[]");
-}
-
+function getScores(){return JSON.parse(localStorage.getItem("billyScores")||"[]");}
 function saveScore(){
  let scores=getScores();
  scores.push(coins);
@@ -113,7 +127,6 @@ function saveScore(){
  localStorage.setItem("billyScores",JSON.stringify(scores));
  renderLeaderboard();
 }
-
 function renderLeaderboard(){
  let scores=getScores();
  let html="<b>Top Players</b><br>";
