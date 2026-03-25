@@ -2,7 +2,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Billy Tap 🐱</title>
+  <title>Billy Tap PRO 🐱</title>
   <style>
     body {
       margin: 0;
@@ -19,98 +19,95 @@
       background: #1e293b;
       border-radius: 20px;
     }
-    #score {
-      margin-bottom: 10px;
-      font-size: 22px;
+    #score { margin-bottom: 6px; font-size: 20px; }
+    #level { margin-bottom: 10px; font-size: 14px; opacity: .8; }
+    button {
+      margin-top: 10px; padding: 8px 14px; border-radius: 12px; border: none; cursor: pointer;
     }
   </style>
 </head>
 <body>
   <div id="score">Coins: 0</div>
-  <canvas id="gameCanvas" width="350" height="500"></canvas>  <script>
+  <div id="level">Level 1 • x1</div>
+  <canvas id="gameCanvas" width="350" height="500"></canvas>
+  <button id="shareBtn">Share on X</button><audio id="tapSound" src="https://actions.google.com/sounds/v1/cartoon/wood_plank_flicks.ogg"></audio>
+
+  <script>
     const canvas = document.getElementById("gameCanvas");
     const ctx = canvas.getContext("2d");
+    const tapSound = document.getElementById("tapSound");
 
     let coins = 0;
+    let level = 1;
+    let multiplier = 1;
 
-    // Billy (circle placeholder for now)
+    const billyImg = new Image();
+    billyImg.src = "https://i.imgur.com/6XKQZQp.png"; // placeholder (puedes cambiar por tu Billy)
+
     let billy = {
       x: 175,
       y: 250,
-      radius: 40,
+      size: 90,
       scale: 1
     };
+
+    let effects = [];
 
     function drawBilly() {
       ctx.save();
       ctx.translate(billy.x, billy.y);
       ctx.scale(billy.scale, billy.scale);
-
-      // body
-      ctx.beginPath();
-      ctx.arc(0, 0, billy.radius, 0, Math.PI * 2);
-      ctx.fillStyle = "#facc15";
-      ctx.fill();
-
-      // eyes
-      ctx.fillStyle = "#000";
-      ctx.beginPath();
-      ctx.arc(-10, -5, 5, 0, Math.PI * 2);
-      ctx.arc(10, -5, 5, 0, Math.PI * 2);
-      ctx.fill();
-
+      ctx.drawImage(billyImg, -billy.size/2, -billy.size/2, billy.size, billy.size);
       ctx.restore();
     }
 
-    function drawCoinEffect(x, y) {
+    function drawEffects() {
       ctx.fillStyle = "#22c55e";
-      ctx.font = "16px Arial";
-      ctx.fillText("+1", x, y);
+      ctx.font = "bold 16px Arial";
+      effects.forEach(e => ctx.fillText(`+${e.value}`, e.x, e.y));
     }
-
-    let effects = [];
 
     function updateEffects() {
-      effects.forEach(e => {
-        e.y -= 1;
-        e.life--;
-      });
+      effects.forEach(e => { e.y -= 1; e.life--; });
       effects = effects.filter(e => e.life > 0);
-    }
-
-    function drawEffects() {
-      effects.forEach(e => {
-        drawCoinEffect(e.x, e.y);
-      });
     }
 
     function animateTap() {
       billy.scale = 1.2;
-      setTimeout(() => {
-        billy.scale = 1;
-      }, 100);
+      setTimeout(() => billy.scale = 1, 80);
     }
 
-    canvas.addEventListener("click", (e) => {
-      coins++;
+    function updateLevel() {
+      level = Math.floor(coins / 50) + 1;
+      multiplier = Math.min(1 + Math.floor(level / 2), 5);
+      document.getElementById("level").innerText = `Level ${level} • x${multiplier}`;
+    }
+
+    canvas.addEventListener("click", () => {
+      let gain = multiplier;
+      coins += gain;
       document.getElementById("score").innerText = "Coins: " + coins;
 
+      updateLevel();
       animateTap();
 
-      effects.push({
-        x: billy.x - 10,
-        y: billy.y,
-        life: 30
-      });
+      tapSound.currentTime = 0;
+      tapSound.play();
+
+      effects.push({ x: billy.x - 10, y: billy.y, life: 30, value: gain });
+    });
+
+    document.getElementById("shareBtn").addEventListener("click", () => {
+      const text = `I farmed ${coins} Billy coins 🐱💰 Can you beat me?`;
+      const url = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`;
+      window.open(url, '_blank');
     });
 
     function loop() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
-
       drawBilly();
       updateEffects();
       drawEffects();
-
       requestAnimationFrame(loop);
     }
 
