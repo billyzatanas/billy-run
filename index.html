@@ -1,120 +1,138 @@
 <!DOCTYPE html><html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Billy Tap ADDICTIVE 🐱</title>
-  <style>
-    body { margin:0; background:linear-gradient(#0f172a,#020617); display:flex; flex-direction:column; align-items:center; justify-content:center; height:100vh; color:#fff; font-family:Arial; }
-    canvas { background:#1e293b; border-radius:20px; }
-    #score { font-size:20px; }
-    #info { font-size:13px; opacity:.8; margin-bottom:6px; }
-    #energyBar { width:200px; height:10px; background:#334155; border-radius:10px; margin:6px 0; overflow:hidden; }
-    #energyFill { height:100%; background:#22c55e; width:100%; }
-    button { margin-top:6px; padding:6px 10px; border-radius:10px; border:none; cursor:pointer; }
-  </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Billy Tap LEADERBOARD 🐱</title>
+<style>
+body{margin:0;background:linear-gradient(#0f172a,#020617);display:flex;flex-direction:column;align-items:center;justify-content:center;height:100vh;color:#fff;font-family:Arial}
+canvas{background:#1e293b;border-radius:20px}
+#score{font-size:20px}
+#info{font-size:13px;opacity:.8}
+#energyBar{width:200px;height:10px;background:#334155;border-radius:10px;margin:6px 0;overflow:hidden}
+#energyFill{height:100%;background:#22c55e;width:100%}
+button{margin-top:6px;padding:6px 10px;border-radius:10px;border:none;cursor:pointer}
+#leaderboard{margin-top:10px;font-size:12px;text-align:left;width:200px}
+</style>
 </head>
 <body><div id="score">Coins: 0</div>
 <div id="info">Level 1 • x1</div>
 <div id="energyBar"><div id="energyFill"></div></div><canvas id="gameCanvas" width="350" height="500"></canvas>
 
-<button id="upgradeTap">Upgrade Tap (+1)</button> <button id="shareBtn">Share</button>
+<button id="upgradeTap">Upgrade Tap</button> <button id="saveScore">Save Score</button> <button id="shareBtn">Share</button>
 
-<script>
-const canvas = document.getElementById("gameCanvas");
-const ctx = canvas.getContext("2d");
+<div id="leaderboard"></div><script>
+const canvas=document.getElementById("gameCanvas");
+const ctx=canvas.getContext("2d");
 
-let coins=0, level=1, multiplier=1;
+let coins=0,level=1,multiplier=1;
 let tapPower=1;
-
-let energy=100;
-let maxEnergy=100;
+let energy=100,maxEnergy=100;
 
 const billyImg=new Image();
-billyImg.src="billy.png"; // usa tu imagen
+billyImg.src="billy.gif";
 
 let billy={x:175,y:250,size:90,scale:1};
 let effects=[];
+let t=0;
 
 function drawBilly(){
-  ctx.save();
-  ctx.translate(billy.x,billy.y);
-  ctx.scale(billy.scale,billy.scale);
-  ctx.drawImage(billyImg,-billy.size/2,-billy.size/2,billy.size,billy.size);
-  ctx.restore();
+ ctx.save();
+ ctx.translate(billy.x,billy.y);
+ ctx.scale(billy.scale,billy.scale);
+ ctx.drawImage(billyImg,-billy.size/2,-billy.size/2,billy.size,billy.size);
+ ctx.restore();
 }
 
 function drawEffects(){
-  ctx.fillStyle="#22c55e";
-  ctx.font="bold 14px Arial";
-  effects.forEach(e=>ctx.fillText(`+${e.value}`,e.x,e.y));
+ ctx.fillStyle="#22c55e";
+ ctx.font="bold 14px Arial";
+ effects.forEach(e=>ctx.fillText(`+${e.value}`,e.x,e.y));
 }
 
 function updateEffects(){
-  effects.forEach(e=>{e.y-=1; e.life--;});
-  effects=effects.filter(e=>e.life>0);
+ effects.forEach(e=>{e.y-=1;e.life--});
+ effects=effects.filter(e=>e.life>0);
 }
 
 function animateTap(){
-  billy.scale=1.15;
-  setTimeout(()=>billy.scale=1,70);
+ billy.scale=1.2;
+ setTimeout(()=>billy.scale=1,70);
 }
 
 function updateUI(){
-  document.getElementById("score").innerText="Coins: "+coins;
-  document.getElementById("info").innerText=`Level ${level} • x${multiplier}`;
-  document.getElementById("energyFill").style.width=(energy/maxEnergy*100)+"%";
+ document.getElementById("score").innerText="Coins: "+coins;
+ document.getElementById("info").innerText=`Level ${level} • x${multiplier}`;
+ document.getElementById("energyFill").style.width=(energy/maxEnergy*100)+"%";
 }
 
 function updateLevel(){
-  level=Math.floor(coins/100)+1;
-  multiplier=1+Math.floor(level/2);
+ level=Math.floor(coins/100)+1;
+ multiplier=1+Math.floor(level/2);
 }
 
 canvas.addEventListener("click",()=>{
-  if(energy<=0) return;
-
-  let gain=tapPower*multiplier;
-  coins+=gain;
-  energy-=2;
-
-  updateLevel();
-  updateUI();
-  animateTap();
-
-  effects.push({x:billy.x-10,y:billy.y,life:25,value:gain});
+ if(energy<=0)return;
+ let gain=tapPower*multiplier;
+ coins+=gain;
+ energy-=1;
+ updateLevel();
+ updateUI();
+ animateTap();
+ effects.push({x:billy.x-10,y:billy.y,life:30,value:gain});
 });
 
-// energía se recarga sola
 setInterval(()=>{
-  energy=Math.min(maxEnergy, energy+1);
-  updateUI();
+ energy=Math.min(maxEnergy,energy+1);
+ updateUI();
 },100);
 
 // upgrade
-document.getElementById("upgradeTap").onclick=()=>{
-  let cost=50*tapPower;
-  if(coins>=cost){
-    coins-=cost;
-    tapPower++;
-    updateUI();
-  }
+ document.getElementById("upgradeTap").onclick=()=>{
+ let cost=50*tapPower;
+ if(coins>=cost){coins-=cost;tapPower++;updateUI();}
+ }
+
+// leaderboard local
+function getScores(){
+ return JSON.parse(localStorage.getItem("billyScores")||"[]");
 }
+
+function saveScore(){
+ let scores=getScores();
+ scores.push(coins);
+ scores.sort((a,b)=>b-a);
+ scores=scores.slice(0,5);
+ localStorage.setItem("billyScores",JSON.stringify(scores));
+ renderLeaderboard();
+}
+
+function renderLeaderboard(){
+ let scores=getScores();
+ let html="<b>Top Players</b><br>";
+ scores.forEach((s,i)=>{html+=`#${i+1} - ${s} coins<br>`});
+ document.getElementById("leaderboard").innerHTML=html;
+}
+
+document.getElementById("saveScore").onclick=saveScore;
 
 // share
  document.getElementById("shareBtn").onclick=()=>{
-  const text=`I farmed ${coins} Billy coins 🐱💰`;
-  window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`,'_blank');
+ const text=`I farmed ${coins} Billy coins 🐱💰 Can you beat me?`;
+ window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`,'_blank');
  }
 
 function loop(){
-  ctx.clearRect(0,0,canvas.width,canvas.height);
-  drawBilly();
-  updateEffects();
-  drawEffects();
-  requestAnimationFrame(loop);
+ ctx.clearRect(0,0,canvas.width,canvas.height);
+ t+=0.05;
+ billy.scale=1+Math.sin(t)*0.05;
+ drawBilly();
+ updateEffects();
+ drawEffects();
+ requestAnimationFrame(loop);
 }
 
 updateUI();
+renderLeaderboard();
 loop();
 </script></body>
 </html>
