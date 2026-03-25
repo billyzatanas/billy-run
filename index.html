@@ -39,7 +39,15 @@ function drawBilly(){
  ctx.save();
  ctx.translate(billy.x,billy.y);
  ctx.scale(billy.scale,billy.scale);
+
+ // recorte circular para evitar fondo cuadrado
+ ctx.beginPath();
+ ctx.arc(0,0,billy.size/2,0,Math.PI*2);
+ ctx.closePath();
+ ctx.clip();
+
  ctx.drawImage(billyImg,-billy.size/2,-billy.size/2,billy.size,billy.size);
+
  ctx.restore();
 }
 
