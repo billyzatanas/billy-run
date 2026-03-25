@@ -1,0 +1,126 @@
+<!DOCTYPE html><html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Billy Run 🐱</title>
+  <style>
+    body {
+      margin: 0;
+      background: #0f172a;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      font-family: Arial, sans-serif;
+      color: white;
+    }
+    canvas {
+      background: #1e293b;
+      border-radius: 16px;
+    }
+    #score {
+      position: absolute;
+      top: 20px;
+      font-size: 24px;
+    }
+  </style>
+</head>
+<body>
+  <div id="score">Score: 0</div>
+  <canvas id="gameCanvas" width="400" height="600"></canvas>  <script>
+    const canvas = document.getElementById("gameCanvas");
+    const ctx = canvas.getContext("2d");
+
+    let billy = {
+      x: 180,
+      y: 500,
+      width: 40,
+      height: 40,
+      dy: 0,
+      gravity: 0.6,
+      jump: -12
+    };
+
+    let obstacles = [];
+    let score = 0;
+    let gameOver = false;
+
+    function drawBilly() {
+      ctx.fillStyle = "#facc15";
+      ctx.fillRect(billy.x, billy.y, billy.width, billy.height);
+    }
+
+    function drawObstacles() {
+      ctx.fillStyle = "#ef4444";
+      obstacles.forEach(o => {
+        ctx.fillRect(o.x, o.y, o.width, o.height);
+      });
+    }
+
+    function updateObstacles() {
+      if (Math.random() < 0.02) {
+        obstacles.push({
+          x: Math.random() * 360,
+          y: -40,
+          width: 40,
+          height: 40
+        });
+      }
+
+      obstacles.forEach(o => {
+        o.y += 4;
+
+        // collision
+        if (
+          billy.x < o.x + o.width &&
+          billy.x + billy.width > o.x &&
+          billy.y < o.y + o.height &&
+          billy.y + billy.height > o.y
+        ) {
+          gameOver = true;
+        }
+      });
+
+      obstacles = obstacles.filter(o => o.y < 600);
+    }
+
+    function updateBilly() {
+      billy.dy += billy.gravity;
+      billy.y += billy.dy;
+
+      if (billy.y > 500) {
+        billy.y = 500;
+        billy.dy = 0;
+      }
+    }
+
+    function draw() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      drawBilly();
+      drawObstacles();
+    }
+
+    function loop() {
+      if (gameOver) {
+        alert("Game Over! Score: " + score);
+        document.location.reload();
+        return;
+      }
+
+      updateBilly();
+      updateObstacles();
+      draw();
+
+      score++;
+      document.getElementById("score").innerText = "Score: " + score;
+
+      requestAnimationFrame(loop);
+    }
+
+    document.addEventListener("click", () => {
+      billy.dy = billy.jump;
+    });
+
+    loop();
+  </script></body>
+</html>
