@@ -75,6 +75,7 @@ let particles=[],floating=[],effects=[];
 const audioTap=new Audio('https://freesound.org/data/previews/341/341695_5260873-lq.mp3');
 const audioCrit=new Audio('https://freesound.org/data/previews/108/108019_838627-lq.mp3');
 const audioLoot=new Audio('https://freesound.org/data/previews/331/331912_3248244-lq.mp3');
+const audioLevelUp=new Audio('https://freesound.org/data/previews/146/146725_285997-lq.mp3');
 
 // Estado Billy
 function setBillyState(img,time=600,shake=0){
@@ -102,7 +103,6 @@ function drawBilly(){
 function animateTap(crit=false, targetX=null, targetY=null){
  billy.scale=1.25;
  if(crit) billy.rotation=(Math.random()-0.5)*0.5;
- // mover Billy ligeramente hacia el tap
  if(targetX!==null && targetY!==null){
      billy.x += (targetX - billy.x)*0.15;
      billy.y += (targetY - billy.y)*0.15;
@@ -131,11 +131,11 @@ canvas.addEventListener('touchmove', e=>{
 },{passive:false});
 
 // Partículas
-function createParticles(color="#22c55e"){
+function createParticles(color="#22c55e", x=billy.x, y=billy.y){
  for(let i=0;i<12;i++){
   particles.push({
-   x:billy.x,
-   y:billy.y,
+   x:x,
+   y:y,
    vx:(Math.random()-0.5)*4,
    vy:-Math.random()*4,
    life:30+Math.random()*15,
@@ -147,7 +147,7 @@ function updateParticles(){particles.forEach(p=>{p.x+=p.vx;p.y+=p.vy;p.life--});
 function drawParticles(){particles.forEach(p=>{ctx.globalAlpha=p.life/40;ctx.fillStyle=p.color;ctx.beginPath();ctx.arc(p.x,p.y,3,0,Math.PI*2);ctx.fill()});ctx.globalAlpha=1}
 
 // Floating text
-function floatingText(val,color="#fff"){floating.push({x:billy.x,y:billy.y,text:`+${val}`,life:30,color:color})}
+function floatingText(val,color="#fff", x=billy.x, y=billy.y){floating.push({x:x,y:y,text:`+${val}`,life:30,color:color})}
 function updateFloating(){floating.forEach(f=>{f.y-=1;f.life--});floating=floating.filter(f=>f.life>0)}
 function drawFloating(){floating.forEach(f=>{ctx.globalAlpha=f.life/30;ctx.fillStyle=f.color;ctx.font="bold 16px Arial";ctx.fillText(f.text,f.x,f.y)});ctx.globalAlpha=1}
 
@@ -166,7 +166,18 @@ function updateUI(){
 }
 
 // Niveles y combos
-function updateLevel(){level=Math.floor(Math.pow(coins/300,0.75))+1; multiplier=1+Math.floor(level/4)}
+let lastLevel = 1;
+function updateLevel(){
+ let newLevel=Math.floor(Math.pow(coins/300,0.75))+1;
+ if(newLevel>level){
+   level=newLevel;
+   multiplier=1+Math.floor(level/4);
+   createParticles("#FFD700");
+   audioLevelUp.play();
+ }
+ level=newLevel;
+ multiplier=1+Math.floor(level/4);
+}
 function addCombo(){combo++;clearTimeout(comboTimer);comboTimer=setTimeout(()=>combo=0,2000)}
 
 // Click/tap principal
@@ -179,8 +190,8 @@ function handleTap(x=null,y=null){
  energy--;
  updateLevel();updateUI();
  animateTap(crit,x,y);
- createParticles(crit?"#FFD700":"#22c55e");
- floatingText(gain,crit?"#FFD700":"#fff");
+ createParticles(crit?"#FFD700":"#22c55e", x, y);
+ floatingText(gain,crit?"#FFD700":"#fff", x, y);
 
  audioTap.play();
  if(crit){setBillyState(billyHappy,800); audioCrit.play();}
@@ -267,8 +278,8 @@ function checkBubbleClick(x, y){
     if(Math.sqrt(dx*dx + dy*dy) < b.size/2){
       const gain = Math.floor(tapPower*multiplier*2);
       coins += gain;
-      floatingText("+"+gain,"#FFD700");
-      createParticles("#FFD700");
+      floatingText("+"+gain,"#FFD700", b.x, b.y);
+      createParticles("#FFD700", b.x, b.y);
       audioCrit.play();
       bonusBubbles.splice(i,1);
       updateLevel();
@@ -313,3 +324,6 @@ function loop(){
 resizeCanvas();
 updateUI();
 loop();
+</script>
+</body>
+</html>
