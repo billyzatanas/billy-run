@@ -2,7 +2,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-<title>Billy Tap GOD MODE ⚡</title>
+<title>Billy Tap EXPRESSIVE 😺</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:Arial;background:radial-gradient(circle,#0f172a,#000);color:#fff;height:100vh;display:flex;flex-direction:column;padding:env(safe-area-inset-top) 10px env(safe-area-inset-bottom)}
@@ -23,7 +23,7 @@ button:active{transform:scale(.95)}
   <div>Coins: <span id="score">0</span></div>
   <div>x<span id="multiplier">1</span></div>
 </div>
-<div class="sub">Combo: <span id="combo">0</span> 🔥 | Streak: <span id="streak">0</span></div>
+<div class="sub">Combo: <span id="combo">0</span> 🔥</div>
 <div id="energyBar"><div id="energyFill"></div></div><div class="center">
   <canvas id="gameCanvas" width="350" height="500"></canvas>
   <div id="event"></div>
@@ -37,13 +37,40 @@ const ctx=canvas.getContext('2d');
 
 let coins=0,level=1,multiplier=1;
 let tapPower=1,energy=100,maxEnergy=100;
-let combo=0,comboTimer=null,streak=0;
-let frenzy=false;
+let combo=0,comboTimer=null;
 
-let billy={x:175,y:250,size:90,scale:1};
+// imágenes de Billy (diferentes caras)
+const billyIdle=new Image(); billyIdle.src="billy.gif";
+const billyHappy=new Image(); billyHappy.src="billy_happy.gif";
+const billyAngry=new Image(); billyAngry.src="billy_angry.gif";
+const billyHype=new Image(); billyHype.src="billy_hype.gif";
+
+let currentBilly=billyIdle;
+let stateTimer=null;
+
+let billy={x:175,y:250,size:100,scale:1};
 let particles=[],floating=[];
 
-function drawBilly(){ctx.save();ctx.translate(billy.x,billy.y);ctx.scale(billy.scale,billy.scale);ctx.shadowColor="#22c55e";ctx.shadowBlur=30;ctx.beginPath();ctx.arc(0,0,billy.size/2,0,Math.PI*2);ctx.fillStyle="#22c55e";ctx.fill();ctx.restore();}
+function setBillyState(img,time=500){
+ currentBilly=img;
+ clearTimeout(stateTimer);
+ stateTimer=setTimeout(()=>currentBilly=billyIdle,time);
+}
+
+function drawBilly(){
+ ctx.save();
+ ctx.translate(billy.x,billy.y);
+ ctx.scale(billy.scale,billy.scale);
+ ctx.shadowColor="#22c55e";
+ ctx.shadowBlur=25;
+
+ ctx.beginPath();
+ ctx.arc(0,0,billy.size/2,0,Math.PI*2);
+ ctx.clip();
+
+ ctx.drawImage(currentBilly,-billy.size/2,-billy.size/2,billy.size,billy.size);
+ ctx.restore();
+}
 
 function createParticles(){for(let i=0;i<10;i++)particles.push({x:billy.x,y:billy.y,vx:(Math.random()-0.5)*3,vy:-Math.random()*3,life:30});}
 function updateParticles(){particles.forEach(p=>{p.x+=p.vx;p.y+=p.vy;p.life--});particles=particles.filter(p=>p.life>0)}
@@ -55,56 +82,47 @@ function drawFloating(){ctx.fillStyle="#fff";ctx.font="bold 14px Arial";floating
 
 function animateTap(){billy.scale=1.3;setTimeout(()=>billy.scale=1,80)}
 
-function updateUI(){score.innerText=coins;multiplierEl.innerText=multiplier;levelEl.innerText=level;energyFill.style.width=(energy/maxEnergy*100)+"%";comboEl.innerText=combo;streakEl.innerText=streak}
+function updateUI(){score.innerText=coins;multiplierEl.innerText=multiplier;levelEl.innerText=level;energyFill.style.width=(energy/maxEnergy*100)+"%";comboEl.innerText=combo}
 
-function updateLevel(){level=Math.floor(coins/150)+1;multiplier=1+Math.floor(level/2)}
+function updateLevel(){level=Math.floor(Math.pow(coins/200,0.75))+1;multiplier=1+Math.floor(level/3)}
 
 function addCombo(){combo++;clearTimeout(comboTimer);comboTimer=setTimeout(()=>combo=0,2000)}
 
 canvas.addEventListener('click',()=>{
- if(energy<=0)return;
+ if(energy<=0){ setBillyState(billyAngry,700); return; }
+
  addCombo();
  let crit=Math.random()<0.1;
- let base=tapPower*multiplier*(crit?5:1)*(1+combo*0.1);
- let gain=frenzy?base*2:base;
+ let gain=tapPower*multiplier*(crit?5:1)*(1+combo*0.1);
  coins+=Math.floor(gain);
  energy--;
+
  updateLevel();updateUI();animateTap();createParticles();floatingText(Math.floor(gain));
+
+ // estados emocionales
+ if(crit) setBillyState(billyHype,800);
+ else if(combo>10) setBillyState(billyHappy,600);
+ else setBillyState(billyIdle,300);
 });
 
 setInterval(()=>{energy=Math.min(maxEnergy,energy+1);updateUI()},1000);
 
-// upgrade
 upgradeTap.onclick=()=>{
- let cost=Math.floor(50*Math.pow(1.5,tapPower));
- if(coins>=cost){coins-=cost;tapPower++;showEvent('POWER UP ⚡');updateUI();}
+ let cost=Math.floor(50*Math.pow(1.6,tapPower));
+ if(coins>=cost){coins-=cost;tapPower++;setBillyState(billyHappy,800);showEvent('POWER UP ⚡');updateUI();}
 }
 
-// LOOT BOX (dopamine hit)
 lootBox.onclick=()=>{
  let roll=Math.random();
- if(roll<0.5){let reward=100+Math.random()*200;coins+=Math.floor(reward);showEvent('LUCKY 💰 +'+Math.floor(reward));}
- else if(roll<0.8){frenzyMode();}
- else{let boost=5;tapPower+=boost;showEvent('MEGA BOOST 🚀');}
+ if(roll<0.5){coins+=100;setBillyState(billyHappy,800);showEvent('LUCKY 💰');}
+ else{setBillyState(billyHype,1000);showEvent('MEGA 🚀');}
  updateUI();
 }
 
-// FRENZY MODE
-function frenzyMode(){
- frenzy=true;
- showEvent('FRENZY x2 🔥');
- setTimeout(()=>{frenzy=false;showEvent('Frenzy End');},5000);
-}
+function showEvent(text){event.innerText=text;event.style.opacity=1;setTimeout(()=>event.style.opacity=0,1500)}
 
-function showEvent(text){
- event.innerText=text;
- event.style.opacity=1;
- setTimeout(()=>event.style.opacity=0,1500);
-}
-
-// share
 shareBtn.onclick=()=>{
- const text=`Billy GOD MODE 🚀 ${coins} coins | Lv ${level}\nI just hit a frenzy 🔥`;
+ const text=`Billy 😺 ${coins} coins | Lv ${level}`;
  window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`,'_blank');
 }
 
@@ -115,7 +133,6 @@ const multiplierEl=document.getElementById('multiplier');
 const levelEl=document.getElementById('level');
 const energyFill=document.getElementById('energyFill');
 const comboEl=document.getElementById('combo');
-const streakEl=document.getElementById('streak');
 const event=document.getElementById('event');
 
 updateUI();loop();
