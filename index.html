@@ -99,30 +99,35 @@ function drawBilly(){
 }
 
 // Animación tap
-function animateTap(crit=false){
+function animateTap(crit=false, targetX=null, targetY=null){
  billy.scale=1.25;
  if(crit) billy.rotation=(Math.random()-0.5)*0.5;
+ // mover Billy ligeramente hacia el tap
+ if(targetX!==null && targetY!==null){
+     billy.x += (targetX - billy.x)*0.15;
+     billy.y += (targetY - billy.y)*0.15;
+ }
  setTimeout(()=>{billy.scale=1; billy.rotation=0},120);
 }
 
 // Seguimiento mouse/touch
-let targetX=null,targetY=null;
+let pointerX=null,pointerY=null;
 function follow(){
- if(targetX){
-  billy.x+= (targetX-billy.x)*0.08;
-  billy.y+= (targetY-billy.y)*0.08;
+ if(pointerX){
+  billy.x+= (pointerX-billy.x)*0.08;
+  billy.y+= (pointerY-billy.y)*0.08;
  }
 }
-canvas.addEventListener('mousemove',e=>{
+canvas.addEventListener('mousemove', e=>{
  const rect=canvas.getBoundingClientRect();
- targetX=e.clientX-rect.left;
- targetY=e.clientY-rect.top;
+ pointerX=e.clientX-rect.left;
+ pointerY=e.clientY-rect.top;
 });
-canvas.addEventListener('touchmove',e=>{
+canvas.addEventListener('touchmove', e=>{
  e.preventDefault();
  const rect=canvas.getBoundingClientRect();
- targetX=e.touches[0].clientX-rect.left;
- targetY=e.touches[0].clientY-rect.top;
+ pointerX=e.touches[0].clientX-rect.left;
+ pointerY=e.touches[0].clientY-rect.top;
 },{passive:false});
 
 // Partículas
@@ -165,14 +170,15 @@ function updateLevel(){level=Math.floor(Math.pow(coins/300,0.75))+1; multiplier=
 function addCombo(){combo++;clearTimeout(comboTimer);comboTimer=setTimeout(()=>combo=0,2000)}
 
 // Click/tap principal
-canvas.addEventListener('click',()=>{
+function handleTap(x=null,y=null){
  if(energy<=0){ setBillyState(billySad,800,1); return; }
  addCombo();
  let crit=Math.random()<0.2;
  let gain=Math.floor(tapPower*multiplier*(crit?4:1)*(1+combo*0.08));
- coins+=gain;
+ coins += gain;
  energy--;
- updateLevel();updateUI();animateTap(crit);
+ updateLevel();updateUI();
+ animateTap(crit,x,y);
  createParticles(crit?"#FFD700":"#22c55e");
  floatingText(gain,crit?"#FFD700":"#fff");
 
@@ -180,7 +186,23 @@ canvas.addEventListener('click',()=>{
  if(crit){setBillyState(billyHappy,800); audioCrit.play();}
  else if(combo>8){setBillyState(billyHappy,600);}
  else{setBillyState(billyIdle,300);}
+}
+
+// Eventos click/tap
+canvas.addEventListener('click', e=>{
+  const rect=canvas.getBoundingClientRect();
+  const x = e.clientX - rect.left;
+  const y = e.clientY - rect.top;
+  handleTap(x,y);
+  checkBubbleClick(x,y);
 });
+canvas.addEventListener('touchstart', e=>{
+  const rect=canvas.getBoundingClientRect();
+  const x = e.touches[0].clientX - rect.left;
+  const y = e.touches[0].clientY - rect.top;
+  handleTap(x,y);
+  checkBubbleClick(x,y);
+},{passive:false});
 
 // Regeneración energía
 setInterval(()=>{energy=Math.min(maxEnergy,energy+1);updateUI()},1200);
@@ -219,16 +241,71 @@ function drawBackground(){
  ctx.globalAlpha=1;
 }
 
+// 🔹 Burbujas Bonus
+let bonusBubbles = [];
+const bubbleImg = billyIdle;
+const maxBubbles = 3;
+const bubbleSpawnInterval = 5000;
+
+function spawnBubble(){
+  if(bonusBubbles.length >= maxBubbles) return;
+  const size = 60 + Math.random()*20;
+  bonusBubbles.push({
+    x: Math.random()*(canvas.width-size) + size/2,
+    y: Math.random()*(canvas.height-size) + size/2,
+    size: size,
+    life: 8000,
+    created: Date.now()
+  });
+}
+
+function checkBubbleClick(x, y){
+  for(let i=bonusBubbles.length-1; i>=0; i--){
+    const b = bonusBubbles[i];
+    const dx = x - b.x;
+    const dy = y - b.y;
+    if(Math.sqrt(dx*dx + dy*dy) < b.size/2){
+      const gain = Math.floor(tapPower*multiplier*2);
+      coins += gain;
+      floatingText("+"+gain,"#FFD700");
+      createParticles("#FFD700");
+      audioCrit.play();
+      bonusBubbles.splice(i,1);
+      updateLevel();
+      updateUI();
+      break;
+    }
+  }
+}
+
+function drawBubbles(){
+  bonusBubbles.forEach(b=>{
+    const t = (Date.now() - b.created)/b.life;
+    const scale = 0.8 + 0.2*Math.sin(t*Math.PI*2);
+    ctx.save();
+    ctx.translate(b.x, b.y);
+    ctx.scale(scale, scale);
+    ctx.drawImage(bubbleImg, -b.size/2, -b.size/2, b.size, b.size);
+    ctx.restore();
+  });
+}
+
+function updateBubbles(){
+  const now = Date.now();
+  bonusBubbles = bonusBubbles.filter(b=> now - b.created < b.life);
+}
+
+setInterval(spawnBubble, bubbleSpawnInterval);
+
 // Loop principal
 function loop(){
  ctx.clearRect(0,0,canvas.width,canvas.height);
  drawBackground();
  follow();
  drawBilly();
- updateParticles();
- drawParticles();
- updateFloating();
- drawFloating();
+ updateParticles(); drawParticles();
+ updateFloating(); drawFloating();
+ updateBubbles(); drawBubbles();
  requestAnimationFrame(loop);
 }
 
@@ -236,6 +313,3 @@ function loop(){
 resizeCanvas();
 updateUI();
 loop();
-</script>
-</body>
-</html>
