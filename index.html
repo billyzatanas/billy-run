@@ -1,164 +1,123 @@
 <!DOCTYPE html><html lang="en">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-<title>Billy Tap PRO 🐱</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<title>Billy Tap GOD MODE ⚡</title>
 <style>
-body{
-  margin:0;
-  background: radial-gradient(circle at top, #1e293b, #020617);
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
-  height:100vh;
-  color:#fff;
-  font-family:Arial;
-  overflow:hidden;
-}canvas{ background: linear-gradient(145deg, #1e293b, #0f172a); border-radius:20px; width:90vw; max-width:420px; height:auto; box-shadow: 0 10px 40px rgba(0,0,0,0.6); }
-
-#score{font-size:20px} #info{font-size:13px;opacity:.8} #energyBar{ width:70vw; max-width:200px; height:10px; background:#334155; border-radius:10px; margin:6px 0; overflow:hidden; } #energyFill{height:100%;background:#22c55e;width:100%}
-
-button{ margin-top:6px; padding:8px 12px; border-radius:10px; border:none; cursor:pointer; }
-
-#leaderboard{ margin-top:10px; font-size:12px; text-align:left; width:70vw; max-width:200px; } </style>
-
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Arial;background:radial-gradient(circle,#0f172a,#000);color:#fff;height:100vh;display:flex;flex-direction:column;padding:env(safe-area-inset-top) 10px env(safe-area-inset-bottom)}
+.header{display:flex;justify-content:space-between;font-size:14px}
+.sub{font-size:12px;opacity:.8}
+.center{flex:1;display:flex;align-items:center;justify-content:center;position:relative}
+canvas{width:92vw;max-width:420px;border-radius:22px;background:#020617;box-shadow:0 20px 60px rgba(0,0,0,.9)}
+.footer{display:flex;gap:6px}
+button{flex:1;padding:12px;border:none;border-radius:14px;background:#111;color:#fff}
+button:active{transform:scale(.95)}
+#energyBar{height:8px;background:#1e293b;border-radius:10px;margin:6px 0;overflow:hidden}
+#energyFill{height:100%;background:#22c55e}
+#event{position:absolute;top:20%;font-size:20px;opacity:0;transition:.3s}
+</style>
 </head>
-<body><div id="score">Coins: 0</div>
-<div id="info">Level 1 • x1</div>
-<div id="energyBar"><div id="energyFill"></div></div><canvas id="gameCanvas" width="350" height="500"></canvas>
-
-<button id="upgradeTap">Upgrade Tap</button> <button id="saveScore">Save Score</button> <button id="shareBtn">Share on X</button>
-
-<div id="leaderboard"></div><audio id="tap1" src="https://actions.google.com/sounds/v1/cartoon/pop.ogg"></audio> <audio id="tap2" src="https://actions.google.com/sounds/v1/cartoon/wood_plank_flicks.ogg"></audio>
-
-<script>
-const canvas=document.getElementById("gameCanvas");
-const ctx=canvas.getContext("2d");
+<body><div class="header">
+  <div>Lv <span id="level">1</span></div>
+  <div>Coins: <span id="score">0</span></div>
+  <div>x<span id="multiplier">1</span></div>
+</div>
+<div class="sub">Combo: <span id="combo">0</span> 🔥 | Streak: <span id="streak">0</span></div>
+<div id="energyBar"><div id="energyFill"></div></div><div class="center">
+  <canvas id="gameCanvas" width="350" height="500"></canvas>
+  <div id="event"></div>
+</div><div class="footer">
+  <button id="upgradeTap">Upgrade</button>
+  <button id="lootBox">Loot</button>
+  <button id="shareBtn">Share</button>
+</div><script>
+const canvas=document.getElementById('gameCanvas');
+const ctx=canvas.getContext('2d');
 
 let coins=0,level=1,multiplier=1;
-let tapPower=1;
-let energy=100,maxEnergy=100;
-
-const billyImg=new Image();
-billyImg.src="billy.gif";
+let tapPower=1,energy=100,maxEnergy=100;
+let combo=0,comboTimer=null,streak=0;
+let frenzy=false;
 
 let billy={x:175,y:250,size:90,scale:1};
-let effects=[];
-let t=0;
+let particles=[],floating=[];
 
-function drawBilly(){
- ctx.save();
- ctx.translate(billy.x,billy.y);
- ctx.scale(billy.scale,billy.scale);
+function drawBilly(){ctx.save();ctx.translate(billy.x,billy.y);ctx.scale(billy.scale,billy.scale);ctx.shadowColor="#22c55e";ctx.shadowBlur=30;ctx.beginPath();ctx.arc(0,0,billy.size/2,0,Math.PI*2);ctx.fillStyle="#22c55e";ctx.fill();ctx.restore();}
 
- ctx.shadowColor="#22c55e";
- ctx.shadowBlur=25;
+function createParticles(){for(let i=0;i<10;i++)particles.push({x:billy.x,y:billy.y,vx:(Math.random()-0.5)*3,vy:-Math.random()*3,life:30});}
+function updateParticles(){particles.forEach(p=>{p.x+=p.vx;p.y+=p.vy;p.life--});particles=particles.filter(p=>p.life>0)}
+function drawParticles(){ctx.fillStyle="#22c55e";particles.forEach(p=>{ctx.globalAlpha=p.life/30;ctx.beginPath();ctx.arc(p.x,p.y,3,0,Math.PI*2);ctx.fill()});ctx.globalAlpha=1}
 
- ctx.beginPath();
- ctx.arc(0,0,billy.size/2,0,Math.PI*2);
- ctx.clip();
+function floatingText(val){floating.push({x:billy.x,y:billy.y,text:`+${val}`,life:30})}
+function updateFloating(){floating.forEach(f=>{f.y-=1;f.life--});floating=floating.filter(f=>f.life>0)}
+function drawFloating(){ctx.fillStyle="#fff";ctx.font="bold 14px Arial";floating.forEach(f=>{ctx.globalAlpha=f.life/30;ctx.fillText(f.text,f.x,f.y)});ctx.globalAlpha=1}
 
- ctx.drawImage(billyImg,-billy.size/2,-billy.size/2,billy.size,billy.size);
- ctx.restore();
-}
+function animateTap(){billy.scale=1.3;setTimeout(()=>billy.scale=1,80)}
 
-function drawEffects(){
- ctx.fillStyle="#22c55e";
- ctx.font="bold 14px Arial";
- ctx.shadowBlur=0;
- effects.forEach(e=>ctx.fillText(`+${e.value}`,e.x,e.y));
-}
+function updateUI(){score.innerText=coins;multiplierEl.innerText=multiplier;levelEl.innerText=level;energyFill.style.width=(energy/maxEnergy*100)+"%";comboEl.innerText=combo;streakEl.innerText=streak}
 
-function updateEffects(){
- effects.forEach(e=>{e.y-=1;e.life--});
- effects=effects.filter(e=>e.life>0);
-}
+function updateLevel(){level=Math.floor(coins/150)+1;multiplier=1+Math.floor(level/2)}
 
-function animateTap(){
- billy.scale=1.25;
- setTimeout(()=>billy.scale=1,60);
-}
+function addCombo(){combo++;clearTimeout(comboTimer);comboTimer=setTimeout(()=>combo=0,2000)}
 
-function updateUI(){
- document.getElementById("score").innerText="Coins: "+coins;
- document.getElementById("info").innerText=`Level ${level} • x${multiplier}`;
- document.getElementById("energyFill").style.width=(energy/maxEnergy*100)+"%";
-}
-
-function updateLevel(){
- level=Math.floor(coins/100)+1;
- multiplier=1+Math.floor(level/2);
-}
-
-canvas.addEventListener("click",()=>{
+canvas.addEventListener('click',()=>{
  if(energy<=0)return;
- let gain=tapPower*multiplier;
- coins+=gain;
- energy-=1;
-
- updateLevel();
- updateUI();
- animateTap();
-
- let s=Math.random()>0.5?tap1:tap2;
- s.currentTime=0;
- s.play();
-
- if(navigator.vibrate) navigator.vibrate(10);
-
- effects.push({x:billy.x-10,y:billy.y,life:30,value:gain});
+ addCombo();
+ let crit=Math.random()<0.1;
+ let base=tapPower*multiplier*(crit?5:1)*(1+combo*0.1);
+ let gain=frenzy?base*2:base;
+ coins+=Math.floor(gain);
+ energy--;
+ updateLevel();updateUI();animateTap();createParticles();floatingText(Math.floor(gain));
 });
 
-setInterval(()=>{
- energy=Math.min(maxEnergy,energy+1);
- updateUI();
-},100);
+setInterval(()=>{energy=Math.min(maxEnergy,energy+1);updateUI()},1000);
 
 // upgrade
- document.getElementById("upgradeTap").onclick=()=>{
- let cost=50*tapPower;
- if(coins>=cost){coins-=cost;tapPower++;updateUI();}
- }
-
-// leaderboard local
-function getScores(){return JSON.parse(localStorage.getItem("billyScores")||"[]");}
-function saveScore(){
- let scores=getScores();
- scores.push(coins);
- scores.sort((a,b)=>b-a);
- scores=scores.slice(0,5);
- localStorage.setItem("billyScores",JSON.stringify(scores));
- renderLeaderboard();
-}
-function renderLeaderboard(){
- let scores=getScores();
- let html="<b>Top Players</b><br>";
- scores.forEach((s,i)=>{html+=`#${i+1} - ${s} coins<br>`});
- document.getElementById("leaderboard").innerHTML=html;
+upgradeTap.onclick=()=>{
+ let cost=Math.floor(50*Math.pow(1.5,tapPower));
+ if(coins>=cost){coins-=cost;tapPower++;showEvent('POWER UP ⚡');updateUI();}
 }
 
-document.getElementById("saveScore").onclick=saveScore;
+// LOOT BOX (dopamine hit)
+lootBox.onclick=()=>{
+ let roll=Math.random();
+ if(roll<0.5){let reward=100+Math.random()*200;coins+=Math.floor(reward);showEvent('LUCKY 💰 +'+Math.floor(reward));}
+ else if(roll<0.8){frenzyMode();}
+ else{let boost=5;tapPower+=boost;showEvent('MEGA BOOST 🚀');}
+ updateUI();
+}
 
-// share pro
- document.getElementById("shareBtn").onclick=()=>{
- const text=`Just hit ${coins} coins on Billy Tap 🐱💰\nStill early… can you beat me?`;
+// FRENZY MODE
+function frenzyMode(){
+ frenzy=true;
+ showEvent('FRENZY x2 🔥');
+ setTimeout(()=>{frenzy=false;showEvent('Frenzy End');},5000);
+}
+
+function showEvent(text){
+ event.innerText=text;
+ event.style.opacity=1;
+ setTimeout(()=>event.style.opacity=0,1500);
+}
+
+// share
+shareBtn.onclick=()=>{
+ const text=`Billy GOD MODE 🚀 ${coins} coins | Lv ${level}\nI just hit a frenzy 🔥`;
  window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`,'_blank');
- }
-
-function loop(){
- ctx.clearRect(0,0,canvas.width,canvas.height);
- t+=0.05;
- billy.scale=1+Math.sin(t)*0.05;
- drawBilly();
- updateEffects();
- drawEffects();
- requestAnimationFrame(loop);
 }
 
-updateUI();
-renderLeaderboard();
-loop();
+function loop(){ctx.clearRect(0,0,canvas.width,canvas.height);drawBilly();updateParticles();drawParticles();updateFloating();drawFloating();requestAnimationFrame(loop)}
+
+const score=document.getElementById('score');
+const multiplierEl=document.getElementById('multiplier');
+const levelEl=document.getElementById('level');
+const energyFill=document.getElementById('energyFill');
+const comboEl=document.getElementById('combo');
+const streakEl=document.getElementById('streak');
+const event=document.getElementById('event');
+
+updateUI();loop();
 </script></body>
 </html>
- 
