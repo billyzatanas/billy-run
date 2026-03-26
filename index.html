@@ -1,39 +1,46 @@
-<!DOCTYPE html><html lang="en">
+<!DOCTYPE html>
+<html lang="en">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-<title>Billy Tap ULTRA 😺</title>
+<title>Billy Tap ULTRA EPIC 😺</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:Arial;background:radial-gradient(circle,#0f172a,#000);color:#fff;height:100vh;display:flex;flex-direction:column;padding:env(safe-area-inset-top) 10px env(safe-area-inset-bottom)}
+body{font-family:Arial,sans-serif;background:#000;height:100vh;display:flex;flex-direction:column;padding:env(safe-area-inset-top) 10px env(safe-area-inset-bottom);overflow:hidden;color:#fff}
 .header{display:flex;justify-content:space-between;font-size:14px}
-.sub{font-size:12px;opacity:.8;text-align:center}
+.sub{font-size:12px;opacity:.8;text-align:center;margin:4px 0}
 .center{flex:1;display:flex;align-items:center;justify-content:center;position:relative}
 canvas{width:95vw;max-width:420px;border-radius:24px;background:#020617;box-shadow:0 25px 70px rgba(0,0,0,.9)}
-.footer{display:flex;gap:6px}
-button{flex:1;padding:12px;border:none;border-radius:14px;background:#111;color:#fff}
-button:active{transform:scale(.95)}
+.footer{display:flex;gap:6px;margin-top:6px}
+button{flex:1;padding:12px;border:none;border-radius:14px;background:linear-gradient(145deg,#111,#222);color:#fff;font-weight:bold;cursor:pointer;transition:all .2s;box-shadow:0 5px 15px rgba(0,0,0,.7)}
+button:active{transform:scale(.95);box-shadow:0 2px 6px rgba(0,0,0,.8)}
 #energyBar{height:8px;background:#1e293b;border-radius:10px;margin:6px 0;overflow:hidden}
-#energyFill{height:100%;background:#22c55e}
+#energyFill{height:100%;background:#22c55e;transition:width .2s}
 </style>
 </head>
-<body><div class="header">
+<body>
+<div class="header">
   <div>Lv <span id="level">1</span></div>
   <div>Coins: <span id="score">0</span></div>
   <div>x<span id="multiplier">1</span></div>
 </div>
 <div class="sub">Combo: <span id="combo">0</span> 🔥</div>
-<div id="energyBar"><div id="energyFill"></div></div><div class="center">
+<div id="energyBar"><div id="energyFill"></div></div>
+<div class="center">
   <canvas id="gameCanvas"></canvas>
-</div><div class="footer">
+</div>
+<div class="footer">
   <button id="upgradeTap">Upgrade</button>
   <button id="lootBox">Loot</button>
   <button id="shareBtn">Share</button>
-</div><script>
+</div>
+
+<script>
+// Canvas y contexto
 const canvas=document.getElementById('gameCanvas');
 const ctx=canvas.getContext('2d');
 
-// 📱 resolución adaptativa real
+// Resolución adaptativa
 function resizeCanvas(){
  const dpr=window.devicePixelRatio||1;
  const rect=canvas.getBoundingClientRect();
@@ -45,35 +52,45 @@ function resizeCanvas(){
 }
 window.addEventListener('resize',resizeCanvas);
 
+// Variables de juego
 let coins=0,level=1,multiplier=1;
 let tapPower=1,energy=100,maxEnergy=100;
 let combo=0,comboTimer=null;
 
-// 🐱 imágenes (usa tus nombres exactos)
+// Imágenes Billy
 const billyIdle=new Image(); billyIdle.src="billy_coins.png";
 const billyHappy=new Image(); billyHappy.src="billy_happy.png";
 const billyAngry=new Image(); billyAngry.src="billy_Angry.png";
 const billySad=new Image(); billySad.src="billy_Triste.png";
-
 let currentBilly=billyIdle;
 let stateTimer=null;
 
-let billy={x:0,y:0,size:120,scale:1,shake:0};
-let particles=[],floating=[];
-let targetX=null,targetY=null;
+// Billy
+let billy={x:0,y:0,size:120,scale:1,shake:0,rotation:0};
 
+// Partículas y efectos
+let particles=[],floating=[],effects=[];
+
+// Sonidos libres
+const audioTap=new Audio('https://freesound.org/data/previews/341/341695_5260873-lq.mp3');
+const audioCrit=new Audio('https://freesound.org/data/previews/108/108019_838627-lq.mp3');
+const audioLoot=new Audio('https://freesound.org/data/previews/331/331912_3248244-lq.mp3');
+
+// Estado Billy
 function setBillyState(img,time=600,shake=0){
  currentBilly=img;
  billy.shake=shake;
  clearTimeout(stateTimer);
- stateTimer=setTimeout(()=>{currentBilly=billyIdle;billy.shake=0},time);
+ stateTimer=setTimeout(()=>{currentBilly=billyIdle;billy.shake=0;billy.rotation=0},time);
 }
 
+// Dibujar Billy
 function drawBilly(){
  ctx.save();
  let offsetX=billy.shake? (Math.random()-0.5)*10:0;
  let offsetY=billy.shake? (Math.random()-0.5)*10:0;
  ctx.translate(billy.x+offsetX,billy.y+offsetY);
+ ctx.rotate(billy.rotation);
  ctx.scale(billy.scale,billy.scale);
  ctx.shadowColor="#22c55e";
  ctx.shadowBlur=30;
@@ -81,76 +98,131 @@ function drawBilly(){
  ctx.restore();
 }
 
-function animateTap(){
+// Animación tap
+function animateTap(crit=false){
  billy.scale=1.25;
- setTimeout(()=>billy.scale=1,80);
+ if(crit) billy.rotation=(Math.random()-0.5)*0.5;
+ setTimeout(()=>{billy.scale=1; billy.rotation=0},120);
 }
 
-// 👀 seguimiento del dedo
-canvas.addEventListener('mousemove',(e)=>{
+// Seguimiento mouse/touch
+let targetX=null,targetY=null;
+function follow(){
+ if(targetX){
+  billy.x+= (targetX-billy.x)*0.08;
+  billy.y+= (targetY-billy.y)*0.08;
+ }
+}
+canvas.addEventListener('mousemove',e=>{
  const rect=canvas.getBoundingClientRect();
  targetX=e.clientX-rect.left;
  targetY=e.clientY-rect.top;
 });
+canvas.addEventListener('touchmove',e=>{
+ e.preventDefault();
+ const rect=canvas.getBoundingClientRect();
+ targetX=e.touches[0].clientX-rect.left;
+ targetY=e.touches[0].clientY-rect.top;
+},{passive:false});
 
-function follow(){
- if(targetX){
-  billy.x+= (targetX-billy.x)*0.05;
-  billy.y+= (targetY-billy.y)*0.05;
+// Partículas
+function createParticles(color="#22c55e"){
+ for(let i=0;i<12;i++){
+  particles.push({
+   x:billy.x,
+   y:billy.y,
+   vx:(Math.random()-0.5)*4,
+   vy:-Math.random()*4,
+   life:30+Math.random()*15,
+   color:color
+  });
  }
 }
-
-function createParticles(){
- for(let i=0;i<8;i++)particles.push({x:billy.x,y:billy.y,vx:(Math.random()-0.5)*3,vy:-Math.random()*3,life:30});
-}
 function updateParticles(){particles.forEach(p=>{p.x+=p.vx;p.y+=p.vy;p.life--});particles=particles.filter(p=>p.life>0)}
-function drawParticles(){ctx.fillStyle="#22c55e";particles.forEach(p=>{ctx.globalAlpha=p.life/30;ctx.beginPath();ctx.arc(p.x,p.y,3,0,Math.PI*2);ctx.fill()});ctx.globalAlpha=1}
+function drawParticles(){particles.forEach(p=>{ctx.globalAlpha=p.life/40;ctx.fillStyle=p.color;ctx.beginPath();ctx.arc(p.x,p.y,3,0,Math.PI*2);ctx.fill()});ctx.globalAlpha=1}
 
-function floatingText(val){floating.push({x:billy.x,y:billy.y,text:`+${val}`,life:30})}
+// Floating text
+function floatingText(val,color="#fff"){floating.push({x:billy.x,y:billy.y,text:`+${val}`,life:30,color:color})}
 function updateFloating(){floating.forEach(f=>{f.y-=1;f.life--});floating=floating.filter(f=>f.life>0)}
-function drawFloating(){ctx.fillStyle="#fff";ctx.font="bold 14px Arial";floating.forEach(f=>{ctx.globalAlpha=f.life/30;ctx.fillText(f.text,f.x,f.y)});ctx.globalAlpha=1}
+function drawFloating(){floating.forEach(f=>{ctx.globalAlpha=f.life/30;ctx.fillStyle=f.color;ctx.font="bold 16px Arial";ctx.fillText(f.text,f.x,f.y)});ctx.globalAlpha=1}
 
-function updateUI(){score.innerText=coins;multiplierEl.innerText=multiplier;levelEl.innerText=level;energyFill.style.width=(energy/maxEnergy*100)+"%";comboEl.innerText=combo}
+// UI
+const score=document.getElementById('score');
+const multiplierEl=document.getElementById('multiplier');
+const levelEl=document.getElementById('level');
+const energyFill=document.getElementById('energyFill');
+const comboEl=document.getElementById('combo');
+function updateUI(){
+ score.innerText=coins;
+ multiplierEl.innerText=multiplier;
+ levelEl.innerText=level;
+ energyFill.style.width=(energy/maxEnergy*100)+"%";
+ comboEl.innerText=combo;
+}
 
-function updateLevel(){level=Math.floor(Math.pow(coins/200,0.75))+1;multiplier=1+Math.floor(level/3)}
-
+// Niveles y combos
+function updateLevel(){level=Math.floor(Math.pow(coins/300,0.75))+1; multiplier=1+Math.floor(level/4)}
 function addCombo(){combo++;clearTimeout(comboTimer);comboTimer=setTimeout(()=>combo=0,2000)}
 
+// Click/tap principal
 canvas.addEventListener('click',()=>{
  if(energy<=0){ setBillyState(billySad,800,1); return; }
  addCombo();
- let crit=Math.random()<0.1;
- let gain=tapPower*multiplier*(crit?5:1)*(1+combo*0.1);
- coins+=Math.floor(gain);
+ let crit=Math.random()<0.2;
+ let gain=Math.floor(tapPower*multiplier*(crit?4:1)*(1+combo*0.08));
+ coins+=gain;
  energy--;
- updateLevel();updateUI();animateTap();createParticles();floatingText(Math.floor(gain));
+ updateLevel();updateUI();animateTap(crit);
+ createParticles(crit?"#FFD700":"#22c55e");
+ floatingText(gain,crit?"#FFD700":"#fff");
 
- if(crit) setBillyState(billyHappy,800);
- else if(combo>8) setBillyState(billyHappy,600);
- else setBillyState(billyIdle,300);
+ audioTap.play();
+ if(crit){setBillyState(billyHappy,800); audioCrit.play();}
+ else if(combo>8){setBillyState(billyHappy,600);}
+ else{setBillyState(billyIdle,300);}
 });
 
-setInterval(()=>{energy=Math.min(maxEnergy,energy+1);updateUI()},1000);
+// Regeneración energía
+setInterval(()=>{energy=Math.min(maxEnergy,energy+1);updateUI()},1200);
 
-upgradeTap.onclick=()=>{
- let cost=Math.floor(50*Math.pow(1.6,tapPower));
- if(coins>=cost){coins-=cost;tapPower++;setBillyState(billyHappy,800);updateUI();}
+// Botones
+document.getElementById('upgradeTap').onclick=()=>{
+ let cost=Math.floor(80*Math.pow(1.6,tapPower));
+ if(coins>=cost){coins-=cost;tapPower++;setBillyState(billyHappy,800);createParticles("#00ffff");updateUI(); audioTap.play();}
 }
-
-lootBox.onclick=()=>{
+document.getElementById('lootBox').onclick=()=>{
  let roll=Math.random();
- if(roll<0.5){coins+=100;setBillyState(billyHappy,800)}
- else{setBillyState(billyAngry,800,1)}
+ if(roll<0.5){coins+=50+Math.floor(Math.random()*50); setBillyState(billyHappy,800); audioLoot.play(); createParticles("#ff66ff");}
+ else{setBillyState(billyAngry,800,1);}
  updateUI();
 }
-
-shareBtn.onclick=()=>{
+document.getElementById('shareBtn').onclick=()=>{
  const text=`Billy 😺 ${coins} coins | Lv ${level}`;
  window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`,'_blank');
 }
 
+// Fondo dinámico con rayos y destellos
+function drawBackground(){
+ const time=Date.now()/1000;
+ const w=canvas.width,h=canvas.height;
+ const gradient=ctx.createRadialGradient(w/2,h/2,0,w/2,h/2,h/1.2);
+ gradient.addColorStop(0,`rgba(0,255,128,0.05)`);
+ gradient.addColorStop(0.5,`rgba(0,128,255,0.05)`);
+ gradient.addColorStop(1,"rgba(0,0,0,0.2)");
+ ctx.fillStyle=gradient;
+ ctx.fillRect(0,0,w,h);
+
+ // Destellos aleatorios
+ if(Math.random()<0.03) effects.push({x:Math.random()*w,y:Math.random()*h,r:Math.random()*4+2,life:20});
+ effects.forEach(e=>{ctx.globalAlpha=e.life/20;ctx.fillStyle="#fff";ctx.beginPath();ctx.arc(e.x,e.y,e.r,0,Math.PI*2);ctx.fill(); e.life--;});
+ effects=effects.filter(e=>e.life>0);
+ ctx.globalAlpha=1;
+}
+
+// Loop principal
 function loop(){
  ctx.clearRect(0,0,canvas.width,canvas.height);
+ drawBackground();
  follow();
  drawBilly();
  updateParticles();
@@ -160,14 +232,10 @@ function loop(){
  requestAnimationFrame(loop);
 }
 
-const score=document.getElementById('score');
-const multiplierEl=document.getElementById('multiplier');
-const levelEl=document.getElementById('level');
-const energyFill=document.getElementById('energyFill');
-const comboEl=document.getElementById('combo');
-
+// Inicialización
 resizeCanvas();
 updateUI();
 loop();
-</script></body>
+</script>
+</body>
 </html>
