@@ -54,7 +54,6 @@ window.addEventListener('resize',resizeCanvas);
 let coins=0,level=1,multiplier=1;
 let tapPower=1,energy=100,maxEnergy=100;
 let combo=0,comboTimer=null;
-let lastLevel=1;
 
 // --- Billy ---
 const billyIdle=new Image(); billyIdle.src="billy_coins.png";
@@ -73,6 +72,7 @@ const audioTap=new Audio('https://freesound.org/data/previews/341/341695_5260873
 const audioCrit=new Audio('https://freesound.org/data/previews/108/108019_838627-lq.mp3');
 const audioLoot=new Audio('https://freesound.org/data/previews/331/331912_3248244-lq.mp3');
 const audioLevelUp=new Audio('https://freesound.org/data/previews/146/146725_285997-lq.mp3');
+const audioMouse=new Audio('https://freesound.org/data/previews/341/341695_5260873-lq.mp3'); // squeak
 
 // --- Estado Billy ---
 function setBillyState(img,time=600,shake=0){
@@ -109,36 +109,13 @@ function animateTap(crit=false, targetX=null, targetY=null){
 
 // --- Seguimiento ---
 let pointerX=null,pointerY=null;
-function follow(){
- if(pointerX){
-  billy.x+= (pointerX-billy.x)*0.08;
-  billy.y+= (pointerY-billy.y)*0.08;
- }
-}
-canvas.addEventListener('mousemove', e=>{
- const rect=canvas.getBoundingClientRect();
- pointerX=e.clientX-rect.left;
- pointerY=e.clientY-rect.top;
-});
-canvas.addEventListener('touchmove', e=>{
- e.preventDefault();
- const rect=canvas.getBoundingClientRect();
- pointerX=e.touches[0].clientX-rect.left;
- pointerY=e.touches[0].clientY-rect.top;
-},{passive:false});
+function follow(){ if(pointerX){ billy.x+= (pointerX-billy.x)*0.08; billy.y+= (pointerY-billy.y)*0.08; } }
+canvas.addEventListener('mousemove', e=>{ const rect=canvas.getBoundingClientRect(); pointerX=e.clientX-rect.left; pointerY=e.clientY-rect.top; });
+canvas.addEventListener('touchmove', e=>{ e.preventDefault(); const rect=canvas.getBoundingClientRect(); pointerX=e.touches[0].clientX-rect.left; pointerY=e.touches[0].clientY-rect.top; },{passive:false});
 
 // --- Partículas ---
 function createParticles(color="#22c55e", x=billy.x, y=billy.y){
- for(let i=0;i<12;i++){
-  particles.push({
-   x:x,
-   y:y,
-   vx:(Math.random()-0.5)*4,
-   vy:-Math.random()*4,
-   life:30+Math.random()*15,
-   color:color
-  });
- }
+ for(let i=0;i<12;i++){ particles.push({ x:x, y:y, vx:(Math.random()-0.5)*4, vy:-Math.random()*4, life:30+Math.random()*15, color:color }); }
 }
 function updateParticles(){particles.forEach(p=>{p.x+=p.vx;p.y+=p.vy;p.life--});particles=particles.filter(p=>p.life>0)}
 function drawParticles(){particles.forEach(p=>{ctx.globalAlpha=p.life/40;ctx.fillStyle=p.color;ctx.beginPath();ctx.arc(p.x,p.y,3,0,Math.PI*2);ctx.fill()});ctx.globalAlpha=1}
@@ -154,103 +131,74 @@ const multiplierEl=document.getElementById('multiplier');
 const levelEl=document.getElementById('level');
 const energyFill=document.getElementById('energyFill');
 const comboEl=document.getElementById('combo');
-function updateUI(){
- score.innerText=coins;
- multiplierEl.innerText=multiplier;
- levelEl.innerText=level;
- energyFill.style.width=(energy/maxEnergy*100)+"%";
- comboEl.innerText=combo;
-}
+function updateUI(){ score.innerText=coins; multiplierEl.innerText=multiplier; levelEl.innerText=level; energyFill.style.width=(energy/maxEnergy*100)+"%"; comboEl.innerText=combo; }
 
 // --- Niveles y Combos ---
 function updateLevel(){
  let newLevel=Math.floor(Math.pow(coins/300,0.75))+1;
- if(newLevel>level){
-   level=newLevel;
-   multiplier=1+Math.floor(level/4);
-   createParticles("#FFD700", billy.x, billy.y);
-   audioLevelUp.play();
- }
+ if(newLevel>level){ level=newLevel; multiplier=1+Math.floor(level/4); createParticles("#FFD700", billy.x, billy.y); audioLevelUp.play(); }
  level=newLevel;
  multiplier=1+Math.floor(level/4);
 }
 function addCombo(){combo++;clearTimeout(comboTimer);comboTimer=setTimeout(()=>combo=0,2000)}
 
-// --- Burbujas Bonus Avanzadas ---
+// --- Burbujas Bonus ---
 let bonusBubbles=[];
 const bubbleImg=billyIdle;
 const maxBubbles=3;
 const bubbleSpawnInterval=4000;
-
-function spawnBubble(){
- if(bonusBubbles.length >= maxBubbles) return;
- const size = 50 + Math.random()*30;
- bonusBubbles.push({
-   x: Math.random()*(canvas.width-size)+size/2,
-   y: Math.random()*(canvas.height-size)+size/2,
-   size: size,
-   life: 8000,
-   created: Date.now(),
-   points: Math.random()<0.7 // 70% chance de dar puntos
- });
-}
-
+function spawnBubble(){ if(bonusBubbles.length>=maxBubbles) return; const size=50+Math.random()*30; bonusBubbles.push({x: Math.random()*(canvas.width-size)+size/2, y: Math.random()*(canvas.height-size)+size/2, size: size, life: 8000, created: Date.now(), points: Math.random()<0.7}); }
 function checkBubbleClick(x,y){
  for(let i=bonusBubbles.length-1;i>=0;i--){
    const b=bonusBubbles[i];
-   const dx=x-b.x; const dy=y-b.y;
+   const dx=x-b.x, dy=y-b.y;
    if(Math.sqrt(dx*dx+dy*dy)<b.size/2){
-      if(b.points){
-         const gain=Math.floor(tapPower*multiplier*2);
-         coins+=gain;
-         floatingText("+"+gain,"#FFD700", b.x, b.y);
-         createParticles("#FFD700", b.x, b.y);
-         audioCrit.play();
-      } else {
-         createParticles("#888", b.x, b.y);
-      }
-      // Multiplicar burbujas
-      if(Math.random()<0.5 && b.size>30){
-         for(let j=0;j<2;j++){
-            bonusBubbles.push({
-               x:b.x+Math.random()*20-10,
-               y:b.y+Math.random()*20-10,
-               size:b.size/1.5,
-               life:4000,
-               created:Date.now(),
-               points: Math.random()<0.5
-            });
-         }
-      }
+      if(b.points){ const gain=Math.floor(tapPower*multiplier*2); coins+=gain; floatingText("+"+gain,"#FFD700", b.x, b.y); createParticles("#FFD700", b.x, b.y); audioCrit.play(); } else { createParticles("#888", b.x, b.y); }
+      if(Math.random()<0.5 && b.size>30){ for(let j=0;j<2;j++){ bonusBubbles.push({x:b.x+Math.random()*20-10, y:b.y+Math.random()*20-10, size:b.size/1.5, life:4000, created:Date.now(), points: Math.random()<0.5}); } }
       bonusBubbles.splice(i,1);
-      updateLevel();
-      updateUI();
-      break;
+      updateLevel(); updateUI(); break;
    }
  }
 }
-
-function drawBubbles(){
- bonusBubbles.forEach(b=>{
-   const t=(Date.now()-b.created)/b.life;
-   const scale=0.8+0.2*Math.sin(t*Math.PI*2);
-   ctx.save();
-   ctx.translate(b.x,b.y);
-   ctx.scale(scale,scale);
-   ctx.globalAlpha=Math.max(0,1-t);
-   ctx.drawImage(bubbleImg,-b.size/2,-b.size/2,b.size,b.size);
-   ctx.restore();
- });
-}
-
-function updateBubbles(){
- const now=Date.now();
- bonusBubbles=bonusBubbles.filter(b=>now-b.created<b.life);
-}
-
+function drawBubbles(){ bonusBubbles.forEach(b=>{ const t=(Date.now()-b.created)/b.life; const scale=0.8+0.2*Math.sin(t*Math.PI*2); ctx.save(); ctx.translate(b.x,b.y); ctx.scale(scale,scale); ctx.globalAlpha=Math.max(0,1-t); ctx.drawImage(bubbleImg,-b.size/2,-b.size/2,b.size,b.size); ctx.restore(); }); }
+function updateBubbles(){ const now=Date.now(); bonusBubbles=bonusBubbles.filter(b=>now-b.created<b.life); }
 setInterval(spawnBubble,bubbleSpawnInterval);
 
-// --- Tap ---
+// --- Ratones ---
+let mice=[];
+const mouseSize=40;
+const mouseSpawnInterval=3000;
+function spawnMouse(){
+  const y=Math.random()*(canvas.height-50)+25;
+  const dir=Math.random()<0.5?-1:1;
+  mice.push({x: dir===1? -mouseSize:canvas.width+mouseSize, y:y, size:mouseSize, dir:dir, speed:2+Math.random()*2, created:Date.now(), points:true});
+}
+function updateMice(){
+  for(let m of mice){ m.x += m.speed*m.dir; }
+  mice = mice.filter(m => m.x> -mouseSize && m.x < canvas.width + mouseSize);
+}
+function drawMice(){
+  for(let m of mice){
+    ctx.save();
+    ctx.translate(m.x,m.y);
+    ctx.fillStyle=m.points?"#fff":"#888";
+    ctx.beginPath(); ctx.arc(0,0,m.size/2,0,Math.PI*2); ctx.fill();
+    ctx.restore();
+  }
+}
+function checkMouseClick(x,y){
+  for(let i=mice.length-1;i>=0;i--){
+    const m=mice[i];
+    const dx=x-m.x, dy=y-m.y;
+    if(Math.sqrt(dx*dx+dy*dy)<m.size/2){
+      if(m.points){ const gain=Math.floor(tapPower*multiplier*3); coins+=gain; floatingText("+"+gain,"#FFA500", m.x, m.y); createParticles("#FFA500", m.x, m.y); audioMouse.play(); }
+      mice.splice(i,1); updateUI(); updateLevel(); break;
+    }
+  }
+}
+setInterval(spawnMouse,mouseSpawnInterval);
+
+// --- Tap principal ---
 function handleTap(x=null,y=null){
  if(energy<=0){ setBillyState(billySad,800,1); return; }
  addCombo();
@@ -268,48 +216,31 @@ function handleTap(x=null,y=null){
  else{setBillyState(billyIdle,300);}
 }
 
-// --- Eventos ---
+// --- Eventos click/tap ---
 canvas.addEventListener('click', e=>{
   const rect=canvas.getBoundingClientRect();
   const x=e.clientX-rect.left;
   const y=e.clientY-rect.top;
-  handleTap(x,y);
-  checkBubbleClick(x,y);
+  handleTap(x,y); checkBubbleClick(x,y); checkMouseClick(x,y);
 });
 canvas.addEventListener('touchstart', e=>{
   const rect=canvas.getBoundingClientRect();
   const x=e.touches[0].clientX-rect.left;
   const y=e.touches[0].clientY-rect.top;
-  handleTap(x,y);
-  checkBubbleClick(x,y);
+  handleTap(x,y); checkBubbleClick(x,y); checkMouseClick(x,y);
 },{passive:false});
 
 // --- Botones ---
-document.getElementById('upgradeTap').onclick=()=>{
- let cost=Math.floor(80*Math.pow(1.6,tapPower));
- if(coins>=cost){coins-=cost;tapPower++;setBillyState(billyHappy,800);createParticles("#00ffff");updateUI(); audioTap.play();}
-}
-document.getElementById('lootBox').onclick=()=>{
- let roll=Math.random();
- if(roll<0.5){coins+=50+Math.floor(Math.random()*50); setBillyState(billyHappy,800); audioLoot.play(); createParticles("#ff66ff");}
- else{setBillyState(billyAngry,800,1);}
- updateUI();
-}
-document.getElementById('shareBtn').onclick=()=>{
- const text=`Billy 😺 ${coins} coins | Lv ${level}`;
- window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`,'_blank');
-}
+document.getElementById('upgradeTap').onclick=()=>{ let cost=Math.floor(80*Math.pow(1.6,tapPower)); if(coins>=cost){coins-=cost;tapPower++;setBillyState(billyHappy,800);createParticles("#00ffff");updateUI(); audioTap.play();} }
+document.getElementById('lootBox').onclick=()=>{ let roll=Math.random(); if(roll<0.5){coins+=50+Math.floor(Math.random()*50); setBillyState(billyHappy,800); audioLoot.play(); createParticles("#ff66ff");} else{setBillyState(billyAngry,800,1);} updateUI(); }
+document.getElementById('shareBtn').onclick=()=>{ const text=`Billy 😺 ${coins} coins | Lv ${level}`; window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`,'_blank'); }
 
 // --- Fondo ---
 function drawBackground(){
- const time=Date.now()/1000;
  const w=canvas.width,h=canvas.height;
  const gradient=ctx.createRadialGradient(w/2,h/2,0,w/2,h/2,h/1.2);
- gradient.addColorStop(0,`rgba(0,255,128,0.05)`);
- gradient.addColorStop(0.5,`rgba(0,128,255,0.05)`);
- gradient.addColorStop(1,"rgba(0,0,0,0.2)");
- ctx.fillStyle=gradient;
- ctx.fillRect(0,0,w,h);
+ gradient.addColorStop(0,"rgba(0,255,128,0.05)"); gradient.addColorStop(0.5,"rgba(0,128,255,0.05)"); gradient.addColorStop(1,"rgba(0,0,0,0.2)");
+ ctx.fillStyle=gradient; ctx.fillRect(0,0,w,h);
  if(Math.random()<0.03) effects.push({x:Math.random()*w,y:Math.random()*h,r:Math.random()*4+2,life:20});
  effects.forEach(e=>{ctx.globalAlpha=e.life/20;ctx.fillStyle="#fff";ctx.beginPath();ctx.arc(e.x,e.y,e.r,0,Math.PI*2);ctx.fill(); e.life--;});
  effects=effects.filter(e=>e.life>0);
@@ -319,12 +250,9 @@ function drawBackground(){
 // --- Loop ---
 function loop(){
  ctx.clearRect(0,0,canvas.width,canvas.height);
- drawBackground();
- follow();
- drawBilly();
- updateParticles(); drawParticles();
- updateFloating(); drawFloating();
- updateBubbles(); drawBubbles();
+ drawBackground(); follow(); drawBilly();
+ updateParticles(); drawParticles(); updateFloating(); drawFloating();
+ updateBubbles(); drawBubbles(); updateMice(); drawMice();
  requestAnimationFrame(loop);
 }
 
