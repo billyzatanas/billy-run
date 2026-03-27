@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
-    <title>🐱 BILLY EL GATO - VERSIÓN FUNCIONAL</title>
+    <title>🐱 BILLY EL GATO - EDICIÓN COMPLETA</title>
     <style>
         * {
             margin: 0;
@@ -18,42 +18,29 @@
             min-height: 100vh;
             overflow: hidden;
             position: relative;
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            background: radial-gradient(circle at center, #0a0a2a 0%, #050510 100%);
         }
 
-        /* Billy principal - VERSIÓN SIMPLIFICADA */
-        #billy {
+        /* Fondo dinámico con estrellas */
+        .stars {
             position: fixed;
-            width: 150px;
-            height: 150px;
-            background: radial-gradient(circle, #FFD966, #FFA500);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 80px;
-            cursor: pointer;
-            z-index: 20;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
-            transition: transform 0.05s linear;
-            left: 50%;
-            top: 50%;
-            transform: translate(-50%, -50%);
-        }
-        
-        #billy:active {
-            transform: translate(-50%, -50%) scale(0.95);
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
         }
 
-        /* Paneles superiores */
+        /* Paneles superiores - mejor espaciado */
         .top-panel {
             position: fixed;
-            top: 12px;
-            left: 12px;
-            right: 12px;
+            top: 10px;
+            left: 10px;
+            right: 10px;
             display: flex;
             justify-content: space-between;
-            gap: 6px;
+            gap: 8px;
             z-index: 30;
             flex-wrap: wrap;
         }
@@ -61,21 +48,22 @@
         .stat-card {
             background: rgba(0, 0, 0, 0.85);
             backdrop-filter: blur(8px);
-            padding: 8px 12px;
+            padding: 6px 12px;
             border-radius: 40px;
-            font-size: 14px;
+            font-size: 12px;
             font-weight: bold;
             color: #FFE484;
             border: 1px solid rgba(255, 200, 100, 0.5);
             box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+            white-space: nowrap;
         }
 
-        /* Barra de tokens */
+        /* Token bar */
         .token-bar {
             position: fixed;
-            top: 75px;
-            left: 12px;
-            right: 12px;
+            top: 70px;
+            left: 10px;
+            right: 10px;
             background: linear-gradient(135deg, #fbbf24, #f59e0b);
             border-radius: 60px;
             padding: 8px 16px;
@@ -90,8 +78,8 @@
         /* Combo y récords */
         .combo-panel {
             position: fixed;
-            top: 125px;
-            right: 12px;
+            top: 120px;
+            right: 10px;
             background: rgba(0, 0, 0, 0.85);
             backdrop-filter: blur(8px);
             padding: 8px 16px;
@@ -105,8 +93,8 @@
         
         .records-panel {
             position: fixed;
-            top: 125px;
-            left: 12px;
+            top: 120px;
+            left: 10px;
             background: rgba(0, 0, 0, 0.85);
             backdrop-filter: blur(8px);
             padding: 8px 12px;
@@ -117,12 +105,38 @@
             text-align: center;
         }
 
+        /* Desafíos */
+        .challenges-panel {
+            position: fixed;
+            bottom: 95px;
+            left: 10px;
+            right: 10px;
+            background: rgba(0,0,0,0.8);
+            border-radius: 20px;
+            padding: 8px;
+            z-index: 30;
+            backdrop-filter: blur(5px);
+            display: flex;
+            justify-content: space-around;
+            gap: 8px;
+        }
+        
+        .challenge-item {
+            font-size: 10px;
+            color: #FFD966;
+            text-align: center;
+            flex: 1;
+            background: rgba(0,0,0,0.5);
+            padding: 4px;
+            border-radius: 12px;
+        }
+
         /* Barra de energía */
         .energy-container {
             position: fixed;
-            bottom: 95px;
-            left: 12px;
-            right: 12px;
+            bottom: 150px;
+            left: 10px;
+            right: 10px;
             background: rgba(0,0,0,0.7);
             border-radius: 20px;
             padding: 8px 12px;
@@ -142,27 +156,26 @@
             background: linear-gradient(90deg, #22c55e, #facc15);
             border-radius: 20px;
             transition: width 0.2s;
-            width: 100%;
         }
 
-        /* Botones de acción */
+        /* Botones de acción - mejor espaciado */
         .action-buttons {
             position: fixed;
-            bottom: 20px;
-            left: 12px;
-            right: 12px;
+            bottom: 15px;
+            left: 10px;
+            right: 10px;
             display: flex;
-            gap: 10px;
+            gap: 8px;
             z-index: 30;
         }
         
         .btn {
             flex: 1;
-            padding: 12px 8px;
+            padding: 10px 6px;
             border: none;
             border-radius: 50px;
             font-weight: bold;
-            font-size: 14px;
+            font-size: 12px;
             cursor: pointer;
             background: linear-gradient(145deg, #1e293b, #0f172a);
             color: white;
@@ -184,8 +197,45 @@
         .btn-solana {
             background: linear-gradient(145deg, #14f195, #9945ff);
         }
+        
+        .btn-sound {
+            background: linear-gradient(145deg, #334155, #1e293b);
+        }
 
-        /* Área de juego para ratones y burbujas */
+        /* Billy - con efecto de seguimiento */
+        #billy {
+            position: fixed;
+            width: 140px;
+            height: 140px;
+            background: radial-gradient(circle, #FFD966, #FFA500);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 75px;
+            cursor: pointer;
+            z-index: 20;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+            transition: transform 0.05s linear, left 0.1s ease-out, top 0.1s ease-out;
+            will-change: transform, left, top;
+            pointer-events: auto;
+        }
+        
+        #billy:active {
+            transform: scale(0.95);
+        }
+        
+        .billy-golden {
+            box-shadow: 0 0 20px gold;
+            animation: pulseGold 0.5s infinite;
+        }
+        
+        @keyframes pulseGold {
+            0%, 100% { box-shadow: 0 0 20px gold; }
+            50% { box-shadow: 0 0 40px #ffaa44; }
+        }
+
+        /* Área de juego */
         #gameArea {
             position: fixed;
             top: 0;
@@ -208,6 +258,13 @@
             filter: drop-shadow(0 4px 6px rgba(0,0,0,0.3));
             transition: transform 0.05s;
             pointer-events: auto;
+            animation: bounce 0.3s ease;
+        }
+        
+        @keyframes bounce {
+            0% { transform: scale(0); }
+            80% { transform: scale(1.1); }
+            100% { transform: scale(1); }
         }
         
         .game-entity:active {
@@ -224,18 +281,31 @@
             background: radial-gradient(circle, #FBBF24, #E67E22);
             border-radius: 50%;
             border: 3px solid gold;
-            animation: pulseGold 0.8s infinite;
+            animation: pulseGoldMouse 0.8s infinite;
+        }
+        
+        .mouse-boss {
+            background: radial-gradient(circle, #4a2a1a, #2a1a0a);
+            border-radius: 50%;
+            border: 3px solid #c97e3a;
+            font-size: 32px !important;
         }
         
         .bubble {
             background: radial-gradient(circle, #FFE484, #F59E0B);
             border-radius: 50%;
             box-shadow: 0 0 15px gold;
+            animation: float 2s ease-in-out infinite;
         }
         
-        @keyframes pulseGold {
+        @keyframes pulseGoldMouse {
             0% { transform: scale(1); box-shadow: 0 0 5px gold; }
             100% { transform: scale(1.05); box-shadow: 0 0 20px #ffaa44; }
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-5px); }
         }
 
         /* Notificaciones */
@@ -278,25 +348,45 @@
             100% { opacity: 0; transform: translateY(-70px); }
         }
         
-        .challenge-item {
-            font-size: 10px;
-            margin-top: 4px;
+        .ripple {
+            position: fixed;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(251,191,36,0.6) 0%, rgba(251,191,36,0) 80%);
+            pointer-events: none;
+            animation: rippleAnim 0.5s ease-out forwards;
+            z-index: 90;
+        }
+        
+        @keyframes rippleAnim {
+            0% { transform: scale(0); opacity: 0.7; }
+            100% { transform: scale(5); opacity: 0; }
         }
         
         @media (max-width: 600px) {
-            .btn { font-size: 11px; padding: 10px 6px; }
-            .stat-card { font-size: 11px; padding: 6px 10px; }
-            #billy { width: 120px; height: 120px; font-size: 65px; }
+            .btn { font-size: 10px; padding: 8px 4px; }
+            .stat-card { font-size: 10px; padding: 4px 8px; }
+            #billy { width: 110px; height: 110px; font-size: 60px; }
+            .combo-panel { font-size: 14px; padding: 6px 12px; top: 115px; }
+            .records-panel { font-size: 9px; top: 115px; }
+            .token-bar { top: 65px; }
+            .challenge-item { font-size: 8px; }
+        }
+        
+        @media (min-width: 601px) {
+            #billy { width: 160px; height: 160px; font-size: 85px; }
         }
     </style>
 </head>
 <body>
+
+<div class="stars" id="stars"></div>
 
 <div class="top-panel">
     <div class="stat-card">😺 Nv <span id="level">1</span></div>
     <div class="stat-card">💰 <span id="coins">0</span></div>
     <div class="stat-card">⚡ x<span id="multiplier">1</span></div>
     <div class="stat-card">💪 <span id="tapPower">1</span></div>
+    <div class="stat-card">📏 <span id="billySize">100</span>%</div>
 </div>
 
 <div class="token-bar" id="tokenBar">
@@ -318,17 +408,21 @@
     <div class="energy-bg"><div class="energy-fill" id="energyFill"></div></div>
 </div>
 
+<div class="challenges-panel" id="challengesPanel"></div>
+
 <div class="action-buttons">
     <button class="btn" id="upgradeBtn">💪 Mejorar</button>
     <button class="btn btn-primary" id="lootBtn">🎁 Cofre</button>
-    <button class="btn" id="shareXBtn">🐦 Compartir</button>
+    <button class="btn" id="skinsBtn">🎨 Skins</button>
+    <button class="btn btn-sound" id="toggleMusicBtn">🎵 ON</button>
+    <button class="btn btn-solana" id="shareXBtn">🐦 X</button>
 </div>
 
 <div id="gameArea"></div>
 <div id="billy">🐱</div>
 
 <script>
-    // ==================== VARIABLES DEL JUEGO ====================
+    // ==================== CONFIGURACIÓN ====================
     let coins = 0;
     let level = 1;
     let multiplier = 1;
@@ -344,16 +438,29 @@
     let totalMiceCaught = 0;
     let totalCrits = 0;
     let noCritCounter = 0;
+    let superComboActive = false;
+    let goldenBilly = false;
+    let musicEnabled = true;
     
     // Entidades
     let mice = [];
     let bubbles = [];
+    let mouseStreak = 0;
+    
+    // Skins
+    let skinsUnlocked = [true, false, false];
+    let currentSkin = 0;
+    let skinPrices = [0, 500, 1500];
     
     // Desafíos
     let challenges = { mice: 0, crits: 0, maxCombo: 0 };
+    let weeklyRewards = { mice: 25, crits: 15, combo: 12 };
     
-    // Cargar datos guardados
-    const saved = localStorage.getItem('billyGame');
+    // Eventos especiales
+    let goldenHourActive = false;
+    
+    // Cargar datos
+    const saved = localStorage.getItem('billyComplete');
     if(saved) {
         try {
             const data = JSON.parse(saved);
@@ -363,7 +470,11 @@
             billyTokens = data.billyTokens || 0;
             bestCombo = data.bestCombo || 0;
             highScore = data.highScore || 0;
+            skinsUnlocked = data.skinsUnlocked || [true, false, false];
+            totalMiceCaught = data.totalMiceCaught || 0;
+            totalCrits = data.totalCrits || 0;
             multiplier = 1 + Math.floor(level / 4);
+            maxEnergy = 100 + Math.floor(level / 2) * 5;
         } catch(e) {}
     }
     
@@ -375,14 +486,30 @@
         document.getElementById('tapPower').textContent = tapPower;
         document.getElementById('comboCount').textContent = combo;
         document.getElementById('energyCurrent').textContent = Math.floor(energy);
+        document.getElementById('energyMax').textContent = maxEnergy;
         document.getElementById('energyFill').style.width = (energy / maxEnergy * 100) + '%';
         document.getElementById('billyTokens').textContent = Math.floor(billyTokens);
         document.getElementById('bestCombo').textContent = bestCombo;
         document.getElementById('highScore').textContent = highScore;
         
+        let sizePercent = 100 + Math.floor(level / 5) * 5;
+        document.getElementById('billySize').textContent = Math.min(sizePercent, 150);
+        
         if(coins > highScore) {
             highScore = Math.floor(coins);
             document.getElementById('highScore').textContent = highScore;
+        }
+        
+        // Aplicar skin
+        const billyDiv = document.getElementById('billy');
+        if(currentSkin === 1) billyDiv.style.background = 'radial-gradient(circle, #FFD700, #FFA500)';
+        else if(currentSkin === 2) billyDiv.style.background = 'radial-gradient(circle, #FF6B6B, #FF4444)';
+        else billyDiv.style.background = 'radial-gradient(circle, #FFD966, #FFA500)';
+        
+        if(goldenBilly || superComboActive) {
+            billyDiv.classList.add('billy-golden');
+        } else {
+            billyDiv.classList.remove('billy-golden');
         }
     }
     
@@ -391,7 +518,7 @@
         div.className = 'notification';
         div.textContent = msg;
         document.body.appendChild(div);
-        setTimeout(() => div.remove(), 1000);
+        setTimeout(() => div.remove(), 1200);
     }
     
     function floatingNumber(value, x, y, isCrit = false) {
@@ -406,8 +533,19 @@
         setTimeout(() => div.remove(), 700);
     }
     
+    function createRipple(x, y) {
+        const ripple = document.createElement('div');
+        ripple.className = 'ripple';
+        ripple.style.left = (x - 35) + 'px';
+        ripple.style.top = (y - 35) + 'px';
+        ripple.style.width = '70px';
+        ripple.style.height = '70px';
+        document.body.appendChild(ripple);
+        setTimeout(() => ripple.remove(), 500);
+    }
+    
     function createParticles(x, y, color) {
-        for(let i = 0; i < 10; i++) {
+        for(let i = 0; i < 12; i++) {
             const particle = document.createElement('div');
             particle.style.position = 'fixed';
             particle.style.left = x + 'px';
@@ -420,7 +558,7 @@
             particle.style.zIndex = '100';
             
             const angle = Math.random() * Math.PI * 2;
-            const speed = 2 + Math.random() * 4;
+            const speed = 2 + Math.random() * 5;
             let vx = Math.cos(angle) * speed;
             let vy = Math.sin(angle) * speed - 2;
             let life = 30;
@@ -450,25 +588,40 @@
             if(combo > challenges.maxCombo) challenges.maxCombo = combo;
         }
         
+        if(combo >= 12 && !superComboActive) {
+            superComboActive = true;
+            goldenBilly = true;
+            showNotification("✨ SUPER COMBO ACTIVADO! x1.5 ✨");
+            setTimeout(() => {
+                if(combo < 12) {
+                    goldenBilly = false;
+                    superComboActive = false;
+                }
+            }, 5000);
+        }
+        
         clearTimeout(comboTimer);
         comboTimer = setTimeout(() => {
             if(combo >= 3) showNotification(`🔥 Combo ${combo} perdido!`);
             combo = 0;
+            superComboActive = false;
+            goldenBilly = false;
             updateUI();
         }, 2000);
         
         updateUI();
+        updateChallenges();
     }
     
     // ==================== SISTEMA DE NIVEL ====================
     function updateLevel() {
-        let needed = 100 * Math.pow(1.3, level - 1);
+        let needed = 120 * Math.pow(1.28, level - 1);
         if(coins >= needed) {
             level++;
             multiplier = 1 + Math.floor(level / 4);
             maxEnergy = 100 + Math.floor(level / 2) * 5;
-            energy = Math.min(maxEnergy, energy + 30);
-            showNotification(`🎉 NIVEL ${level}! 🎉`);
+            energy = Math.min(maxEnergy, energy + 40);
+            showNotification(`🎉 NIVEL ${level}! +40 energía 🎉`);
             updateUI();
             updateLevel();
         }
@@ -476,17 +629,47 @@
     
     // ==================== TOKENS ====================
     function mineTokens(amount) {
-        let earned = Math.floor(amount / 10);
+        let earned = Math.floor(amount / 8);
         if(earned > 0) {
             billyTokens += earned;
             updateUI();
         }
     }
     
+    // ==================== SEGUIMIENTO DE BILLY ====================
+    let targetX = window.innerWidth / 2;
+    let targetY = window.innerHeight / 2;
+    let billyX = window.innerWidth / 2;
+    let billyY = window.innerHeight / 2;
+    
+    function updateBillyPosition() {
+        billyX += (targetX - billyX) * 0.12;
+        billyY += (targetY - billyY) * 0.12;
+        
+        const billyDiv = document.getElementById('billy');
+        billyDiv.style.left = (billyX - billyDiv.offsetWidth / 2) + 'px';
+        billyDiv.style.top = (billyY - billyDiv.offsetHeight / 2) + 'px';
+        
+        requestAnimationFrame(updateBillyPosition);
+    }
+    updateBillyPosition();
+    
+    document.addEventListener('mousemove', (e) => {
+        targetX = e.clientX;
+        targetY = e.clientY;
+    });
+    
+    document.addEventListener('touchmove', (e) => {
+        e.preventDefault();
+        const t = e.touches[0];
+        targetX = t.clientX;
+        targetY = t.clientY;
+    }, { passive: false });
+    
     // ==================== TAP EN BILLY ====================
     function tapBilly(event) {
         if(energy <= 0) {
-            showNotification('💤 Sin energía! Espera un momento');
+            showNotification('💤 Sin energía! Espera 5 segundos');
             return;
         }
         
@@ -494,11 +677,11 @@
         totalTaps++;
         
         // Calcular crítico
-        let critChance = 15 + Math.floor(combo / 2);
+        let critChance = 12 + Math.floor(combo / 2.5);
         if(noCritCounter >= 8) {
             critChance = 100;
             noCritCounter = 0;
-            showNotification("💥 ¡CRÍTICO ASEGURADO!");
+            showNotification("💥 ¡CRÍTICO GARANTIZADO!");
         }
         
         const isCrit = Math.random() * 100 < critChance;
@@ -510,14 +693,15 @@
             noCritCounter++;
         }
         
-        // Calcular ganancia
-        let gain = tapPower * multiplier * (isCrit ? 5 : 1) * (1 + combo * 0.04);
-        gain = Math.floor(gain);
+        // Calcular ganancia (balanceado)
+        let gain = tapPower * multiplier * (isCrit ? 4 : 1) * (1 + combo * 0.03);
+        if(superComboActive) gain = gain * 1.5;
+        gain = Math.floor(Math.max(1, gain));
         coins += gain;
         
         // Consumir energía
-        energy -= Math.max(1, Math.floor(combo / 6));
-        if(energy < 0) energy = 0;
+        let energyCost = Math.max(1, Math.floor(combo / 8));
+        energy = Math.max(0, energy - energyCost);
         
         updateUI();
         updateLevel();
@@ -525,39 +709,67 @@
         
         // Efectos visuales
         const billyDiv = document.getElementById('billy');
-        billyDiv.style.transform = 'translate(-50%, -50%) scale(0.9)';
-        setTimeout(() => billyDiv.style.transform = 'translate(-50%, -50%) scale(1)', 100);
+        billyDiv.style.transform = 'scale(0.92)';
+        setTimeout(() => billyDiv.style.transform = 'scale(1)', 100);
         
-        const clickX = event.clientX || (event.touches ? event.touches[0].clientX : window.innerWidth/2);
-        const clickY = event.clientY || (event.touches ? event.touches[0].clientY : window.innerHeight/2);
+        const clickX = event.clientX || (event.touches ? event.touches[0].clientX : billyX);
+        const clickY = event.clientY || (event.touches ? event.touches[0].clientY : billyY);
         
+        createRipple(clickX, clickY);
         createParticles(clickX, clickY, isCrit ? '#FFD966' : '#A5F0A0');
         floatingNumber(gain, clickX, clickY, isCrit);
         
-        if(isCrit) showNotification(`⚡ CRÍTICO! x${Math.floor(1 + combo * 0.05)}`);
+        if(isCrit && combo > 5) showNotification(`⚡ MEGA CRÍTICO! x${Math.floor(1 + combo * 0.03)}`);
         
         updateChallenges();
+        
+        // Audio simulado (beep)
+        if(window.AudioContext || window.webkitAudioContext) {
+            try {
+                const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                const osc = audioCtx.createOscillator();
+                const gainNode = audioCtx.createGain();
+                osc.connect(gainNode);
+                gainNode.connect(audioCtx.destination);
+                osc.frequency.value = isCrit ? 880 : 660;
+                gainNode.gain.value = 0.1;
+                osc.start();
+                gainNode.gain.exponentialRampToValueAtTime(0.00001, audioCtx.currentTime + 0.3);
+                osc.stop(audioCtx.currentTime + 0.3);
+            } catch(e) {}
+        }
     }
     
     // ==================== RATONES ====================
     function spawnMouse() {
-        if(mice.length > 8) return;
+        if(mice.length > 10) return;
         
-        const isGolden = Math.random() < 0.2;
-        const size = 50;
-        const yPos = 100 + Math.random() * (window.innerHeight - 200);
+        const rand = Math.random();
+        let isGolden = false;
+        let isBoss = false;
+        
+        if(goldenHourActive) isGolden = true;
+        else if(rand < 0.12) isGolden = true;
+        else if(rand < 0.2 && level >= 3) isBoss = true;
+        
+        const size = isBoss ? 70 : 45;
+        const yPos = 100 + Math.random() * (window.innerHeight - 220);
         const fromLeft = Math.random() < 0.5;
-        const xStart = fromLeft ? -60 : window.innerWidth + 60;
+        const xStart = fromLeft ? -70 : window.innerWidth + 70;
         const dir = fromLeft ? 1 : -1;
+        
+        let valueMulti = isBoss ? 12 : (isGolden ? 7 : 2.5);
+        const value = Math.floor(tapPower * multiplier * valueMulti);
         
         mice.push({
             x: xStart,
             y: yPos,
             size: size,
             dir: dir,
-            speed: 1.5 + Math.random(),
+            speed: isBoss ? 0.9 : 1.4 + Math.random() * 1.2,
             isGolden: isGolden,
-            value: isGolden ? tapPower * multiplier * 6 : tapPower * multiplier * 2
+            isBoss: isBoss,
+            value: value
         });
     }
     
@@ -580,6 +792,15 @@
         coins += gain;
         totalMiceCaught++;
         challenges.mice++;
+        mouseStreak++;
+        
+        if(mouseStreak >= 3) {
+            let bonus = Math.floor(gain * 0.4);
+            coins += bonus;
+            floatingNumber(bonus, clickX, clickY - 30, false);
+            showNotification("🐱 ¡Racha de ratones! +bonus");
+            mouseStreak = 0;
+        }
         
         createParticles(clickX, clickY, m.isGolden ? '#FFD966' : '#F59E0B');
         floatingNumber(gain, clickX, clickY, m.isGolden);
@@ -595,21 +816,25 @@
     
     // ==================== BURBUJAS ====================
     function spawnBubble() {
-        if(bubbles.length > 5) return;
+        if(bubbles.length > 6) return;
         
-        const size = 45 + Math.random() * 30;
+        const size = 45 + Math.random() * 35;
         bubbles.push({
-            x: 50 + Math.random() * (window.innerWidth - 100),
-            y: 100 + Math.random() * (window.innerHeight - 200),
+            x: 40 + Math.random() * (window.innerWidth - size - 40),
+            y: 120 + Math.random() * (window.innerHeight - 240),
             size: size,
-            value: Math.floor(tapPower * multiplier * (Math.random() < 0.3 ? 5 : 2))
+            value: Math.floor(tapPower * multiplier * (Math.random() < 0.25 ? 5 : 2.2)),
+            life: 8000,
+            created: Date.now()
         });
     }
     
     function updateBubbles() {
-        // Las burbujas no se mueven, solo expiran después de un tiempo
-        if(bubbles.length > 10) {
-            bubbles = bubbles.slice(0, 10);
+        const now = Date.now();
+        for(let i = bubbles.length - 1; i >= 0; i--) {
+            if(now - bubbles[i].created > bubbles[i].life) {
+                bubbles.splice(i, 1);
+            }
         }
     }
     
@@ -636,22 +861,26 @@
         const existing = container.querySelectorAll('.game-entity');
         existing.forEach(el => el.remove());
         
-        // Renderizar ratones
+        // Ratones
         mice.forEach((m, idx) => {
             const div = document.createElement('div');
-            div.className = `game-entity ${m.isGolden ? 'mouse-golden' : 'mouse-normal'}`;
+            let className = 'game-entity ';
+            if(m.isBoss) className += 'mouse-boss';
+            else if(m.isGolden) className += 'mouse-golden';
+            else className += 'mouse-normal';
+            div.className = className;
             div.style.left = (m.x - m.size/2) + 'px';
             div.style.top = (m.y - m.size/2) + 'px';
             div.style.width = m.size + 'px';
             div.style.height = m.size + 'px';
             div.style.fontSize = (m.size/2.2) + 'px';
-            div.textContent = m.isGolden ? '🐭✨' : '🐭';
+            div.textContent = m.isBoss ? '🐀👑' : (m.isGolden ? '🐭✨' : '🐭');
             div.dataset.type = 'mouse';
             div.dataset.idx = idx;
             container.appendChild(div);
         });
         
-        // Renderizar burbujas
+        // Burbujas
         bubbles.forEach((b, idx) => {
             const div = document.createElement('div');
             div.className = 'game-entity bubble';
@@ -667,18 +896,15 @@
         });
     }
     
-    // ==================== MANEJADOR DE CLICS EN ENTIDADES ====================
+    // ==================== EVENTOS DE ENTIDADES ====================
     document.getElementById('gameArea').addEventListener('click', (e) => {
         let target = e.target;
         while(target && target !== document.getElementById('gameArea')) {
             if(target.classList && target.classList.contains('game-entity')) {
                 const type = target.dataset.type;
                 const idx = parseInt(target.dataset.idx);
-                if(type === 'mouse') {
-                    catchMouse(idx, e.clientX, e.clientY);
-                } else if(type === 'bubble') {
-                    catchBubble(idx, e.clientX, e.clientY);
-                }
+                if(type === 'mouse') catchMouse(idx, e.clientX, e.clientY);
+                else if(type === 'bubble') catchBubble(idx, e.clientX, e.clientY);
                 e.stopPropagation();
                 return;
             }
@@ -686,132 +912,194 @@
         }
     });
     
-    // ==================== EVENTOS DE TAP EN BILLY ====================
-    const billyElement = document.getElementById('billy');
-    billyElement.addEventListener('click', tapBilly);
-    billyElement.addEventListener('touchstart', (e) => {
-        e.preventDefault();
-        tapBilly(e);
-    });
-    
     // ==================== BOTONES ====================
     document.getElementById('upgradeBtn').onclick = () => {
-        let cost = Math.floor(50 * Math.pow(1.4, tapPower - 1));
+        let cost = Math.floor(60 * Math.pow(1.42, tapPower - 1));
         if(coins >= cost) {
             coins -= cost;
             tapPower++;
             updateUI();
-            showNotification(`💪 Poder de toque aumentado a ${tapPower}!`);
-            createParticles(window.innerWidth/2, window.innerHeight/2, '#FFD966');
+            showNotification(`💪 Poder aumentado a ${tapPower}!`);
+            createParticles(billyX, billyY, '#FFD966');
         } else {
-            showNotification(`💰 Necesitas ${Math.floor(cost - coins)} monedas más`);
+            showNotification(`💰 Faltan ${Math.floor(cost - coins)} monedas`);
         }
     };
     
     document.getElementById('lootBtn').onclick = () => {
-        if(coins >= 50) {
-            coins -= 50;
-            let reward = 80 + Math.floor(Math.random() * 250);
+        if(coins >= 45) {
+            coins -= 45;
+            let reward = 60 + Math.floor(Math.random() * 180);
             coins += reward;
             updateUI();
             updateLevel();
-            showNotification(`🎁 Cofre abierto! +${reward} monedas`);
-            createParticles(window.innerWidth/2, window.innerHeight/2, '#FFD966');
+            showNotification(`🎁 +${reward} monedas!`);
+            createParticles(billyX, billyY, '#FFD966');
         } else {
-            showNotification(`💔 Necesitas 50 monedas`);
+            showNotification(`💔 45 monedas necesarias`);
         }
     };
     
+    document.getElementById('skinsBtn').onclick = () => {
+        let msg = "🎨 SKINS:\n";
+        msg += skinsUnlocked[0] ? "✅ Original\n" : "🔒 Original\n";
+        msg += skinsUnlocked[1] ? "✅ Dorado\n" : `🔒 Dorado (${skinPrices[1]} monedas)\n`;
+        msg += skinsUnlocked[2] ? "✅ Élite\n" : `🔒 Élite (${skinPrices[2]} monedas)\n`;
+        
+        if(!skinsUnlocked[1] && coins >= skinPrices[1]) {
+            if(confirm(msg + "\n¿Comprar skin Dorado?")) {
+                coins -= skinPrices[1];
+                skinsUnlocked[1] = true;
+                currentSkin = 1;
+                updateUI();
+                showNotification("🎨 Skin Dorado desbloqueada!");
+            }
+        } else if(!skinsUnlocked[2] && coins >= skinPrices[2]) {
+            if(confirm(msg + "\n¿Comprar skin Élite?")) {
+                coins -= skinPrices[2];
+                skinsUnlocked[2] = true;
+                currentSkin = 2;
+                updateUI();
+                showNotification("🎨 Skin Élite desbloqueada!");
+            }
+        } else if(skinsUnlocked[1] || skinsUnlocked[2]) {
+            currentSkin = (currentSkin + 1) % 3;
+            while(!skinsUnlocked[currentSkin]) currentSkin = (currentSkin + 1) % 3;
+            showNotification(`🎨 Skin ${currentSkin === 0 ? 'Original' : (currentSkin === 1 ? 'Dorado' : 'Élite')} equipada`);
+            updateUI();
+        } else {
+            alert(msg);
+        }
+    };
+    
+    let musicOn = true;
+    document.getElementById('toggleMusicBtn').onclick = () => {
+        musicOn = !musicOn;
+        document.getElementById('toggleMusicBtn').innerHTML = musicOn ? '🎵 ON' : '🎵 OFF';
+        if(musicOn) showNotification("🎵 Música activada");
+        else showNotification("🔇 Música desactivada");
+    };
+    
     document.getElementById('shareXBtn').onclick = () => {
-        const text = `🐱 ¡Billy El Gato! Nivel ${level} | ${Math.floor(coins)} monedas | Mejor combo ${bestCombo} | Atrapé ${totalMiceCaught} ratones! 🎮 #BillyElGato`;
+        const text = `🐱 ¡Billy El Gato! Nivel ${level} | ${Math.floor(coins)} monedas | Mejor combo ${bestCombo} | Atrapé ${totalMiceCaught} ratones! 🎮 #BillyElGato #Solana`;
         window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`, '_blank');
     };
     
     document.getElementById('tokenBar').onclick = () => {
-        showNotification(`💰 ${Math.floor(billyTokens)} $BILLY tokens acumulados!`);
+        showNotification(`💰 ${Math.floor(billyTokens)} $BILLY tokens. ¡Próximo lanzamiento en Solana!`);
     };
     
     // ==================== DESAFÍOS ====================
     function updateChallenges() {
-        let challengesHTML = `
-            <div class="challenge-item">🐭 Ratones: ${challenges.mice}/20</div>
-            <div class="challenge-item">⚡ Críticos: ${challenges.crits}/15</div>
-            <div class="challenge-item">🔥 Combo máx: ${challenges.maxCombo}/12</div>
+        const panel = document.getElementById('challengesPanel');
+        panel.innerHTML = `
+            <div class="challenge-item">🐭 ${challenges.mice}/${weeklyRewards.mice}</div>
+            <div class="challenge-item">⚡ ${challenges.crits}/${weeklyRewards.crits}</div>
+            <div class="challenge-item">🔥 ${challenges.maxCombo}/${weeklyRewards.combo}</div>
         `;
         
-        let existingPanel = document.querySelector('.challenges-panel');
-        if(!existingPanel) {
-            const panel = document.createElement('div');
-            panel.className = 'challenges-panel';
-            panel.style.cssText = 'position:fixed; top:180px; left:12px; right:12px; background:rgba(0,0,0,0.8); border-radius:20px; padding:8px; z-index:30; backdrop-filter:blur(5px);';
-            panel.innerHTML = challengesHTML;
-            document.body.appendChild(panel);
-        } else {
-            existingPanel.innerHTML = challengesHTML;
-        }
-        
-        // Recompensas
-        if(challenges.mice >= 20) {
-            coins += 200;
+        if(challenges.mice >= weeklyRewards.mice) {
+            let reward = 250;
+            coins += reward;
             challenges.mice = 0;
-            showNotification('🏆 Desafío de ratones completado! +200 monedas');
+            showNotification(`🏆 Desafío ratones! +${reward} monedas`);
             updateUI();
         }
-        if(challenges.crits >= 15) {
-            coins += 150;
+        if(challenges.crits >= weeklyRewards.crits) {
+            let reward = 200;
+            coins += reward;
             challenges.crits = 0;
-            showNotification('🏆 Desafío de críticos completado! +150 monedas');
+            showNotification(`🏆 Desafío críticos! +${reward} monedas`);
             updateUI();
         }
-        if(challenges.maxCombo >= 12) {
-            coins += 300;
+        if(challenges.maxCombo >= weeklyRewards.combo) {
+            let reward = 350;
+            coins += reward;
             challenges.maxCombo = 0;
-            showNotification('🏆 Desafío de combo completado! +300 monedas');
+            showNotification(`🏆 Desafío combo! +${reward} monedas`);
             updateUI();
         }
     }
     
+    // ==================== EVENTOS ESPECIALES ====================
+    setInterval(() => {
+        if(Math.random() < 0.15 && !goldenHourActive) {
+            goldenHourActive = true;
+            showNotification("✨ ¡HORA DORADA! Ratones dorados ✨");
+            setTimeout(() => {
+                goldenHourActive = false;
+                showNotification("⌛ Hora dorada terminada");
+            }, 10000);
+        }
+    }, 35000);
+    
+    setInterval(() => {
+        if(Math.random() < 0.1 && !superComboActive) {
+            showNotification("🎉 ¡EVENTO! Doble monedas por 15s 🎉");
+            let oldMulti = multiplier;
+            multiplier *= 2;
+            setTimeout(() => {
+                multiplier = oldMulti;
+                showNotification("Evento terminado");
+                updateUI();
+            }, 15000);
+            updateUI();
+        }
+    }, 50000);
+    
     // ==================== CICLOS DEL JUEGO ====================
     setInterval(() => {
-        // Regenerar energía
-        let regen = Math.max(1, Math.floor(combo / 4));
+        let regen = Math.max(1, Math.floor(combo / 5));
         energy = Math.min(maxEnergy, energy + regen);
         updateUI();
     }, 1500);
     
-    setInterval(() => {
-        spawnMouse();
-    }, 3500);
-    
-    setInterval(() => {
-        spawnBubble();
-    }, 6000);
-    
+    setInterval(() => spawnMouse(), 3800);
+    setInterval(() => spawnBubble(), 6000);
     setInterval(() => {
         updateMice();
         updateBubbles();
         renderEntities();
     }, 50);
     
-    // Guardado automático
+    // Guardado
     setInterval(() => {
-        localStorage.setItem('billyGame', JSON.stringify({
+        localStorage.setItem('billyComplete', JSON.stringify({
             coins, level, tapPower, billyTokens, bestCombo, highScore,
-            totalTaps, totalMiceCaught, totalCrits
+            skinsUnlocked, totalMiceCaught, totalCrits
         }));
     }, 10000);
+    
+    // Estrellas
+    function generateStars() {
+        const starsDiv = document.getElementById('stars');
+        for(let i = 0; i < 200; i++) {
+            const star = document.createElement('div');
+            star.style.position = 'absolute';
+            star.style.left = Math.random() * 100 + '%';
+            star.style.top = Math.random() * 100 + '%';
+            star.style.width = star.style.height = (1 + Math.random() * 2) + 'px';
+            star.style.background = 'white';
+            star.style.borderRadius = '50%';
+            star.style.opacity = 0.3 + Math.random() * 0.7;
+            star.style.animation = `twinkle ${1 + Math.random() * 2}s infinite alternate`;
+            starsDiv.appendChild(star);
+        }
+    }
+    const styleStar = document.createElement('style');
+    styleStar.textContent = `@keyframes twinkle { from { opacity: 0.3; } to { opacity: 1; } }`;
+    document.head.appendChild(styleStar);
+    generateStars();
     
     // Inicializar
     updateUI();
     updateChallenges();
-    showNotification('🐱 ¡Billy el Gato! Toca a Billy para ganar monedas 🐭');
+    showNotification('🐱 ¡BILLY EL GATO! Toca a Billy para ganar monedas 🐭');
     
-    // Ajustar posición de Billy al cargar
-    setTimeout(() => {
-        const billy = document.getElementById('billy');
-        billy.style.left = '50%';
-        billy.style.top = '50%';
-    }, 100);
+    // Ajustar tamaño de Billy
+    const billyDiv = document.getElementById('billy');
+    billyDiv.style.left = (window.innerWidth / 2 - billyDiv.offsetWidth / 2) + 'px';
+    billyDiv.style.top = (window.innerHeight / 2 - billyDiv.offsetHeight / 2) + 'px';
 </script>
 </body>
 </html>
