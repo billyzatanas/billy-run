@@ -21,7 +21,6 @@
             touch-action: none;
         }
 
-        /* Fondo dinámico */
         .dynamic-bg {
             position: fixed;
             top: 0;
@@ -42,7 +41,6 @@
             z-index: 1;
         }
 
-        /* Paneles principales */
         .top-panel {
             position: fixed;
             top: 12px;
@@ -68,7 +66,6 @@
             border: 1px solid rgba(255, 200, 100, 0.4);
         }
 
-        /* Token bar */
         .token-bar {
             position: fixed;
             top: 75px;
@@ -86,7 +83,6 @@
         .token-label { display: flex; align-items: center; gap: 6px; font-weight: bold; color: #1e1a2f; font-size: 13px; }
         .token-amount { font-size: 18px; font-weight: bold; color: #1e1a2f; }
 
-        /* Paneles de combo y récords */
         .combo-panel {
             position: fixed;
             top: 125px;
@@ -115,7 +111,6 @@
             text-align: center;
         }
 
-        /* Barra de energía */
         .energy-container {
             position: fixed;
             bottom: 105px;
@@ -130,7 +125,6 @@
         .energy-bg { height: 10px; background: #2d2a3e; border-radius: 20px; overflow: hidden; }
         .energy-fill { height: 100%; background: linear-gradient(90deg, #22c55e, #facc15); border-radius: 20px; transition: width 0.1s; }
 
-        /* Botones */
         .action-buttons {
             position: fixed;
             bottom: 20px;
@@ -159,7 +153,6 @@
         .btn-solana { background: linear-gradient(145deg, #14f195, #9945ff); }
         .btn-sound { background: linear-gradient(145deg, #334155, #1e293b); flex: 0.4; }
 
-        /* Paneles adicionales */
         .challenges-panel {
             position: fixed;
             top: 180px;
@@ -183,7 +176,6 @@
             color: #FFD966;
         }
 
-        /* Notificaciones */
         .notification {
             position: fixed;
             top: 45%;
@@ -263,6 +255,24 @@
             .challenges-panel { top: 165px; }
             .challenge-item { font-size: 8px; padding: 3px 6px; }
         }
+        
+        #gameArea {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 5;
+            cursor: crosshair;
+        }
+        
+        #billyCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 4;
+            pointer-events: none;
+        }
     </style>
 </head>
 <body>
@@ -311,13 +321,13 @@
 </div>
 
 <canvas id="billyCanvas"></canvas>
-<div id="gameArea" style="position:fixed; top:0; left:0; width:100%; height:100%; z-index:5; cursor:crosshair;"></div>
+<div id="gameArea"></div>
 
 <script>
     // ==================== CONFIGURACIÓN INICIAL ====================
     const BILLY_BASE_SIZE = 130;
     
-    // Imágenes de Billy (usando emojis como fallback mientras cargan las imágenes)
+    // Imágenes de Billy
     const images = {
         happy: new Image(), 
         angry: new Image(), 
@@ -325,7 +335,6 @@
         coins: new Image()
     };
     
-    // Cargar imágenes - si no existen, se usarán emojis
     images.happy.src = 'billy_happy.png';
     images.angry.src = 'billy_Angry.png';
     images.sad.src = 'billy_Triste.png';
@@ -384,7 +393,6 @@
         if(currentImg.complete && currentImg.naturalWidth > 0) {
             billyCtx.drawImage(currentImg, -BILLY_BASE_SIZE/2, -BILLY_BASE_SIZE/2, BILLY_BASE_SIZE, BILLY_BASE_SIZE);
         } else {
-            // Fallback con emoji
             billyCtx.fillStyle = "#2c2c2c";
             billyCtx.beginPath();
             billyCtx.arc(0, 0, BILLY_BASE_SIZE/2.2, 0, Math.PI*2);
@@ -473,7 +481,7 @@
     let skinsUnlocked = [true, false, false];
     let skinPrices = [0, 500, 1500];
     
-    // Desafíos semanales
+    // Desafíos
     let challenges = { mice: 0, crits: 0, maxCombo: 0 };
     let weeklyRewards = { mice: 30, crits: 20, combo: 15 };
     
@@ -660,9 +668,10 @@
     // ==================== RATONES ====================
     let mice = [];
     let mouseStreak = 0;
+    let lastSpawnTime = 0;
     
     function spawnMouse() {
-        if(mice.length > 6) return;
+        if(mice.length > 8) return;
         const r = Math.random();
         let type = 'normal';
         if(goldenHourActive) type = 'golden';
@@ -672,39 +681,79 @@
         const isGolden = (type === 'golden');
         const isBoss = (type === 'boss');
         const size = isBoss ? 75 : 50;
-        const yPos = 100 + Math.random() * (window.innerHeight - 220);
+        const yPos = 120 + Math.random() * (window.innerHeight - 240);
         const fromLeft = Math.random() < 0.5;
         const xStart = fromLeft ? -80 : window.innerWidth + 80;
         const dir = fromLeft ? 1 : -1;
-        let zigzag = Math.random() < 0.45;
+        
         mice.push({
-            x: xStart, y: yPos, size: size, dir: dir, speed: isBoss ? 0.85 : 1.4 + Math.random()*1.2,
-            isGolden: isGolden, isBoss: isBoss, zigzag: zigzag, zigzagOffset: 0,
+            x: xStart, 
+            y: yPos, 
+            size: size, 
+            dir: dir, 
+            speed: isBoss ? 1.2 : 2.0 + Math.random() * 1.5,
+            isGolden: isGolden, 
+            isBoss: isBoss,
             value: isBoss ? tapPower * multiplier * 14 : (isGolden ? tapPower * multiplier * 8 : tapPower * multiplier * 2.5),
-            life: 11000, created: Date.now()
+            life: 12000, 
+            created: Date.now()
         });
     }
     
     function updateMice() {
         const now = Date.now();
-        for(let m of mice) {
+        for(let i = mice.length-1; i >= 0; i--) {
+            const m = mice[i];
             m.x += m.speed * m.dir;
-            if(m.zigzag) {
-                m.zigzagOffset += 0.12;
-                m.y += Math.sin(m.zigzagOffset) * 1.3;
-                m.y = Math.min(Math.max(m.y, 80), window.innerHeight-100);
+            
+            // Eliminar si sale de la pantalla
+            if((m.dir === 1 && m.x > window.innerWidth + 150) || 
+               (m.dir === -1 && m.x < -150)) {
+                mice.splice(i,1);
+                continue;
+            }
+            
+            // Eliminar si expiró
+            if(now - m.created > m.life) {
+                mice.splice(i,1);
+                continue;
             }
         }
-        mice = mice.filter(m => (m.dir === 1 && m.x < window.innerWidth+120) || (m.dir === -1 && m.x > -120));
-        mice = mice.filter(m => (now - m.created) < m.life);
-        renderEntities();
     }
     
+    // ==================== BURBUJAS ====================
+    let bubbles = [];
+    
+    function spawnBubble() {
+        if(bubbles.length >= 6) return;
+        const size = 50 + Math.random() * 45;
+        bubbles.push({
+            x: 40 + Math.random() * (window.innerWidth - size - 40),
+            y: 120 + Math.random() * (window.innerHeight - 240),
+            size: size, 
+            value: Math.floor(tapPower * multiplier * (Math.random() < 0.3 ? 6 : 2.5)),
+            life: 10000, 
+            created: Date.now()
+        });
+    }
+    
+    function updateBubbles() {
+        const now = Date.now();
+        for(let i = bubbles.length-1; i >= 0; i--) {
+            if(now - bubbles[i].created > bubbles[i].life) {
+                bubbles.splice(i,1);
+            }
+        }
+    }
+    
+    // ==================== RENDERIZADO DE ENTIDADES ====================
     function renderEntities() {
         const container = document.getElementById('gameArea');
+        // Limpiar solo las entidades existentes
         let existing = document.querySelectorAll('.mouse-entity, .bubble-entity');
         existing.forEach(el => el.remove());
         
+        // Renderizar ratones
         mice.forEach((m, idx) => {
             const timeLeft = (m.life - (Date.now() - m.created)) / 1000;
             const isEscaping = timeLeft < 1.5;
@@ -720,11 +769,15 @@
             div.style.fontSize = (m.size/2.2)+'px';
             div.innerText = m.isBoss ? '🐀👑' : '🐭';
             div.style.fontWeight = 'bold';
+            div.style.display = 'flex';
+            div.style.alignItems = 'center';
+            div.style.justifyContent = 'center';
             div.dataset.idx = idx;
-            div.onclick = (e) => { e.stopPropagation(); catchMouse(idx, e.clientX, e.clientY); };
+            div.dataset.type = 'mouse';
             container.appendChild(div);
         });
         
+        // Renderizar burbujas
         bubbles.forEach((b, idx) => {
             const div = document.createElement('div');
             div.className = 'game-entity bubble-entity';
@@ -737,11 +790,33 @@
             div.style.boxShadow = '0 0 15px gold';
             div.style.fontSize = (b.size/2.2)+'px';
             div.innerText = '🎁';
+            div.style.display = 'flex';
+            div.style.alignItems = 'center';
+            div.style.justifyContent = 'center';
             div.dataset.idx = idx;
-            div.onclick = (e) => { e.stopPropagation(); catchBubble(idx, e.clientX, e.clientY); };
+            div.dataset.type = 'bubble';
             container.appendChild(div);
         });
     }
+    
+    // Event delegation para clicks en entidades
+    document.getElementById('gameArea').addEventListener('click', (e) => {
+        let target = e.target;
+        while(target && target !== document.getElementById('gameArea')) {
+            if(target.classList && target.classList.contains('game-entity')) {
+                const type = target.dataset.type;
+                const idx = parseInt(target.dataset.idx);
+                if(type === 'mouse') {
+                    catchMouse(idx, e.clientX, e.clientY);
+                } else if(type === 'bubble') {
+                    catchBubble(idx, e.clientX, e.clientY);
+                }
+                e.stopPropagation();
+                return;
+            }
+            target = target.parentElement;
+        }
+    });
     
     function catchMouse(idx, clickX, clickY) {
         if(idx >= mice.length) return;
@@ -768,22 +843,6 @@
         mice.splice(idx,1);
         renderEntities();
         updateChallenges();
-    }
-    
-    // ==================== BURBUJAS ====================
-    let bubbles = [];
-    
-    function spawnBubble() {
-        if(bubbles.length >= 5) return;
-        const size = 50 + Math.random()*45;
-        bubbles.push({
-            x: 40 + Math.random()*(window.innerWidth - size - 40),
-            y: 100 + Math.random()*(window.innerHeight - 210),
-            size: size, 
-            value: Math.floor(tapPower * multiplier * (Math.random() < 0.3 ? 6 : 2.5)),
-            life: 9000, 
-            created: Date.now()
-        });
     }
     
     function catchBubble(idx, x, y) {
@@ -857,11 +916,39 @@
     
     // Eventos de interacción
     const gameDiv = document.getElementById('gameArea');
-    gameDiv.addEventListener('click', (e) => { handleTap(e.clientX, e.clientY); });
+    gameDiv.addEventListener('click', (e) => {
+        // Solo procesar tap si no se hizo click en una entidad
+        let target = e.target;
+        let isEntity = false;
+        while(target && target !== gameDiv) {
+            if(target.classList && target.classList.contains('game-entity')) {
+                isEntity = true;
+                break;
+            }
+            target = target.parentElement;
+        }
+        if(!isEntity) {
+            handleTap(e.clientX, e.clientY);
+        }
+    });
+    
     gameDiv.addEventListener('touchstart', (e) => {
         e.preventDefault();
         const t = e.touches[0];
-        handleTap(t.clientX, t.clientY);
+        // Verificar si tocó una entidad
+        const elem = document.elementFromPoint(t.clientX, t.clientY);
+        let isEntity = false;
+        let check = elem;
+        while(check && check !== gameDiv) {
+            if(check.classList && check.classList.contains('game-entity')) {
+                isEntity = true;
+                break;
+            }
+            check = check.parentElement;
+        }
+        if(!isEntity) {
+            handleTap(t.clientX, t.clientY);
+        }
     }, {passive:false});
     
     document.addEventListener('mousemove', (e) => { targetX = e.clientX; targetY = e.clientY; });
@@ -946,10 +1033,9 @@
     }, 1300);
     
     // Spawners
-    setInterval(spawnMouse, 4000);
-    setInterval(spawnBubble, 5500);
-    setInterval(() => { updateMice(); }, 80);
-    setInterval(() => renderEntities(), 100);
+    setInterval(() => { spawnMouse(); }, 3500);
+    setInterval(() => { spawnBubble(); }, 5500);
+    setInterval(() => { updateMice(); updateBubbles(); renderEntities(); }, 80);
     
     // Estrellas
     function generateStars() {
