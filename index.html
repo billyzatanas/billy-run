@@ -2,95 +2,79 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>BILLY TAP - El Gato de Solana 😺✨</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
+<title>BILLY EL GATO - Solana Edition 😺✨</title>
 <style>
 * {
-  box-sizing: border-box;
   margin: 0;
   padding: 0;
+  box-sizing: border-box;
   user-select: none;
   -webkit-tap-highlight-color: transparent;
 }
 
 body {
-  font-family: 'Segoe UI', 'Comic Neue', system-ui, -apple-system, sans-serif;
-  background: linear-gradient(135deg, #0a0f2a 0%, #1a1f3a 50%, #0a0a2a 100%);
+  font-family: 'Segoe UI', 'Comic Neue', system-ui, sans-serif;
+  background: linear-gradient(135deg, #0a0a2a 0%, #1a1a3a 50%, #0a0f2a 100%);
   min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  padding: env(safe-area-inset-top) 12px env(safe-area-inset-bottom);
-  overflow-x: hidden;
-  color: #fff;
+  overflow: hidden;
   position: relative;
+  touch-action: none; /* Mejor para seguir el dedo */
 }
 
-/* Fondo animado con estrellas */
-body::before {
-  content: '';
+/* Estrellas animadas */
+.stars {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background-image: radial-gradient(2px 2px at 20px 30px, #fff, rgba(0,0,0,0)),
-                    radial-gradient(1px 1px at 40px 70px, #ffd700, rgba(0,0,0,0));
-  background-size: 200px 200px;
-  background-repeat: repeat;
-  opacity: 0.3;
   pointer-events: none;
   z-index: 0;
 }
 
-/* Header con efecto vidrio */
-.header {
+/* Panel superior */
+.top-panel {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  padding: 15px;
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  background: rgba(0, 0, 0, 0.4);
+  z-index: 20;
+  background: rgba(0,0,0,0.4);
   backdrop-filter: blur(10px);
-  padding: 10px 15px;
-  border-radius: 30px;
-  margin-bottom: 8px;
-  position: relative;
-  z-index: 10;
-  border: 1px solid rgba(255,215,0,0.3);
+  border-bottom: 2px solid rgba(251,191,36,0.3);
 }
 
-.stat-card {
-  background: rgba(0,0,0,0.5);
-  padding: 5px 12px;
+.stat {
+  background: rgba(0,0,0,0.6);
+  padding: 6px 12px;
   border-radius: 20px;
+  font-size: 14px;
   font-weight: bold;
-  font-size: 12px;
+  color: #ffd700;
   display: flex;
   align-items: center;
   gap: 5px;
 }
 
-.stat-card span:first-child {
-  font-size: 14px;
-}
-
-/* Panel de tokens BILLY */
-.token-panel {
+/* Panel de tokens */
+.token-bar {
+  position: fixed;
+  top: 70px;
+  left: 15px;
+  right: 15px;
   background: linear-gradient(135deg, #fbbf24, #f59e0b);
-  border-radius: 20px;
-  padding: 8px 15px;
-  margin: 8px 0;
+  border-radius: 30px;
+  padding: 8px 20px;
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  z-index: 20;
+  cursor: pointer;
   box-shadow: 0 4px 15px rgba(0,0,0,0.3);
   border: 1px solid rgba(255,255,255,0.5);
-  cursor: pointer;
-  transition: transform 0.2s;
-  position: relative;
-  z-index: 10;
-}
-
-.token-panel:hover {
-  transform: scale(1.02);
 }
 
 .token-label {
@@ -99,107 +83,54 @@ body::before {
   gap: 8px;
   font-weight: bold;
   color: #000;
-  font-size: 14px;
 }
 
 .token-amount {
   font-size: 20px;
   font-weight: bold;
   color: #000;
-  text-shadow: 0 1px 2px rgba(255,255,255,0.5);
-}
-
-/* Controles de sonido */
-.sound-controls {
-  display: flex;
-  gap: 8px;
-  margin-bottom: 8px;
-  position: relative;
-  z-index: 10;
-}
-
-.sound-btn {
-  background: rgba(0,0,0,0.5);
-  backdrop-filter: blur(5px);
-  border: none;
-  border-radius: 30px;
-  padding: 6px 12px;
-  color: white;
-  font-size: 12px;
-  cursor: pointer;
-  transition: all 0.2s;
-}
-
-.sound-btn:active {
-  transform: scale(0.95);
-}
-
-/* Canvas del juego */
-.center {
-  flex: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-  z-index: 10;
-  margin: 10px 0;
-}
-
-canvas {
-  width: 95vw;
-  max-width: 500px;
-  aspect-ratio: 1;
-  border-radius: 40px;
-  background: linear-gradient(135deg, #2d1b3a 0%, #1a0f2a 100%);
-  box-shadow: 0 20px 40px rgba(0,0,0,0.5), 0 0 0 3px rgba(251,191,36,0.3);
-  cursor: pointer;
-  transition: transform 0.1s;
-}
-
-canvas:active {
-  transform: scale(0.98);
 }
 
 /* Barra de energía */
-.energy-container {
-  margin: 8px 0;
-  position: relative;
-  z-index: 10;
-}
-
-.energy-label {
-  display: flex;
-  justify-content: space-between;
-  font-size: 11px;
-  margin-bottom: 4px;
-  padding: 0 5px;
-}
-
-#energyBar {
-  height: 12px;
-  background: rgba(30, 41, 59, 0.8);
+.energy-bar {
+  position: fixed;
+  bottom: 100px;
+  left: 15px;
+  right: 15px;
+  z-index: 20;
+  background: rgba(0,0,0,0.5);
   border-radius: 20px;
-  overflow: hidden;
+  padding: 5px 10px;
   backdrop-filter: blur(5px);
 }
 
-#energyFill {
-  height: 100%;
-  background: linear-gradient(90deg, #fbbf24, #f59e0b, #22c55e);
-  transition: width 0.2s;
-  box-shadow: 0 0 10px rgba(251,191,36,0.5);
+.energy-bg {
+  height: 12px;
+  background: rgba(255,255,255,0.2);
+  border-radius: 10px;
+  overflow: hidden;
 }
 
-/* Botones de acción */
+.energy-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #22c55e, #fbbf24);
+  border-radius: 10px;
+  transition: width 0.2s;
+  width: 100%;
+}
+
+/* Botones */
 .action-buttons {
+  position: fixed;
+  bottom: 20px;
+  left: 15px;
+  right: 15px;
   display: flex;
   gap: 10px;
-  margin: 10px 0;
-  position: relative;
-  z-index: 10;
+  z-index: 20;
 }
 
-.epic-btn {
+.btn {
   flex: 1;
   padding: 12px;
   border: none;
@@ -207,58 +138,48 @@ canvas:active {
   font-weight: bold;
   font-size: 14px;
   cursor: pointer;
-  transition: all 0.2s;
   background: linear-gradient(135deg, #1e293b, #0f172a);
   color: white;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+  transition: transform 0.1s;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
+  gap: 5px;
 }
 
-.epic-btn:active {
-  transform: scale(0.96);
+.btn:active {
+  transform: scale(0.95);
 }
 
 .btn-primary {
   background: linear-gradient(135deg, #fbbf24, #f59e0b);
   color: #000;
-  font-weight: bold;
 }
 
 .btn-solana {
   background: linear-gradient(135deg, #14f195, #9945ff);
-  color: white;
 }
 
-/* Misiones y daily */
-.daily-panel {
-  background: rgba(0,0,0,0.4);
-  backdrop-filter: blur(10px);
-  border-radius: 20px;
-  padding: 10px;
-  margin: 8px 0;
-  display: flex;
-  gap: 10px;
-  overflow-x: auto;
-  position: relative;
-  z-index: 10;
-}
-
-.mission-item {
-  background: rgba(255,215,0,0.2);
-  border-radius: 15px;
-  padding: 6px 12px;
-  font-size: 11px;
-  white-space: nowrap;
-  border: 1px solid rgba(251,191,36,0.5);
+/* Panel de combo */
+.combo-panel {
+  position: fixed;
+  top: 120px;
+  right: 15px;
+  background: rgba(0,0,0,0.6);
+  backdrop-filter: blur(5px);
+  padding: 8px 15px;
+  border-radius: 30px;
+  font-size: 18px;
+  font-weight: bold;
+  color: #ff6600;
+  z-index: 20;
+  text-align: center;
 }
 
 /* Notificaciones */
 .notification {
   position: fixed;
-  top: 30%;
+  top: 40%;
   left: 50%;
   transform: translateX(-50%);
   background: linear-gradient(135deg, #fbbf24, #f59e0b);
@@ -269,30 +190,54 @@ canvas:active {
   animation: slideDown 0.5s ease-out;
   z-index: 1000;
   white-space: nowrap;
-  box-shadow: 0 5px 20px rgba(0,0,0,0.4);
   font-size: 14px;
+  box-shadow: 0 5px 20px rgba(0,0,0,0.3);
 }
 
 @keyframes slideDown {
   0% { top: -20%; opacity: 0; transform: translateX(-50%) scale(0.8); }
-  100% { top: 30%; opacity: 1; transform: translateX(-50%) scale(1); }
+  100% { top: 40%; opacity: 1; transform: translateX(-50%) scale(1); }
 }
 
-/* Efecto de confeti */
-.confetti {
+/* Números flotantes */
+.floating-number {
   position: fixed;
-  width: 10px;
-  height: 10px;
-  background: #fbbf24;
-  position: absolute;
-  animation: fall 3s linear forwards;
-  z-index: 1000;
   pointer-events: none;
+  font-weight: bold;
+  font-size: 24px;
+  text-shadow: 0 0 5px rgba(0,0,0,0.5);
+  animation: floatUp 1s ease-out forwards;
+  z-index: 100;
 }
 
-@keyframes fall {
-  to {
-    transform: translateY(100vh) rotate(360deg);
+@keyframes floatUp {
+  0% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-80px) scale(1.2);
+  }
+}
+
+/* Indicador de toque */
+.touch-ripple {
+  position: fixed;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(251,191,36,0.8) 0%, rgba(251,191,36,0) 70%);
+  pointer-events: none;
+  animation: rippleExpand 0.6s ease-out forwards;
+  z-index: 50;
+}
+
+@keyframes rippleExpand {
+  0% {
+    transform: scale(0);
+    opacity: 0.8;
+  }
+  100% {
+    transform: scale(4);
     opacity: 0;
   }
 }
@@ -300,538 +245,593 @@ canvas:active {
 </head>
 <body>
 
-<div class="header">
-  <div class="stat-card">😺 Nivel <span id="level">1</span></div>
-  <div class="stat-card">💰 <span id="score">0</span></div>
-  <div class="stat-card">⚡ x<span id="multiplier">1</span></div>
-  <div class="stat-card">💪 <span id="tapPower">1</span></div>
+<div class="stars" id="stars"></div>
+
+<div class="top-panel">
+  <div class="stat">😺 Nivel <span id="level">1</span></div>
+  <div class="stat">💰 <span id="coins">0</span></div>
+  <div class="stat">⚡ x<span id="multiplier">1</span></div>
+  <div class="stat">💪 <span id="tapPower">1</span></div>
 </div>
 
-<div class="token-panel" id="tokenPanel">
+<div class="token-bar" id="tokenBar">
   <div class="token-label">
     <span>🐱 $BILLY</span>
     <span style="font-size: 10px;">Solana</span>
   </div>
   <div class="token-amount">
-    <span id="billyTokens">0</span> <span style="font-size: 12px;">BILLY</span>
+    <span id="billyTokens">0</span> BILLY
   </div>
 </div>
 
-<div class="sound-controls">
-  <button class="sound-btn" id="toggleMusic">🎵 Música ON</button>
-  <button class="sound-btn" id="toggleSfx">🔊 SFX ON</button>
+<div class="combo-panel">
+  🔥 <span id="combo">0</span> COMBO
 </div>
 
-<div class="center">
-  <canvas id="gameCanvas"></canvas>
-</div>
-
-<div class="energy-container">
-  <div class="energy-label">
+<div class="energy-bar">
+  <div style="display: flex; justify-content: space-between; font-size: 10px; margin-bottom: 4px;">
     <span>⚡ Energía</span>
     <span><span id="energyCurrent">100</span>/<span id="energyMax">100</span></span>
   </div>
-  <div id="energyBar"><div id="energyFill"></div></div>
-</div>
-
-<div class="daily-panel" id="dailyPanel">
-  <div class="mission-item">🎁 Daily Reward: ¡Toca 100 veces!</div>
-  <div class="mission-item">🏆 Misión: 5 críticos seguidos</div>
-  <div class="mission-item">🌟 Logro: Nivel 10</div>
+  <div class="energy-bg">
+    <div class="energy-fill" id="energyFill"></div>
+  </div>
 </div>
 
 <div class="action-buttons">
-  <button class="epic-btn" id="upgradeTap">💪 Mejorar</button>
-  <button class="epic-btn btn-primary" id="lootBox">🎁 Cofre</button>
-  <button class="epic-btn btn-solana" id="connectWallet">🔗 Conectar Wallet</button>
+  <button class="btn" id="upgradeBtn">💪 Mejorar</button>
+  <button class="btn btn-primary" id="lootBtn">🎁 Cofre</button>
+  <button class="btn btn-solana" id="walletBtn">🔗 Wallet</button>
 </div>
 
 <script>
-// ==================== SISTEMA DE SONIDO ÉPICO ====================
-class AudioManager {
+// ==================== SISTEMA DE SONIDO ====================
+class BillySound {
   constructor() {
-    this.musicEnabled = true;
-    this.sfxEnabled = true;
-    this.music = null;
-    this.initMusic();
+    this.enabled = true;
+    this.context = null;
+    this.initAudio();
   }
-
-  initMusic() {
-    // Música de fondo - loop infinito
-    this.music = new Audio('https://cdn.pixabay.com/download/audio/2022/05/27/audio_1c3e2e6e1c.mp3?filename=happy-childrens-tune-11685.mp3');
-    this.music.loop = true;
-    this.music.volume = 0.3;
-    if (this.musicEnabled) {
-      this.music.play().catch(e => console.log('Auto-play prevented'));
+  
+  initAudio() {
+    try {
+      this.context = new (window.AudioContext || window.webkitAudioContext)();
+    } catch(e) {
+      console.log('Web Audio no soportado');
     }
   }
-
+  
   playTap() {
-    if (!this.sfxEnabled) return;
-    const audio = new Audio('https://cdn.pixabay.com/download/audio/2022/03/10/audio_c8c8b9c9f1.mp3?filename=click-button-140881.mp3');
-    audio.volume = 0.2;
-    audio.play().catch(e => console.log('SFX error'));
+    if (!this.enabled || !this.context) return;
+    try {
+      const osc = this.context.createOscillator();
+      const gain = this.context.createGain();
+      osc.connect(gain);
+      gain.connect(this.context.destination);
+      osc.frequency.value = 800;
+      gain.gain.value = 0.15;
+      osc.type = 'sine';
+      osc.start();
+      gain.gain.exponentialRampToValueAtTime(0.00001, this.context.currentTime + 0.2);
+      osc.stop(this.context.currentTime + 0.2);
+    } catch(e) {}
   }
-
+  
   playCrit() {
-    if (!this.sfxEnabled) return;
-    const audio = new Audio('https://cdn.pixabay.com/download/audio/2022/03/10/audio_bb7a2e5f5a.mp3?filename=level-up-191997.mp3');
-    audio.volume = 0.3;
-    audio.play().catch(e => console.log('SFX error'));
+    if (!this.enabled || !this.context) return;
+    try {
+      const osc = this.context.createOscillator();
+      const gain = this.context.createGain();
+      osc.connect(gain);
+      gain.connect(this.context.destination);
+      osc.frequency.value = 1200;
+      gain.gain.value = 0.2;
+      osc.type = 'triangle';
+      osc.start();
+      gain.gain.exponentialRampToValueAtTime(0.00001, this.context.currentTime + 0.3);
+      osc.stop(this.context.currentTime + 0.3);
+    } catch(e) {}
   }
-
+  
   playLevelUp() {
-    if (!this.sfxEnabled) return;
-    const audio = new Audio('https://cdn.pixabay.com/download/audio/2022/05/27/audio_3e6e1c2e6e.mp3?filename=fanfare-6-118400.mp3');
-    audio.volume = 0.4;
-    audio.play().catch(e => console.log('SFX error'));
+    if (!this.enabled || !this.context) return;
+    try {
+      const now = this.context.currentTime;
+      const osc = this.context.createOscillator();
+      const gain = this.context.createGain();
+      osc.connect(gain);
+      gain.connect(this.context.destination);
+      osc.frequency.value = 400;
+      gain.gain.value = 0.2;
+      osc.type = 'sawtooth';
+      osc.start();
+      osc.frequency.setValueAtTime(800, now + 0.15);
+      gain.gain.exponentialRampToValueAtTime(0.00001, now + 0.5);
+      osc.stop(now + 0.5);
+    } catch(e) {}
   }
-
+  
   playCoin() {
-    if (!this.sfxEnabled) return;
-    const audio = new Audio('https://cdn.pixabay.com/download/audio/2022/03/10/audio_1a2b3c4d5e.mp3?filename=coin-257878.mp3');
-    audio.volume = 0.25;
-    audio.play().catch(e => console.log('SFX error'));
+    if (!this.enabled || !this.context) return;
+    try {
+      const osc = this.context.createOscillator();
+      const gain = this.context.createGain();
+      osc.connect(gain);
+      gain.connect(this.context.destination);
+      osc.frequency.value = 1000;
+      gain.gain.value = 0.1;
+      osc.type = 'sine';
+      osc.start();
+      gain.gain.exponentialRampToValueAtTime(0.00001, this.context.currentTime + 0.15);
+      osc.stop(this.context.currentTime + 0.15);
+    } catch(e) {}
   }
-
-  toggleMusic() {
-    this.musicEnabled = !this.musicEnabled;
-    if (this.musicEnabled) {
-      this.music.play().catch(e => console.log('Play error'));
-    } else {
-      this.music.pause();
-    }
-    return this.musicEnabled;
-  }
-
-  toggleSfx() {
-    this.sfxEnabled = !this.sfxEnabled;
-    return this.sfxEnabled;
+  
+  playMeow() {
+    if (!this.enabled || !this.context) return;
+    try {
+      const now = this.context.currentTime;
+      const osc = this.context.createOscillator();
+      const gain = this.context.createGain();
+      osc.connect(gain);
+      gain.connect(this.context.destination);
+      osc.frequency.value = 400;
+      gain.gain.value = 0.2;
+      osc.type = 'sine';
+      osc.start();
+      osc.frequency.setValueAtTime(600, now + 0.1);
+      osc.frequency.setValueAtTime(300, now + 0.2);
+      gain.gain.exponentialRampToValueAtTime(0.00001, now + 0.4);
+      osc.stop(now + 0.4);
+    } catch(e) {}
   }
 }
 
-const audioManager = new AudioManager();
+const sound = new BillySound();
 
-// ==================== SISTEMA DE IMÁGENES DE BILLY ====================
-// Puedes reemplazar estas URLs con las imágenes reales de tu gatito Billy
-// Sube tus imágenes a Imgur o cualquier hosting y pega los links aquí
-
-const BILLY_IMAGES = {
-  idle: 'https://placekitten.com/200/200', // Reemplaza con la URL de tu imagen de Billy normal
-  happy: 'https://placekitten.com/210/210', // Reemplaza con Billy feliz
-  angry: 'https://placekitten.com/190/190', // Reemplaza con Billy enojado
-  sad: 'https://placekitten.com/180/180'     // Reemplaza con Billy triste
-};
-
-// Instrucciones para subir imágenes:
-// 1. Ve a https://imgur.com o https://postimages.org
-// 2. Sube tus imágenes de Billy
-// 3. Copia el enlace directo de la imagen
-// 4. Reemplaza las URLs de arriba con tus enlaces
-
-const billyImages = {
-  idle: new Image(),
-  happy: new Image(),
+// ==================== CARGAR IMÁGENES DE BILLY ====================
+// IMPORTANTE: Reemplaza estas URLs con las rutas de tus imágenes PNG
+// Si están en el mismo repositorio, usa: 'billy_Angry.png', etc.
+const IMAGES = {
   angry: new Image(),
-  sad: new Image()
+  happy: new Image(),
+  sad: new Image(),
+  coins: new Image()
 };
 
-// Cargar imágenes (reemplazar URLs cuando tengas las reales)
-billyImages.idle.src = 'https://placekitten.com/200/200';
-billyImages.happy.src = 'https://placekitten.com/210/210';
-billyImages.angry.src = 'https://placekitten.com/190/190';
-billyImages.sad.src = 'https://placekitten.com/180/180';
+// Cargar imágenes - Ajusta las rutas según donde estén tus archivos
+// Si están en la misma carpeta que este HTML, usa:
+IMAGES.angry.src = 'billy_Angry.png';
+IMAGES.happy.src = 'billy_happy.png';
+IMAGES.sad.src = 'billy_Triste.png';
+IMAGES.coins.src = 'billy_coins.png';
 
-let currentBilly = billyImages.idle;
+// Estado actual de Billy
+let currentBilly = IMAGES.happy;
+let billyX = window.innerWidth / 2;
+let billyY = window.innerHeight / 2;
+let billySize = 120;
+let billyScale = 1;
+let billyRotation = 0;
+let billyShake = 0;
 
-// ==================== SISTEMA DE TOKEN BILLY (Solana Ready) ====================
-let billyTokens = 0;
-let walletConnected = false;
-let walletAddress = null;
-
-// Sistema de minado de tokens - cada tap da tokens BILLY
-function mineTokens(amount) {
-  const tokensEarned = Math.floor(amount / 10); // Cada 10 monedas = 1 token BILLY
-  if (tokensEarned > 0) {
-    billyTokens += tokensEarned;
-    updateTokenDisplay();
-    showNotification(`+${tokensEarned} $BILLY Tokens! 🪙`);
+// ==================== FUNCIÓN PARA RECORTAR FONDO NEGRO ====================
+// Esta función toma una imagen y crea una versión con fondo transparente
+function removeBlackBackground(img, callback) {
+  const canvas = document.createElement('canvas');
+  const ctx = canvas.getContext('2d');
+  canvas.width = img.width;
+  canvas.height = img.height;
+  ctx.drawImage(img, 0, 0);
+  
+  const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+  const data = imageData.data;
+  
+  // Umbral para detectar negro (0-255)
+  const threshold = 30;
+  
+  for (let i = 0; i < data.length; i += 4) {
+    const r = data[i];
+    const g = data[i + 1];
+    const b = data[i + 2];
+    // Si el pixel es muy oscuro, lo hacemos transparente
+    if (r < threshold && g < threshold && b < threshold) {
+      data[i + 3] = 0; // Alpha = 0 (transparente)
+    }
   }
+  
+  ctx.putImageData(imageData, 0, 0);
+  
+  const newImg = new Image();
+  newImg.onload = () => callback(newImg);
+  newImg.src = canvas.toDataURL();
 }
 
-function updateTokenDisplay() {
+// Procesar imágenes para quitar fondo negro
+// (Descomenta si quieres procesar automáticamente)
+/*
+Object.keys(IMAGES).forEach(key => {
+  IMAGES[key].onload = () => {
+    removeBlackBackground(IMAGES[key], (cleanImg) => {
+      IMAGES[key] = cleanImg;
+    });
+  };
+});
+*/
+
+// ==================== SISTEMA DE JUEGO ====================
+let coins = 0;
+let level = 1;
+let multiplier = 1;
+let tapPower = 1;
+let energy = 100;
+let maxEnergy = 100;
+let combo = 0;
+let bestCombo = 0;
+let comboTimer = null;
+let billyTokens = 0;
+
+// Elementos UI
+function updateUI() {
+  document.getElementById('level').innerText = level;
+  document.getElementById('coins').innerText = Math.floor(coins);
+  document.getElementById('multiplier').innerText = multiplier;
+  document.getElementById('tapPower').innerText = tapPower;
+  document.getElementById('combo').innerText = combo;
+  document.getElementById('energyCurrent').innerText = Math.floor(energy);
+  document.getElementById('energyFill').style.width = (energy / maxEnergy * 100) + '%';
   document.getElementById('billyTokens').innerText = Math.floor(billyTokens);
 }
 
-// Conexión con wallet Solana (simulada para demo - lista para implementar con @solana/web3.js)
-async function connectSolanaWallet() {
-  // Aquí irá la integración real con Phantom Wallet
-  // Por ahora es una simulación
-  showNotification('🔗 Conectando a Solana Wallet...');
-  
-  // Simulación de conexión
-  setTimeout(() => {
-    walletConnected = true;
-    walletAddress = '7xKX...3mNp';
-    showNotification('✅ Wallet conectada! Prepárate para el lanzamiento de $BILLY');
-    document.getElementById('connectWallet').innerHTML = '🟢 Wallet Conectada';
-    document.getElementById('connectWallet').style.opacity = '0.7';
-  }, 1500);
+// Mostrar notificación
+function showNotification(msg) {
+  const div = document.createElement('div');
+  div.className = 'notification';
+  div.innerText = msg;
+  document.body.appendChild(div);
+  setTimeout(() => div.remove(), 2000);
 }
 
-// ==================== SISTEMA DE JUEGO MEJORADO ====================
-const canvas = document.getElementById('gameCanvas');
-const ctx = canvas.getContext('2d');
-
-// Variables del juego
-let coins = 0, level = 1, multiplier = 1;
-let tapPower = 1, energy = 100, maxEnergy = 100;
-let combo = 0, bestCombo = 0;
-let comboTimer = null;
-let particles = [];
-let floating = [];
-let effects = [];
-let bonusBubbles = [];
-let mice = [];
-
-// Posición de Billy
-let billy = { x: 0, y: 0, size: 130, scale: 1, shake: 0, rotation: 0, pulse: 0 };
-
-// Configuración de canvas
-function resizeCanvas() {
-  const rect = canvas.getBoundingClientRect();
-  canvas.width = rect.width;
-  canvas.height = rect.height;
-  billy.x = canvas.width / 2;
-  billy.y = canvas.height / 2;
+// Mostrar número flotante
+function showFloatingNumber(value, x, y, isCrit = false) {
+  const div = document.createElement('div');
+  div.className = 'floating-number';
+  div.innerText = `+${Math.floor(value)}`;
+  div.style.left = x + 'px';
+  div.style.top = y + 'px';
+  div.style.color = isCrit ? '#ffd700' : '#fff';
+  div.style.fontSize = isCrit ? '28px' : '20px';
+  div.style.fontWeight = 'bold';
+  document.body.appendChild(div);
+  setTimeout(() => div.remove(), 1000);
 }
-window.addEventListener('resize', resizeCanvas);
-resizeCanvas();
 
-// Sistema de combo y crítico
+// Efecto de toque
+function createRipple(x, y) {
+  const ripple = document.createElement('div');
+  ripple.className = 'touch-ripple';
+  ripple.style.left = (x - 30) + 'px';
+  ripple.style.top = (y - 30) + 'px';
+  ripple.style.width = '60px';
+  ripple.style.height = '60px';
+  document.body.appendChild(ripple);
+  setTimeout(() => ripple.remove(), 600);
+}
+
+// Partículas (simple)
+function createParticles(x, y, color) {
+  for (let i = 0; i < 8; i++) {
+    const particle = document.createElement('div');
+    particle.style.position = 'fixed';
+    particle.style.left = x + 'px';
+    particle.style.top = y + 'px';
+    particle.style.width = '4px';
+    particle.style.height = '4px';
+    particle.style.background = color;
+    particle.style.borderRadius = '50%';
+    particle.style.pointerEvents = 'none';
+    particle.style.zIndex = '100';
+    const angle = Math.random() * Math.PI * 2;
+    const speed = 3 + Math.random() * 4;
+    let vx = Math.cos(angle) * speed;
+    let vy = Math.sin(angle) * speed;
+    let life = 30;
+    document.body.appendChild(particle);
+    
+    const animate = () => {
+      life--;
+      if (life <= 0) {
+        particle.remove();
+        return;
+      }
+      const left = parseFloat(particle.style.left);
+      const top = parseFloat(particle.style.top);
+      particle.style.left = (left + vx) + 'px';
+      particle.style.top = (top + vy) + 'px';
+      particle.style.opacity = life / 30;
+      requestAnimationFrame(animate);
+    };
+    animate();
+  }
+}
+
+// Actualizar nivel
+function updateLevel() {
+  let needed = 150 * Math.pow(1.3, level - 1);
+  if (coins >= needed) {
+    level++;
+    multiplier = 1 + Math.floor(level / 4);
+    sound.playLevelUp();
+    showNotification(`🎉 NIVEL ${level} DESBLOQUEADO! 🎉`);
+    createParticles(billyX, billyY, '#ffd700');
+    energy = Math.min(maxEnergy, energy + 20);
+    updateUI();
+  }
+}
+
+// Minar tokens BILLY
+function mineTokens(amount) {
+  let earned = Math.floor(amount / 8);
+  if (earned > 0) {
+    billyTokens += earned;
+    updateUI();
+  }
+}
+
+// Añadir combo
 function addCombo() {
   combo++;
   if (combo > bestCombo) bestCombo = combo;
   clearTimeout(comboTimer);
   comboTimer = setTimeout(() => {
-    if (combo >= 5) showNotification(`🔥 Combo de ${combo} perdido! Sigue así 🔥`);
+    if (combo >= 5) showNotification(`🔥 Combo de ${combo} terminado! 🔥`);
     combo = 0;
+    updateUI();
   }, 2000);
+  updateUI();
 }
 
-// Sistema de niveles
-function updateLevel() {
-  let neededCoins = 200 * Math.pow(1.25, level - 1);
-  if (coins >= neededCoins && level < 100) {
-    level++;
-    multiplier = 1 + Math.floor(level / 4);
-    audioManager.playLevelUp();
-    showNotification(`🎉 NIVEL ${level} DESBLOQUEADO! 🎉`);
-    createConfetti();
-    
-    // Bonus de energía al subir nivel
-    energy = Math.min(maxEnergy, energy + 20);
+// Cambiar expresión de Billy
+function setBillyExpression(expression, duration = 500) {
+  if (expression === 'happy') currentBilly = IMAGES.happy;
+  else if (expression === 'angry') currentBilly = IMAGES.angry;
+  else if (expression === 'sad') currentBilly = IMAGES.sad;
+  else if (expression === 'coins') currentBilly = IMAGES.coins;
+  
+  // Efecto de sacudida
+  billyShake = 5;
+  setTimeout(() => { billyShake = 0; }, 100);
+  
+  // Volver a feliz después del tiempo
+  if (duration > 0) {
+    setTimeout(() => {
+      currentBilly = IMAGES.happy;
+    }, duration);
   }
 }
 
-// Notificaciones
-function showNotification(text) {
-  const div = document.createElement('div');
-  div.className = 'notification';
-  div.innerText = text;
-  document.body.appendChild(div);
-  setTimeout(() => div.remove(), 2000);
-}
-
-// Confeti
-function createConfetti() {
-  for (let i = 0; i < 50; i++) {
-    const conf = document.createElement('div');
-    conf.className = 'confetti';
-    conf.style.left = Math.random() * window.innerWidth + 'px';
-    conf.style.backgroundColor = `hsl(${Math.random() * 360}, 100%, 50%)`;
-    document.body.appendChild(conf);
-    setTimeout(() => conf.remove(), 3000);
-  }
-}
-
-// Partículas
-function createParticles(color, x, y, count = 10) {
-  for (let i = 0; i < count; i++) {
-    particles.push({
-      x: x, y: y,
-      vx: (Math.random() - 0.5) * 8,
-      vy: -Math.random() * 6 - 2,
-      life: 30 + Math.random() * 20,
-      color: color,
-      size: 3 + Math.random() * 4
-    });
-  }
-}
-
-// Texto flotante
-function floatingText(text, color, x, y, isBig = false) {
-  floating.push({
-    x: x, y: y,
-    text: text,
-    life: 40,
-    color: color,
-    size: isBig ? 20 : 14
-  });
-}
-
-// Tap principal
+// TAP principal
 function handleTap(x, y) {
   if (energy <= 0) {
-    showNotification('💤 Billy está cansado! Espera que recupere energía 💤');
+    setBillyExpression('sad', 800);
+    showNotification('💤 Billy está cansado! Espera un poco 💤');
     return;
   }
   
   addCombo();
   
-  // Probabilidad de crítico basada en combo
-  let critChance = Math.min(45, 15 + Math.floor(combo / 2));
+  let critChance = Math.min(40, 15 + Math.floor(combo / 2));
   let isCrit = Math.random() * 100 < critChance;
-  let megaComboBonus = combo >= 15 ? 1.5 : 1;
+  let gain = Math.floor(tapPower * multiplier * (isCrit ? 5 : 1) * (1 + combo * 0.04));
   
-  let gain = Math.floor(tapPower * multiplier * (isCrit ? 5 : 1) * (1 + combo * 0.03) * megaComboBonus);
   coins += gain;
-  energy -= Math.max(1, Math.floor(combo / 8));
-  
-  // Minar tokens BILLY
+  energy -= Math.max(1, Math.floor(combo / 6));
   mineTokens(gain);
   
   updateUI();
   updateLevel();
   
-  // Animaciones
-  billy.scale = 1.3;
-  setTimeout(() => billy.scale = 1, 100);
+  // Efectos visuales
+  createRipple(x, y);
+  createParticles(x, y, isCrit ? '#ffd700' : '#22c55e');
+  showFloatingNumber(gain, x, y, isCrit);
   
-  createParticles(isCrit ? '#fbbf24' : '#22c55e', x, y, isCrit ? 20 : 12);
-  floatingText(`+${gain}`, isCrit ? '#fbbf24' : '#fff', x, y, isCrit);
+  // Animación de escala
+  billyScale = 1.2;
+  setTimeout(() => { billyScale = 1; }, 100);
   
-  // Sonidos
+  // Sonidos y expresión
   if (isCrit) {
-    audioManager.playCrit();
-    if (combo > 10) showNotification(`⚡ CRÍTICO MEGACOMBO! x${Math.floor(1 + combo * 0.05)} ⚡`);
+    sound.playCrit();
+    setBillyExpression('coins', 400);
+    showNotification(`⚡ CRÍTICO! x${Math.floor(1 + combo * 0.04)} ⚡`);
   } else {
-    audioManager.playTap();
+    sound.playTap();
+    if (combo > 5) setBillyExpression('happy', 200);
   }
   
-  // Cambiar expresión de Billy
-  if (isCrit) {
-    currentBilly = billyImages.happy;
-    setTimeout(() => currentBilly = billyImages.idle, 600);
-  } else if (combo > 8) {
-    currentBilly = billyImages.happy;
-    setTimeout(() => currentBilly = billyImages.idle, 300);
-  }
+  // Pequeño maullido ocasional
+  if (Math.random() < 0.1) sound.playMeow();
 }
 
-// Dibujar Billy con imágenes reales
+// ==================== SEGUIMIENTO DEL DEDO/RATÓN ====================
+let targetX = window.innerWidth / 2;
+let targetY = window.innerHeight / 2;
+
+function updateBillyPosition() {
+  // Movimiento suave hacia el objetivo
+  billyX += (targetX - billyX) * 0.12;
+  billyY += (targetY - billyY) * 0.12;
+  
+  // Limitar bordes
+  billyX = Math.min(Math.max(billyX, billySize / 2 + 10), window.innerWidth - billySize / 2 - 10);
+  billyY = Math.min(Math.max(billyY, billySize / 2 + 60), window.innerHeight - billySize / 2 - 120);
+  
+  requestAnimationFrame(updateBillyPosition);
+}
+updateBillyPosition();
+
+// Eventos de seguimiento
+document.addEventListener('mousemove', (e) => {
+  targetX = e.clientX;
+  targetY = e.clientY;
+});
+
+document.addEventListener('touchmove', (e) => {
+  e.preventDefault();
+  const touch = e.touches[0];
+  targetX = touch.clientX;
+  targetY = touch.clientY;
+}, { passive: false });
+
+document.addEventListener('touchstart', (e) => {
+  e.preventDefault();
+  const touch = e.touches[0];
+  targetX = touch.clientX;
+  targetY = touch.clientY;
+  handleTap(touch.clientX, touch.clientY);
+}, { passive: false });
+
+document.addEventListener('click', (e) => {
+  handleTap(e.clientX, e.clientY);
+});
+
+// ==================== DIBUJAR BILLY ====================
 function drawBilly() {
-  ctx.save();
-  
-  let offsetX = billy.shake ? (Math.random() - 0.5) * 8 : 0;
-  let offsetY = billy.shake ? (Math.random() - 0.5) * 8 : 0;
-  
-  ctx.translate(billy.x + offsetX, billy.y + offsetY);
-  ctx.rotate(billy.rotation);
-  ctx.scale(billy.scale + billy.pulse / 20, billy.scale + billy.pulse / 20);
-  
-  // Sombra épica según combo
-  if (combo > 10) {
-    ctx.shadowBlur = 20;
-    ctx.shadowColor = combo > 20 ? '#ff66ff' : '#fbbf24';
+  const billy = document.getElementById('billyCharacter');
+  if (!billy) {
+    // Crear elemento si no existe
+    const div = document.createElement('div');
+    div.id = 'billyCharacter';
+    div.style.position = 'fixed';
+    div.style.width = billySize + 'px';
+    div.style.height = billySize + 'px';
+    div.style.pointerEvents = 'none';
+    div.style.zIndex = '100';
+    div.style.transition = 'transform 0.05s ease-out';
+    document.body.appendChild(div);
+    drawBilly();
+    return;
   }
   
-  // Dibujar imagen de Billy
+  // Dibujar imagen en canvas para mejor control de transparencia
+  const canvas = document.createElement('canvas');
+  canvas.width = billySize;
+  canvas.height = billySize;
+  const ctx = canvas.getContext('2d');
+  
+  // Aplicar sacudida
+  let shakeX = billyShake ? (Math.random() - 0.5) * 8 : 0;
+  let shakeY = billyShake ? (Math.random() - 0.5) * 8 : 0;
+  
+  ctx.save();
+  ctx.translate(billySize / 2, billySize / 2);
+  ctx.scale(billyScale, billyScale);
+  ctx.rotate(billyRotation);
+  
   if (currentBilly.complete && currentBilly.naturalWidth > 0) {
-    ctx.drawImage(currentBilly, -billy.size / 2, -billy.size / 2, billy.size, billy.size);
+    ctx.drawImage(currentBilly, -billySize / 2, -billySize / 2, billySize, billySize);
   } else {
-    // Fallback si la imagen no carga
+    // Fallback mientras cargan las imágenes
     ctx.fillStyle = '#FFA500';
     ctx.beginPath();
-    ctx.arc(0, 0, billy.size / 2, 0, Math.PI * 2);
+    ctx.arc(0, 0, billySize / 2, 0, Math.PI * 2);
     ctx.fill();
     ctx.fillStyle = '#000';
-    ctx.font = `${billy.size / 2}px Arial`;
-    ctx.fillText('😺', -billy.size / 3, billy.size / 4);
+    ctx.font = `${billySize / 2}px Arial`;
+    ctx.fillText('😺', -billySize / 3, billySize / 4);
   }
   
   ctx.restore();
+  
+  billy.style.left = (billyX - billySize / 2 + shakeX) + 'px';
+  billy.style.top = (billyY - billySize / 2 + shakeY) + 'px';
+  billy.style.backgroundImage = `url(${canvas.toDataURL()})`;
+  billy.style.backgroundSize = 'cover';
+  billy.style.backgroundRepeat = 'no-repeat';
+  
+  requestAnimationFrame(drawBilly);
 }
 
-// Sistema de ratones (minijuego)
-function spawnMouse() {
-  if (mice.length >= 5) return;
-  const isGolden = Math.random() < 0.15;
-  const y = Math.random() * (canvas.height - 60) + 30;
-  const dir = Math.random() < 0.5 ? -1 : 1;
-  mice.push({
-    x: dir === 1 ? -50 : canvas.width + 50,
-    y: y,
-    size: 45,
-    dir: dir,
-    speed: 1.5 + Math.random() * 1.5,
-    isGolden: isGolden,
-    value: isGolden ? tapPower * multiplier * 6 : tapPower * multiplier * 2
-  });
-}
-
-function checkMouseClick(x, y) {
-  for (let i = mice.length - 1; i >= 0; i--) {
-    const m = mice[i];
-    const dx = x - m.x, dy = y - m.y;
-    if (Math.sqrt(dx * dx + dy * dy) < m.size / 2) {
-      coins += m.value;
-      floatingText(`+${m.value}`, m.isGolden ? '#fbbf24' : '#ffa500', m.x, m.y, m.isGolden);
-      createParticles(m.isGolden ? '#fbbf24' : '#ffa500', m.x, m.y, 10);
-      audioManager.playCoin();
-      mice.splice(i, 1);
-      updateUI();
-      updateLevel();
-      break;
-    }
+// ==================== CREAR ESTRELLAS ====================
+function createStars() {
+  const starsContainer = document.getElementById('stars');
+  for (let i = 0; i < 100; i++) {
+    const star = document.createElement('div');
+    star.style.position = 'absolute';
+    star.style.left = Math.random() * 100 + '%';
+    star.style.top = Math.random() * 100 + '%';
+    star.style.width = Math.random() * 3 + 'px';
+    star.style.height = star.style.width;
+    star.style.background = 'white';
+    star.style.borderRadius = '50%';
+    star.style.opacity = 0.3 + Math.random() * 0.7;
+    star.style.animation = `twinkle ${1 + Math.random() * 3}s infinite`;
+    starsContainer.appendChild(star);
   }
 }
 
-// Sistema de burbujas bonus
-function spawnBubble() {
-  if (bonusBubbles.length >= 4) return;
-  const size = 50 + Math.random() * 40;
-  bonusBubbles.push({
-    x: Math.random() * (canvas.width - size) + size / 2,
-    y: Math.random() * (canvas.height - size) + size / 2,
-    size: size,
-    life: 8000,
-    created: Date.now(),
-    value: Math.floor(tapPower * multiplier * (Math.random() < 0.3 ? 8 : 3))
-  });
-}
-
-function checkBubbleClick(x, y) {
-  for (let i = bonusBubbles.length - 1; i >= 0; i--) {
-    const b = bonusBubbles[i];
-    const dx = x - b.x, dy = y - b.y;
-    if (Math.sqrt(dx * dx + dy * dy) < b.size / 2) {
-      coins += b.value;
-      floatingText(`+${b.value}`, '#fbbf24', b.x, b.y, true);
-      createParticles('#fbbf24', b.x, b.y, 15);
-      audioManager.playCrit();
-      bonusBubbles.splice(i, 1);
-      updateUI();
-      updateLevel();
-      break;
-    }
+// Estilo para las estrellas
+const style = document.createElement('style');
+style.textContent = `
+  @keyframes twinkle {
+    0%, 100% { opacity: 0.2; }
+    50% { opacity: 1; }
   }
-}
+`;
+document.head.appendChild(style);
+createStars();
 
-// Actualizar UI
-function updateUI() {
-  document.getElementById('score').innerText = Math.floor(coins);
-  document.getElementById('level').innerText = level;
-  document.getElementById('multiplier').innerText = multiplier;
-  document.getElementById('tapPower').innerText = tapPower;
-  document.getElementById('energyCurrent').innerText = Math.floor(energy);
-  document.getElementById('energyMax').innerText = maxEnergy;
-  document.getElementById('energyFill').style.width = (energy / maxEnergy * 100) + '%';
-}
+// ==================== SISTEMA DE RECUPERACIÓN DE ENERGÍA ====================
+setInterval(() => {
+  let regen = Math.max(1, Math.floor(combo / 4));
+  energy = Math.min(maxEnergy, energy + regen);
+  updateUI();
+}, 1000);
 
-// Eventos de pantalla
-canvas.addEventListener('click', (e) => {
-  const rect = canvas.getBoundingClientRect();
-  const x = (e.clientX - rect.left) * (canvas.width / rect.width);
-  const y = (e.clientY - rect.top) * (canvas.height / rect.height);
-  handleTap(x, y);
-  checkBubbleClick(x, y);
-  checkMouseClick(x, y);
-});
-
-canvas.addEventListener('touchstart', (e) => {
-  e.preventDefault();
-  const rect = canvas.getBoundingClientRect();
-  const touch = e.touches[0];
-  const x = (touch.clientX - rect.left) * (canvas.width / rect.width);
-  const y = (touch.clientY - rect.top) * (canvas.height / rect.height);
-  handleTap(x, y);
-  checkBubbleClick(x, y);
-  checkMouseClick(x, y);
-}, { passive: false });
-
-// Seguimiento del cursor
-let pointerX = null, pointerY = null;
-canvas.addEventListener('mousemove', (e) => {
-  const rect = canvas.getBoundingClientRect();
-  pointerX = (e.clientX - rect.left) * (canvas.width / rect.width);
-  pointerY = (e.clientY - rect.top) * (canvas.height / rect.height);
-});
-
-function follow() {
-  if (pointerX) {
-    billy.x += (pointerX - billy.x) * 0.1;
-    billy.y += (pointerY - billy.y) * 0.1;
-  }
-}
-
-// Botones
-document.getElementById('upgradeTap').onclick = () => {
+// ==================== EVENTOS DE BOTONES ====================
+document.getElementById('upgradeBtn').onclick = () => {
   let cost = Math.floor(80 * Math.pow(1.5, tapPower - 1));
   if (coins >= cost) {
     coins -= cost;
     tapPower++;
     updateUI();
+    setBillyExpression('happy', 400);
+    createParticles(billyX, billyY, '#ffd700');
+    sound.playLevelUp();
     showNotification(`💪 Poder aumentado a ${tapPower}!`);
-    audioManager.playLevelUp();
-    createParticles('#fbbf24', billy.x, billy.y, 15);
   } else {
-    showNotification(`💰 Necesitas ${cost} monedas 💰`);
+    showNotification(`💰 Necesitas ${Math.floor(cost)} monedas 💰`);
+    setBillyExpression('sad', 300);
   }
 };
 
-document.getElementById('lootBox').onclick = () => {
-  if (coins >= 50) {
-    coins -= 50;
-    let reward = 100 + Math.floor(Math.random() * 200);
+document.getElementById('lootBtn').onclick = () => {
+  if (coins >= 30) {
+    coins -= 30;
+    let reward = 80 + Math.floor(Math.random() * 150);
     coins += reward;
-    showNotification(`🎁 Cofre mágico: +${reward} monedas! 🎁`);
-    audioManager.playCrit();
-    createConfetti();
     updateUI();
     updateLevel();
+    setBillyExpression('coins', 500);
+    createParticles(billyX, billyY, '#ffd700');
+    sound.playCrit();
+    showNotification(`🎁 Cofre: +${reward} monedas! 🎁`);
   } else {
-    showNotification(`💔 Necesitas 50 monedas para abrir el cofre 💔`);
+    showNotification(`💔 Necesitas 30 monedas 💔`);
+    setBillyExpression('sad', 300);
   }
 };
 
-document.getElementById('connectWallet').onclick = connectSolanaWallet;
-
-// Controles de sonido
-document.getElementById('toggleMusic').onclick = () => {
-  const enabled = audioManager.toggleMusic();
-  document.getElementById('toggleMusic').innerHTML = enabled ? '🎵 Música ON' : '🎵 Música OFF';
+document.getElementById('walletBtn').onclick = () => {
+  showNotification('🔗 Conexión a Solana Wallet - Próximamente en el lanzamiento de $BILLY! 🚀');
 };
 
-document.getElementById('toggleSfx').onclick = () => {
-  const enabled = audioManager.toggleSfx();
-  document.getElementById('toggleSfx').innerHTML = enabled ? '🔊 SFX ON' : '🔊 SFX OFF';
+document.getElementById('tokenBar').onclick = () => {
+  showNotification(`🐱 Tienes ${Math.floor(billyTokens)} $BILLY Tokens! Prepárate para el lanzamiento en Solana 🌟`);
 };
 
-document.getElementById('tokenPanel').onclick = () => {
-  showNotification(`💰 Tienes ${Math.floor(billyTokens)} $BILLY Tokens! Prepárate para el lanzamiento en Solana 🚀`);
-};
-
-// Spawners
-setInterval(spawnMouse, 4000);
-setInterval(spawnBubble, 6000);
-setInterval(() => {
-  let regen = Math.max(1, Math.floor(combo / 5));
-  energy = Math.min(maxEnergy, energy + regen);
-  updateUI();
-}, 1000);
-
-// Guardar progreso
+// ==================== GUARDAR PROGRESO ====================
 setInterval(() => {
   localStorage.setItem('billySave', JSON.stringify({
     coins: coins,
@@ -851,136 +851,26 @@ if (saved) {
   tapPower = data.tapPower || 1;
   billyTokens = data.billyTokens || 0;
   bestCombo = data.bestCombo || 0;
-  updateUI();
-  updateTokenDisplay();
   multiplier = 1 + Math.floor(level / 4);
+  updateUI();
 }
 
-// Animaciones y partículas
-function updateParticles() {
-  particles.forEach(p => {
-    p.x += p.vx;
-    p.y += p.vy;
-    p.life--;
-  });
-  particles = particles.filter(p => p.life > 0);
-}
-
-function drawParticles() {
-  particles.forEach(p => {
-    ctx.globalAlpha = p.life / 40;
-    ctx.fillStyle = p.color;
-    ctx.beginPath();
-    ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-    ctx.fill();
-  });
-  ctx.globalAlpha = 1;
-}
-
-function updateFloating() {
-  floating.forEach(f => {
-    f.y -= 1.5;
-    f.life--;
-  });
-  floating = floating.filter(f => f.life > 0);
-}
-
-function drawFloating() {
-  floating.forEach(f => {
-    ctx.globalAlpha = f.life / 40;
-    ctx.fillStyle = f.color;
-    ctx.font = `bold ${f.size}px "Segoe UI"`;
-    ctx.shadowBlur = 5;
-    ctx.shadowColor = '#000';
-    ctx.fillText(f.text, f.x - 15, f.y);
-  });
-  ctx.globalAlpha = 1;
-  ctx.shadowBlur = 0;
-}
-
-function updateBubbles() {
-  const now = Date.now();
-  bonusBubbles = bonusBubbles.filter(b => now - b.created < b.life);
-}
-
-function drawBubbles() {
-  bonusBubbles.forEach(b => {
-    const t = (Date.now() - b.created) / b.life;
-    const scale = 0.8 + 0.3 * Math.sin(t * Math.PI * 4);
-    ctx.save();
-    ctx.translate(b.x, b.y);
-    ctx.scale(scale, scale);
-    ctx.globalAlpha = Math.max(0, 1 - t);
-    ctx.fillStyle = '#fbbf24';
-    ctx.beginPath();
-    ctx.arc(0, 0, b.size / 2, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.fillStyle = '#000';
-    ctx.font = `${b.size / 3}px Arial`;
-    ctx.fillText('🎁', -b.size / 4, b.size / 6);
-    ctx.restore();
-  });
-}
-
-function updateMice() {
-  mice.forEach(m => m.x += m.speed * m.dir);
-  mice = mice.filter(m => m.x > -60 && m.x < canvas.width + 60);
-}
-
-function drawMice() {
-  mice.forEach(m => {
-    ctx.save();
-    ctx.translate(m.x, m.y);
-    ctx.fillStyle = m.isGolden ? '#fbbf24' : '#8B4513';
-    ctx.beginPath();
-    ctx.arc(0, 0, m.size / 2, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.fillStyle = '#000';
-    ctx.font = `${m.size / 2}px Arial`;
-    ctx.fillText('🐭', -m.size / 4, m.size / 4);
-    if (m.isGolden) {
-      ctx.fillStyle = '#fbbf24';
-      ctx.font = `${m.size / 3}px Arial`;
-      ctx.fillText('⭐', -m.size / 3, -m.size / 3);
-    }
-    ctx.restore();
-  });
-}
-
-function drawBackground() {
-  const gradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
-  gradient.addColorStop(0, '#1a0f2a');
-  gradient.addColorStop(1, '#2d1b3a');
-  ctx.fillStyle = gradient;
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
-  
-  // Estrellas
-  for (let i = 0; i < 30; i++) {
-    ctx.fillStyle = `rgba(255,255,255,${0.2 + Math.sin(Date.now() * 0.001 + i) * 0.1})`;
-    ctx.beginPath();
-    ctx.arc((i * 131) % canvas.width, (i * 97) % canvas.height, 1.5, 0, Math.PI * 2);
-    ctx.fill();
-  }
-}
-
-// Loop principal
-function animate() {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-  drawBackground();
-  follow();
+// Iniciar dibujo
+setTimeout(() => {
   drawBilly();
-  updateParticles();
-  drawParticles();
-  updateFloating();
-  drawFloating();
-  updateBubbles();
-  drawBubbles();
-  updateMice();
-  drawMice();
-  requestAnimationFrame(animate);
-}
+}, 100);
 
-animate();
+// Asegurar que las imágenes se carguen correctamente
+Object.values(IMAGES).forEach(img => {
+  img.onerror = () => {
+    console.log('Imagen no encontrada, usando fallback');
+  };
+});
+
+// Instrucciones para el usuario
+setTimeout(() => {
+  showNotification('🐱 Toca la pantalla o mueve el ratón para seguir a Billy!');
+}, 1000);
 </script>
 </body>
 </html>
