@@ -3,581 +3,984 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>Billy Tap ULTRA EPIC 😺✨</title>
+<title>BILLY TAP - El Gato de Solana 😺✨</title>
 <style>
-*{box-sizing:border-box;margin:0;padding:0;user-select:none}
-body{font-family:'Segoe UI',Arial,sans-serif;background:linear-gradient(135deg,#0a0a2a 0%,#000000 100%);height:100vh;display:flex;flex-direction:column;padding:env(safe-area-inset-top) 10px env(safe-area-inset-bottom);overflow:hidden;color:#fff}
-.header{display:flex;justify-content:space-between;font-size:14px;background:rgba(0,0,0,0.5);padding:8px 12px;border-radius:20px;backdrop-filter:blur(10px)}
-.sub{font-size:12px;opacity:.9;text-align:center;margin:4px 0;background:rgba(0,0,0,0.3);padding:4px;border-radius:12px}
-.center{flex:1;display:flex;align-items:center;justify-content:center;position:relative}
-canvas{width:95vw;max-width:450px;border-radius:32px;background:linear-gradient(135deg,#0f172a 0%,#1e1a3a 100%);box-shadow:0 25px 50px rgba(0,0,0,0.5),0 0 0 2px rgba(34,197,94,0.2);cursor:pointer;transition:transform 0.1s}
-canvas:active{transform:scale(0.98)}
-.footer{display:flex;gap:8px;margin-top:8px;margin-bottom:8px}
-button{flex:1;padding:12px;border:none;border-radius:20px;background:linear-gradient(145deg,#1e293b,#0f172a);color:#fff;font-weight:bold;cursor:pointer;transition:all 0.2s;box-shadow:0 4px 15px rgba(0,0,0,0.3);font-size:14px}
-button:active{transform:scale(0.95)}
-#energyBar{height:8px;background:#1e293b;border-radius:10px;margin:8px 0;overflow:hidden;box-shadow:inset 0 1px 3px rgba(0,0,0,0.5)}
-#energyFill{height:100%;background:linear-gradient(90deg,#22c55e,#4ade80);transition:width 0.2s;box-shadow:0 0 8px #22c55e}
-.stats{display:flex;gap:15px;justify-content:center;margin-top:5px;font-size:11px}
-.achievement{position:fixed;top:20%;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,#fbbf24,#f59e0b);color:#000;padding:12px 24px;border-radius:50px;font-weight:bold;animation:slideDown 0.5s ease-out;z-index:1000;white-space:nowrap;box-shadow:0 4px 20px rgba(0,0,0,0.3)}
-@keyframes slideDown{0%{top:-20%;opacity:0}100%{top:20%;opacity:1}}
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  font-family: 'Segoe UI', 'Comic Neue', system-ui, -apple-system, sans-serif;
+  background: linear-gradient(135deg, #0a0f2a 0%, #1a1f3a 50%, #0a0a2a 100%);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  padding: env(safe-area-inset-top) 12px env(safe-area-inset-bottom);
+  overflow-x: hidden;
+  color: #fff;
+  position: relative;
+}
+
+/* Fondo animado con estrellas */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: radial-gradient(2px 2px at 20px 30px, #fff, rgba(0,0,0,0)),
+                    radial-gradient(1px 1px at 40px 70px, #ffd700, rgba(0,0,0,0));
+  background-size: 200px 200px;
+  background-repeat: repeat;
+  opacity: 0.3;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Header con efecto vidrio */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(10px);
+  padding: 10px 15px;
+  border-radius: 30px;
+  margin-bottom: 8px;
+  position: relative;
+  z-index: 10;
+  border: 1px solid rgba(255,215,0,0.3);
+}
+
+.stat-card {
+  background: rgba(0,0,0,0.5);
+  padding: 5px 12px;
+  border-radius: 20px;
+  font-weight: bold;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.stat-card span:first-child {
+  font-size: 14px;
+}
+
+/* Panel de tokens BILLY */
+.token-panel {
+  background: linear-gradient(135deg, #fbbf24, #f59e0b);
+  border-radius: 20px;
+  padding: 8px 15px;
+  margin: 8px 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+  border: 1px solid rgba(255,255,255,0.5);
+  cursor: pointer;
+  transition: transform 0.2s;
+  position: relative;
+  z-index: 10;
+}
+
+.token-panel:hover {
+  transform: scale(1.02);
+}
+
+.token-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: bold;
+  color: #000;
+  font-size: 14px;
+}
+
+.token-amount {
+  font-size: 20px;
+  font-weight: bold;
+  color: #000;
+  text-shadow: 0 1px 2px rgba(255,255,255,0.5);
+}
+
+/* Controles de sonido */
+.sound-controls {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 8px;
+  position: relative;
+  z-index: 10;
+}
+
+.sound-btn {
+  background: rgba(0,0,0,0.5);
+  backdrop-filter: blur(5px);
+  border: none;
+  border-radius: 30px;
+  padding: 6px 12px;
+  color: white;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.sound-btn:active {
+  transform: scale(0.95);
+}
+
+/* Canvas del juego */
+.center {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  z-index: 10;
+  margin: 10px 0;
+}
+
+canvas {
+  width: 95vw;
+  max-width: 500px;
+  aspect-ratio: 1;
+  border-radius: 40px;
+  background: linear-gradient(135deg, #2d1b3a 0%, #1a0f2a 100%);
+  box-shadow: 0 20px 40px rgba(0,0,0,0.5), 0 0 0 3px rgba(251,191,36,0.3);
+  cursor: pointer;
+  transition: transform 0.1s;
+}
+
+canvas:active {
+  transform: scale(0.98);
+}
+
+/* Barra de energía */
+.energy-container {
+  margin: 8px 0;
+  position: relative;
+  z-index: 10;
+}
+
+.energy-label {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  margin-bottom: 4px;
+  padding: 0 5px;
+}
+
+#energyBar {
+  height: 12px;
+  background: rgba(30, 41, 59, 0.8);
+  border-radius: 20px;
+  overflow: hidden;
+  backdrop-filter: blur(5px);
+}
+
+#energyFill {
+  height: 100%;
+  background: linear-gradient(90deg, #fbbf24, #f59e0b, #22c55e);
+  transition: width 0.2s;
+  box-shadow: 0 0 10px rgba(251,191,36,0.5);
+}
+
+/* Botones de acción */
+.action-buttons {
+  display: flex;
+  gap: 10px;
+  margin: 10px 0;
+  position: relative;
+  z-index: 10;
+}
+
+.epic-btn {
+  flex: 1;
+  padding: 12px;
+  border: none;
+  border-radius: 30px;
+  font-weight: bold;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s;
+  background: linear-gradient(135deg, #1e293b, #0f172a);
+  color: white;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.epic-btn:active {
+  transform: scale(0.96);
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #fbbf24, #f59e0b);
+  color: #000;
+  font-weight: bold;
+}
+
+.btn-solana {
+  background: linear-gradient(135deg, #14f195, #9945ff);
+  color: white;
+}
+
+/* Misiones y daily */
+.daily-panel {
+  background: rgba(0,0,0,0.4);
+  backdrop-filter: blur(10px);
+  border-radius: 20px;
+  padding: 10px;
+  margin: 8px 0;
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  position: relative;
+  z-index: 10;
+}
+
+.mission-item {
+  background: rgba(255,215,0,0.2);
+  border-radius: 15px;
+  padding: 6px 12px;
+  font-size: 11px;
+  white-space: nowrap;
+  border: 1px solid rgba(251,191,36,0.5);
+}
+
+/* Notificaciones */
+.notification {
+  position: fixed;
+  top: 30%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: linear-gradient(135deg, #fbbf24, #f59e0b);
+  color: #000;
+  padding: 12px 24px;
+  border-radius: 50px;
+  font-weight: bold;
+  animation: slideDown 0.5s ease-out;
+  z-index: 1000;
+  white-space: nowrap;
+  box-shadow: 0 5px 20px rgba(0,0,0,0.4);
+  font-size: 14px;
+}
+
+@keyframes slideDown {
+  0% { top: -20%; opacity: 0; transform: translateX(-50%) scale(0.8); }
+  100% { top: 30%; opacity: 1; transform: translateX(-50%) scale(1); }
+}
+
+/* Efecto de confeti */
+.confetti {
+  position: fixed;
+  width: 10px;
+  height: 10px;
+  background: #fbbf24;
+  position: absolute;
+  animation: fall 3s linear forwards;
+  z-index: 1000;
+  pointer-events: none;
+}
+
+@keyframes fall {
+  to {
+    transform: translateY(100vh) rotate(360deg);
+    opacity: 0;
+  }
+}
 </style>
 </head>
 <body>
+
 <div class="header">
-  <div>🌟 Lv <span id="level">1</span></div>
-  <div>💰 <span id="score">0</span></div>
-  <div>⚡ x<span id="multiplier">1</span></div>
-  <div>💪 <span id="tapPower">1</span></div>
+  <div class="stat-card">😺 Nivel <span id="level">1</span></div>
+  <div class="stat-card">💰 <span id="score">0</span></div>
+  <div class="stat-card">⚡ x<span id="multiplier">1</span></div>
+  <div class="stat-card">💪 <span id="tapPower">1</span></div>
 </div>
-<div class="sub">
-  🔥 Combo: <span id="combo">0</span> | 🎯 Crítico: <span id="critChance">20</span>% | 🐭 Ratones: <span id="mouseCount">0</span>
+
+<div class="token-panel" id="tokenPanel">
+  <div class="token-label">
+    <span>🐱 $BILLY</span>
+    <span style="font-size: 10px;">Solana</span>
+  </div>
+  <div class="token-amount">
+    <span id="billyTokens">0</span> <span style="font-size: 12px;">BILLY</span>
+  </div>
 </div>
-<div id="energyBar"><div id="energyFill"></div></div>
+
+<div class="sound-controls">
+  <button class="sound-btn" id="toggleMusic">🎵 Música ON</button>
+  <button class="sound-btn" id="toggleSfx">🔊 SFX ON</button>
+</div>
+
 <div class="center">
   <canvas id="gameCanvas"></canvas>
 </div>
-<div class="stats">
-  <span>🎯 Siguiente nivel: <span id="nextLevel">0</span></span>
-  <span>✨ Mejor combo: <span id="bestCombo">0</span></span>
+
+<div class="energy-container">
+  <div class="energy-label">
+    <span>⚡ Energía</span>
+    <span><span id="energyCurrent">100</span>/<span id="energyMax">100</span></span>
+  </div>
+  <div id="energyBar"><div id="energyFill"></div></div>
 </div>
-<div class="footer">
-  <button id="upgradeTap">💪 Mejorar (↑⚡)</button>
-  <button id="lootBox">🎁 Cofre Mágico</button>
-  <button id="shareBtn">📢 Compartir</button>
+
+<div class="daily-panel" id="dailyPanel">
+  <div class="mission-item">🎁 Daily Reward: ¡Toca 100 veces!</div>
+  <div class="mission-item">🏆 Misión: 5 críticos seguidos</div>
+  <div class="mission-item">🌟 Logro: Nivel 10</div>
+</div>
+
+<div class="action-buttons">
+  <button class="epic-btn" id="upgradeTap">💪 Mejorar</button>
+  <button class="epic-btn btn-primary" id="lootBox">🎁 Cofre</button>
+  <button class="epic-btn btn-solana" id="connectWallet">🔗 Conectar Wallet</button>
 </div>
 
 <script>
-// --- Canvas ---
-const canvas=document.getElementById('gameCanvas');
-const ctx=canvas.getContext('2d');
-function resizeCanvas(){
- const dpr=window.devicePixelRatio||1;
- const rect=canvas.getBoundingClientRect();
- canvas.width=rect.width*dpr;
- canvas.height=rect.height*dpr;
- ctx.setTransform(dpr,0,0,dpr,0,0);
- billy.x=rect.width/2;
- billy.y=rect.height/2;
-}
-window.addEventListener('resize',resizeCanvas);
+// ==================== SISTEMA DE SONIDO ÉPICO ====================
+class AudioManager {
+  constructor() {
+    this.musicEnabled = true;
+    this.sfxEnabled = true;
+    this.music = null;
+    this.initMusic();
+  }
 
-// --- Sistema de guardado ---
-let saveData = localStorage.getItem('billyEpicSave');
-if(saveData){
-  let saved = JSON.parse(saveData);
-  coins = saved.coins || 0;
-  level = saved.level || 1;
-  tapPower = saved.tapPower || 1;
-  bestCombo = saved.bestCombo || 0;
-}
+  initMusic() {
+    // Música de fondo - loop infinito
+    this.music = new Audio('https://cdn.pixabay.com/download/audio/2022/05/27/audio_1c3e2e6e1c.mp3?filename=happy-childrens-tune-11685.mp3');
+    this.music.loop = true;
+    this.music.volume = 0.3;
+    if (this.musicEnabled) {
+      this.music.play().catch(e => console.log('Auto-play prevented'));
+    }
+  }
 
-// --- Variables ---
-let coins=0,level=1,multiplier=1;
-let tapPower=1,energy=100,maxEnergy=100;
-let combo=0,bestCombo=0;
-let comboTimer=null;
-let evolutionStage = 0; // 0=normal, 1=plata, 2=oro, 3=legendario
+  playTap() {
+    if (!this.sfxEnabled) return;
+    const audio = new Audio('https://cdn.pixabay.com/download/audio/2022/03/10/audio_c8c8b9c9f1.mp3?filename=click-button-140881.mp3');
+    audio.volume = 0.2;
+    audio.play().catch(e => console.log('SFX error'));
+  }
 
-// --- Imágenes (con emojis como placeholder, pero puedes añadir imágenes reales) ---
-const billyIdle=new Image(); billyIdle.src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='45' fill='%23FFA500'/%3E%3Ccircle cx='35' cy='40' r='5' fill='black'/%3E%3Ccircle cx='65' cy='40' r='5' fill='black'/%3E%3Cpath d='M35 65 Q50 75 65 65' stroke='black' fill='none' stroke-width='3'/%3E%3C/svg%3E";
-const billyHappy=new Image(); billyHappy.src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='45' fill='%23FFD700'/%3E%3Ccircle cx='35' cy='40' r='5' fill='black'/%3E%3Ccircle cx='65' cy='40' r='5' fill='black'/%3E%3Cpath d='M35 70 Q50 85 65 70' stroke='black' fill='none' stroke-width='3'/%3E%3C/svg%3E";
-const billyAngry=new Image(); billyAngry.src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='45' fill='%23FF4444'/%3E%3Ccircle cx='35' cy='40' r='5' fill='black'/%3E%3Ccircle cx='65' cy='40' r='5' fill='black'/%3E%3Cpath d='M35 65 L65 65 M35 75 L65 75' stroke='black' fill='none' stroke-width='3'/%3E%3C/svg%3E";
-const billySad=new Image(); billySad.src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='45' fill='%23888888'/%3E%3Ccircle cx='35' cy='40' r='5' fill='black'/%3E%3Ccircle cx='65' cy='40' r='5' fill='black'/%3E%3Cpath d='M35 70 Q50 55 65 70' stroke='black' fill='none' stroke-width='3'/%3E%3C/svg%3E";
-let currentBilly=billyIdle;
-let stateTimer=null;
-let billy={x:0,y:0,size:120,scale:1,shake:0,rotation:0,pulse:0};
+  playCrit() {
+    if (!this.sfxEnabled) return;
+    const audio = new Audio('https://cdn.pixabay.com/download/audio/2022/03/10/audio_bb7a2e5f5a.mp3?filename=level-up-191997.mp3');
+    audio.volume = 0.3;
+    audio.play().catch(e => console.log('SFX error'));
+  }
 
-// --- Partículas mejoradas ---
-let particles=[],floating=[],effects=[],auras=[];
+  playLevelUp() {
+    if (!this.sfxEnabled) return;
+    const audio = new Audio('https://cdn.pixabay.com/download/audio/2022/05/27/audio_3e6e1c2e6e.mp3?filename=fanfare-6-118400.mp3');
+    audio.volume = 0.4;
+    audio.play().catch(e => console.log('SFX error'));
+  }
 
-// --- Sonidos (mejorados con Web Audio para feedback) ---
-function playSound(type){
-  const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-  const oscillator = audioCtx.createOscillator();
-  const gainNode = audioCtx.createGain();
-  oscillator.connect(gainNode);
-  gainNode.connect(audioCtx.destination);
-  if(type === 'tap'){
-    oscillator.frequency.value = 800;
-    gainNode.gain.value = 0.2;
-    oscillator.type = 'sine';
-    oscillator.start();
-    gainNode.gain.exponentialRampToValueAtTime(0.00001, audioCtx.currentTime + 0.3);
-    oscillator.stop(audioCtx.currentTime + 0.3);
-  } else if(type === 'crit'){
-    oscillator.frequency.value = 1200;
-    gainNode.gain.value = 0.3;
-    oscillator.type = 'triangle';
-    oscillator.start();
-    gainNode.gain.exponentialRampToValueAtTime(0.00001, audioCtx.currentTime + 0.4);
-    oscillator.stop(audioCtx.currentTime + 0.4);
-  } else if(type === 'levelup'){
-    oscillator.frequency.value = 400;
-    gainNode.gain.value = 0.25;
-    oscillator.type = 'sawtooth';
-    oscillator.start();
-    setTimeout(()=>{
-      oscillator.frequency.value = 800;
-    },100);
-    gainNode.gain.exponentialRampToValueAtTime(0.00001, audioCtx.currentTime + 0.6);
-    oscillator.stop(audioCtx.currentTime + 0.6);
+  playCoin() {
+    if (!this.sfxEnabled) return;
+    const audio = new Audio('https://cdn.pixabay.com/download/audio/2022/03/10/audio_1a2b3c4d5e.mp3?filename=coin-257878.mp3');
+    audio.volume = 0.25;
+    audio.play().catch(e => console.log('SFX error'));
+  }
+
+  toggleMusic() {
+    this.musicEnabled = !this.musicEnabled;
+    if (this.musicEnabled) {
+      this.music.play().catch(e => console.log('Play error'));
+    } else {
+      this.music.pause();
+    }
+    return this.musicEnabled;
+  }
+
+  toggleSfx() {
+    this.sfxEnabled = !this.sfxEnabled;
+    return this.sfxEnabled;
   }
 }
 
-// --- Estado Billy con evolución ---
-function updateEvolution(){
-  if(level >= 20 && evolutionStage < 3){
-    evolutionStage = 3;
-    showAchievement('🌟 ¡BILLY LEGENDARIO! 🌟');
-  } else if(level >= 10 && evolutionStage < 2){
-    evolutionStage = 2;
-    showAchievement('✨ ¡BILLY DORADO! ✨');
-  } else if(level >= 5 && evolutionStage < 1){
-    evolutionStage = 1;
-    showAchievement('⭐ ¡BILLY PLATEADO! ⭐');
+const audioManager = new AudioManager();
+
+// ==================== SISTEMA DE IMÁGENES DE BILLY ====================
+// Puedes reemplazar estas URLs con las imágenes reales de tu gatito Billy
+// Sube tus imágenes a Imgur o cualquier hosting y pega los links aquí
+
+const BILLY_IMAGES = {
+  idle: 'https://placekitten.com/200/200', // Reemplaza con la URL de tu imagen de Billy normal
+  happy: 'https://placekitten.com/210/210', // Reemplaza con Billy feliz
+  angry: 'https://placekitten.com/190/190', // Reemplaza con Billy enojado
+  sad: 'https://placekitten.com/180/180'     // Reemplaza con Billy triste
+};
+
+// Instrucciones para subir imágenes:
+// 1. Ve a https://imgur.com o https://postimages.org
+// 2. Sube tus imágenes de Billy
+// 3. Copia el enlace directo de la imagen
+// 4. Reemplaza las URLs de arriba con tus enlaces
+
+const billyImages = {
+  idle: new Image(),
+  happy: new Image(),
+  angry: new Image(),
+  sad: new Image()
+};
+
+// Cargar imágenes (reemplazar URLs cuando tengas las reales)
+billyImages.idle.src = 'https://placekitten.com/200/200';
+billyImages.happy.src = 'https://placekitten.com/210/210';
+billyImages.angry.src = 'https://placekitten.com/190/190';
+billyImages.sad.src = 'https://placekitten.com/180/180';
+
+let currentBilly = billyImages.idle;
+
+// ==================== SISTEMA DE TOKEN BILLY (Solana Ready) ====================
+let billyTokens = 0;
+let walletConnected = false;
+let walletAddress = null;
+
+// Sistema de minado de tokens - cada tap da tokens BILLY
+function mineTokens(amount) {
+  const tokensEarned = Math.floor(amount / 10); // Cada 10 monedas = 1 token BILLY
+  if (tokensEarned > 0) {
+    billyTokens += tokensEarned;
+    updateTokenDisplay();
+    showNotification(`+${tokensEarned} $BILLY Tokens! 🪙`);
   }
 }
 
-function setBillyState(img,time=600,shake=0){
- currentBilly=img;
- billy.shake=shake;
- clearTimeout(stateTimer);
- stateTimer=setTimeout(()=>{
-   if(evolutionStage === 3) currentBilly=billyHappy;
-   else if(evolutionStage === 2) currentBilly=billyHappy;
-   else currentBilly=billyIdle;
-   billy.shake=0;
-   billy.rotation=0;
- },time);
+function updateTokenDisplay() {
+  document.getElementById('billyTokens').innerText = Math.floor(billyTokens);
 }
 
-// --- Aura legendaria ---
-function updateAura(){
-  if(combo > 15){
-    auras.push({x:billy.x,y:billy.y,life:20,size:60});
+// Conexión con wallet Solana (simulada para demo - lista para implementar con @solana/web3.js)
+async function connectSolanaWallet() {
+  // Aquí irá la integración real con Phantom Wallet
+  // Por ahora es una simulación
+  showNotification('🔗 Conectando a Solana Wallet...');
+  
+  // Simulación de conexión
+  setTimeout(() => {
+    walletConnected = true;
+    walletAddress = '7xKX...3mNp';
+    showNotification('✅ Wallet conectada! Prepárate para el lanzamiento de $BILLY');
+    document.getElementById('connectWallet').innerHTML = '🟢 Wallet Conectada';
+    document.getElementById('connectWallet').style.opacity = '0.7';
+  }, 1500);
+}
+
+// ==================== SISTEMA DE JUEGO MEJORADO ====================
+const canvas = document.getElementById('gameCanvas');
+const ctx = canvas.getContext('2d');
+
+// Variables del juego
+let coins = 0, level = 1, multiplier = 1;
+let tapPower = 1, energy = 100, maxEnergy = 100;
+let combo = 0, bestCombo = 0;
+let comboTimer = null;
+let particles = [];
+let floating = [];
+let effects = [];
+let bonusBubbles = [];
+let mice = [];
+
+// Posición de Billy
+let billy = { x: 0, y: 0, size: 130, scale: 1, shake: 0, rotation: 0, pulse: 0 };
+
+// Configuración de canvas
+function resizeCanvas() {
+  const rect = canvas.getBoundingClientRect();
+  canvas.width = rect.width;
+  canvas.height = rect.height;
+  billy.x = canvas.width / 2;
+  billy.y = canvas.height / 2;
+}
+window.addEventListener('resize', resizeCanvas);
+resizeCanvas();
+
+// Sistema de combo y crítico
+function addCombo() {
+  combo++;
+  if (combo > bestCombo) bestCombo = combo;
+  clearTimeout(comboTimer);
+  comboTimer = setTimeout(() => {
+    if (combo >= 5) showNotification(`🔥 Combo de ${combo} perdido! Sigue así 🔥`);
+    combo = 0;
+  }, 2000);
+}
+
+// Sistema de niveles
+function updateLevel() {
+  let neededCoins = 200 * Math.pow(1.25, level - 1);
+  if (coins >= neededCoins && level < 100) {
+    level++;
+    multiplier = 1 + Math.floor(level / 4);
+    audioManager.playLevelUp();
+    showNotification(`🎉 NIVEL ${level} DESBLOQUEADO! 🎉`);
+    createConfetti();
+    
+    // Bonus de energía al subir nivel
+    energy = Math.min(maxEnergy, energy + 20);
   }
-  auras = auras.filter(a=>a.life-- >0);
 }
 
-function drawAura(){
-  auras.forEach(a=>{
-    ctx.save();
-    ctx.shadowBlur = 30;
-    ctx.shadowColor = '#ff66ff';
-    ctx.globalAlpha = a.life/20;
-    ctx.beginPath();
-    ctx.arc(a.x, a.y, a.size, 0, Math.PI*2);
-    ctx.strokeStyle = '#ff66ff';
-    ctx.lineWidth = 3;
-    ctx.stroke();
-    ctx.beginPath();
-    ctx.arc(a.x, a.y, a.size-10, 0, Math.PI*2);
-    ctx.stroke();
-    ctx.restore();
-  });
-}
-
-// --- Partículas mejoradas ---
-function createParticles(color="#22c55e", x=billy.x, y=billy.y, count=12){
- for(let i=0;i<count;i++){ 
-   particles.push({ 
-     x:x, y:y, 
-     vx:(Math.random()-0.5)*6, 
-     vy:-Math.random()*6 - 2, 
-     life:40+Math.random()*20, 
-     color:color,
-     size:2+Math.random()*4
-   }); 
- }
-}
-function updateParticles(){particles.forEach(p=>{p.x+=p.vx;p.y+=p.vy;p.life--});particles=particles.filter(p=>p.life>0)}
-function drawParticles(){particles.forEach(p=>{ctx.globalAlpha=p.life/40;ctx.fillStyle=p.color;ctx.beginPath();ctx.arc(p.x,p.y,p.size,0,Math.PI*2);ctx.fill()});ctx.globalAlpha=1}
-
-// --- Floating text mejorado ---
-function floatingText(val,color="#fff", x=billy.x, y=billy.y, isCrit=false){
-  floating.push({x:x,y:y,text:`+${val}`,life:40,color:color,size:isCrit?24:16});
-}
-function updateFloating(){floating.forEach(f=>{f.y-=1.5;f.life--});floating=floating.filter(f=>f.life>0)}
-function drawFloating(){floating.forEach(f=>{ctx.globalAlpha=f.life/40;ctx.fillStyle=f.color;ctx.font=`bold ${f.size}px Arial`;ctx.fillText(f.text,f.x-20,f.y)});ctx.globalAlpha=1}
-
-// --- UI ---
-const score=document.getElementById('score');
-const multiplierEl=document.getElementById('multiplier');
-const levelEl=document.getElementById('level');
-const energyFill=document.getElementById('energyFill');
-const comboEl=document.getElementById('combo');
-const tapPowerEl=document.getElementById('tapPower');
-const critChanceEl=document.getElementById('critChance');
-const mouseCountEl=document.getElementById('mouseCount');
-const nextLevelEl=document.getElementById('nextLevel');
-const bestComboEl=document.getElementById('bestCombo');
-
-function updateUI(){ 
- score.innerText=Math.floor(coins); 
- multiplierEl.innerText=multiplier; 
- levelEl.innerText=level; 
- energyFill.style.width=(energy/maxEnergy*100)+"%"; 
- comboEl.innerText=combo; 
- tapPowerEl.innerText=tapPower;
- let critChance = Math.min(40, 20 + Math.floor(combo/2));
- critChanceEl.innerText = critChance;
- nextLevelEl.innerText = Math.floor(300 * Math.pow(1.2, level-1));
- bestComboEl.innerText = bestCombo;
- 
- // Guardar progreso
- localStorage.setItem('billyEpicSave', JSON.stringify({
-   coins: coins,
-   level: level,
-   tapPower: tapPower,
-   bestCombo: bestCombo
- }));
-}
-
-// --- Niveles y Combos mejorados ---
-function updateLevel(){
- let neededCoins = 300 * Math.pow(1.2, level-1);
- if(coins >= neededCoins && level < 50){
-   level++;
-   multiplier = 1 + Math.floor(level/3);
-   createParticles("#FFD700", billy.x, billy.y, 20);
-   playSound('levelup');
-   showAchievement(`🎉 ¡NIVEL ${level}! 🎉`);
-   updateEvolution();
- }
- multiplier = 1 + Math.floor(level/3);
-}
-
-function addCombo(){
- combo++;
- if(combo > bestCombo) bestCombo = combo;
- clearTimeout(comboTimer);
- comboTimer = setTimeout(()=>{
-   if(combo >= 10) showAchievement(`🔥 ¡Combo de ${combo} perdido! Sigue así 🔥`);
-   combo = 0;
- }, 2000);
-}
-
-function showAchievement(text){
+// Notificaciones
+function showNotification(text) {
   const div = document.createElement('div');
-  div.className = 'achievement';
+  div.className = 'notification';
   div.innerText = text;
   document.body.appendChild(div);
-  setTimeout(()=>div.remove(), 2000);
+  setTimeout(() => div.remove(), 2000);
 }
 
-// --- Burbujas Bonus mejoradas ---
-let bonusBubbles=[];
-const maxBubbles=4;
-function spawnBubble(){ 
- if(bonusBubbles.length>=maxBubbles) return; 
- const size=40+Math.random()*40; 
- bonusBubbles.push({
-   x: Math.random()*(canvas.width-size)+size/2, 
-   y: Math.random()*(canvas.height-size)+size/2, 
-   size: size, 
-   life: 8000, 
-   created: Date.now(), 
-   points: Math.random()<0.7,
-   value: Math.floor(tapPower * multiplier * (Math.random() < 0.2 ? 5 : 2))
- }); 
+// Confeti
+function createConfetti() {
+  for (let i = 0; i < 50; i++) {
+    const conf = document.createElement('div');
+    conf.className = 'confetti';
+    conf.style.left = Math.random() * window.innerWidth + 'px';
+    conf.style.backgroundColor = `hsl(${Math.random() * 360}, 100%, 50%)`;
+    document.body.appendChild(conf);
+    setTimeout(() => conf.remove(), 3000);
+  }
 }
-function checkBubbleClick(x,y){
- for(let i=bonusBubbles.length-1;i>=0;i--){
-   const b=bonusBubbles[i];
-   const dx=x-b.x, dy=y-b.y;
-   if(Math.sqrt(dx*dx+dy*dy)<b.size/2){
-      if(b.points){ 
-        const gain = b.value;
-        coins+=gain; 
-        floatingText(gain,"#FFD700", b.x, b.y, gain>100); 
-        createParticles("#FFD700", b.x, b.y, 15); 
-        playSound('crit');
-      } else { 
-        createParticles("#888", b.x, b.y, 8); 
-      }
-      bonusBubbles.splice(i,1);
-      updateLevel(); 
-      updateUI(); 
-      break;
-   }
- }
-}
-function drawBubbles(){ 
- bonusBubbles.forEach(b=>{ 
-   const t=(Date.now()-b.created)/b.life; 
-   const scale=0.8+0.3*Math.sin(t*Math.PI*4); 
-   ctx.save(); 
-   ctx.translate(b.x,b.y); 
-   ctx.scale(scale,scale); 
-   ctx.globalAlpha=Math.max(0,1-t); 
-   ctx.fillStyle = b.points ? '#FFD700' : '#888888';
-   ctx.beginPath();
-   ctx.arc(0,0,b.size/2,0,Math.PI*2);
-   ctx.fill();
-   ctx.fillStyle = '#000';
-   ctx.font = `${b.size/3}px Arial`;
-   ctx.fillText('🎁', -b.size/4, b.size/6);
-   ctx.restore(); 
- }); 
-}
-function updateBubbles(){ 
- const now=Date.now(); 
- bonusBubbles=bonusBubbles.filter(b=>now-b.created<b.life); 
-}
-setInterval(spawnBubble,5000);
 
-// --- Ratones mejorados con ratones dorados ---
-let mice=[];
-const mouseSize=45;
-function spawnMouse(){
-  const isGolden = Math.random() < 0.15;
-  const y=Math.random()*(canvas.height-60)+30;
-  const dir=Math.random()<0.5?-1:1;
-  mice.push({ 
-    x: dir===1? -mouseSize:canvas.width+mouseSize, 
-    y:y, 
-    size:mouseSize, 
-    dir:dir, 
-    speed:1.5+Math.random()*2, 
-    created:Date.now(), 
-    isGolden: isGolden,
-    value: isGolden ? tapPower * multiplier * 8 : tapPower * multiplier * 3
+// Partículas
+function createParticles(color, x, y, count = 10) {
+  for (let i = 0; i < count; i++) {
+    particles.push({
+      x: x, y: y,
+      vx: (Math.random() - 0.5) * 8,
+      vy: -Math.random() * 6 - 2,
+      life: 30 + Math.random() * 20,
+      color: color,
+      size: 3 + Math.random() * 4
+    });
+  }
+}
+
+// Texto flotante
+function floatingText(text, color, x, y, isBig = false) {
+  floating.push({
+    x: x, y: y,
+    text: text,
+    life: 40,
+    color: color,
+    size: isBig ? 20 : 14
   });
 }
-function updateMice(){
-  for(let m of mice){ m.x += m.speed*m.dir; }
-  mice = mice.filter(m => m.x> -mouseSize && m.x < canvas.width + mouseSize);
-  mouseCountEl.innerText = mice.length;
-}
-function drawMice(){
-  for(let m of mice){
-    ctx.save();
-    ctx.translate(m.x,m.y);
-    ctx.shadowBlur = m.isGolden ? 15 : 0;
-    ctx.shadowColor = '#FFD700';
-    ctx.fillStyle = m.isGolden ? "#FFD700" : "#A0522D";
-    ctx.beginPath(); 
-    ctx.arc(0,0,m.size/2,0,Math.PI*2); 
-    ctx.fill();
-    ctx.fillStyle = "#000";
-    ctx.font = `${m.size/2}px Arial`;
-    ctx.fillText('🐭', -m.size/4, m.size/4);
-    if(m.isGolden){
-      ctx.fillStyle = "#FFD700";
-      ctx.font = `${m.size/3}px Arial`;
-      ctx.fillText('⭐', -m.size/3, -m.size/3);
-    }
-    ctx.restore();
+
+// Tap principal
+function handleTap(x, y) {
+  if (energy <= 0) {
+    showNotification('💤 Billy está cansado! Espera que recupere energía 💤');
+    return;
+  }
+  
+  addCombo();
+  
+  // Probabilidad de crítico basada en combo
+  let critChance = Math.min(45, 15 + Math.floor(combo / 2));
+  let isCrit = Math.random() * 100 < critChance;
+  let megaComboBonus = combo >= 15 ? 1.5 : 1;
+  
+  let gain = Math.floor(tapPower * multiplier * (isCrit ? 5 : 1) * (1 + combo * 0.03) * megaComboBonus);
+  coins += gain;
+  energy -= Math.max(1, Math.floor(combo / 8));
+  
+  // Minar tokens BILLY
+  mineTokens(gain);
+  
+  updateUI();
+  updateLevel();
+  
+  // Animaciones
+  billy.scale = 1.3;
+  setTimeout(() => billy.scale = 1, 100);
+  
+  createParticles(isCrit ? '#fbbf24' : '#22c55e', x, y, isCrit ? 20 : 12);
+  floatingText(`+${gain}`, isCrit ? '#fbbf24' : '#fff', x, y, isCrit);
+  
+  // Sonidos
+  if (isCrit) {
+    audioManager.playCrit();
+    if (combo > 10) showNotification(`⚡ CRÍTICO MEGACOMBO! x${Math.floor(1 + combo * 0.05)} ⚡`);
+  } else {
+    audioManager.playTap();
+  }
+  
+  // Cambiar expresión de Billy
+  if (isCrit) {
+    currentBilly = billyImages.happy;
+    setTimeout(() => currentBilly = billyImages.idle, 600);
+  } else if (combo > 8) {
+    currentBilly = billyImages.happy;
+    setTimeout(() => currentBilly = billyImages.idle, 300);
   }
 }
-function checkMouseClick(x,y){
-  for(let i=mice.length-1;i>=0;i--){
-    const m=mice[i];
-    const dx=x-m.x, dy=y-m.y;
-    if(Math.sqrt(dx*dx+dy*dy)<m.size/2){
-      const gain = m.value;
-      coins+=gain; 
-      floatingText(gain, m.isGolden ? "#FFD700" : "#FFA500", m.x, m.y, m.isGolden); 
-      createParticles(m.isGolden ? "#FFD700" : "#FFA500", m.x, m.y, 12); 
-      playSound(m.isGolden ? 'crit' : 'tap');
-      mice.splice(i,1); 
-      updateUI(); 
-      updateLevel(); 
+
+// Dibujar Billy con imágenes reales
+function drawBilly() {
+  ctx.save();
+  
+  let offsetX = billy.shake ? (Math.random() - 0.5) * 8 : 0;
+  let offsetY = billy.shake ? (Math.random() - 0.5) * 8 : 0;
+  
+  ctx.translate(billy.x + offsetX, billy.y + offsetY);
+  ctx.rotate(billy.rotation);
+  ctx.scale(billy.scale + billy.pulse / 20, billy.scale + billy.pulse / 20);
+  
+  // Sombra épica según combo
+  if (combo > 10) {
+    ctx.shadowBlur = 20;
+    ctx.shadowColor = combo > 20 ? '#ff66ff' : '#fbbf24';
+  }
+  
+  // Dibujar imagen de Billy
+  if (currentBilly.complete && currentBilly.naturalWidth > 0) {
+    ctx.drawImage(currentBilly, -billy.size / 2, -billy.size / 2, billy.size, billy.size);
+  } else {
+    // Fallback si la imagen no carga
+    ctx.fillStyle = '#FFA500';
+    ctx.beginPath();
+    ctx.arc(0, 0, billy.size / 2, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.fillStyle = '#000';
+    ctx.font = `${billy.size / 2}px Arial`;
+    ctx.fillText('😺', -billy.size / 3, billy.size / 4);
+  }
+  
+  ctx.restore();
+}
+
+// Sistema de ratones (minijuego)
+function spawnMouse() {
+  if (mice.length >= 5) return;
+  const isGolden = Math.random() < 0.15;
+  const y = Math.random() * (canvas.height - 60) + 30;
+  const dir = Math.random() < 0.5 ? -1 : 1;
+  mice.push({
+    x: dir === 1 ? -50 : canvas.width + 50,
+    y: y,
+    size: 45,
+    dir: dir,
+    speed: 1.5 + Math.random() * 1.5,
+    isGolden: isGolden,
+    value: isGolden ? tapPower * multiplier * 6 : tapPower * multiplier * 2
+  });
+}
+
+function checkMouseClick(x, y) {
+  for (let i = mice.length - 1; i >= 0; i--) {
+    const m = mice[i];
+    const dx = x - m.x, dy = y - m.y;
+    if (Math.sqrt(dx * dx + dy * dy) < m.size / 2) {
+      coins += m.value;
+      floatingText(`+${m.value}`, m.isGolden ? '#fbbf24' : '#ffa500', m.x, m.y, m.isGolden);
+      createParticles(m.isGolden ? '#fbbf24' : '#ffa500', m.x, m.y, 10);
+      audioManager.playCoin();
+      mice.splice(i, 1);
+      updateUI();
+      updateLevel();
       break;
     }
   }
 }
-setInterval(spawnMouse,3500);
 
-// --- Tap principal mejorado ---
-function handleTap(x=null,y=null){
- if(energy<=0){ 
-   setBillyState(billySad,800,1); 
-   showAchievement('💤 ¡Billy está cansado! Espera energía 💤');
-   return; 
- }
- addCombo();
- let critChance = Math.min(40, 20 + Math.floor(combo/2));
- let isCrit = Math.random()*100 < critChance;
- let megaCombo = combo >= 20 ? 2 : 1;
- let gain = Math.floor(tapPower * multiplier * (isCrit?5:1) * (1 + combo*0.05) * megaCombo);
- coins+=gain;
- energy -= Math.max(1, Math.floor(combo/10));
- updateLevel();
- updateUI();
- 
- // Animación de pulso
- billy.scale = 1.3;
- billy.pulse = 5;
- setTimeout(()=>{
-   billy.scale = 1;
-   billy.pulse = 0;
- }, 120);
- 
- createParticles(isCrit?"#FFD700":"#22c55e",x||billy.x,y||billy.y, isCrit?20:12);
- floatingText(gain, isCrit?"#FFD700":"#fff",x||billy.x,y||billy.y, isCrit);
- playSound(isCrit?'crit':'tap');
- 
- if(isCrit){
-   setBillyState(billyHappy,600,1);
-   if(combo > 10) showAchievement(`⚡ ¡CRÍTICO MEGACOMBO x${Math.floor(1+combo*0.05)}! ⚡`);
- } else if(combo>12){
-   setBillyState(billyHappy,400);
- } else {
-   setBillyState(billyIdle,200);
- }
+// Sistema de burbujas bonus
+function spawnBubble() {
+  if (bonusBubbles.length >= 4) return;
+  const size = 50 + Math.random() * 40;
+  bonusBubbles.push({
+    x: Math.random() * (canvas.width - size) + size / 2,
+    y: Math.random() * (canvas.height - size) + size / 2,
+    size: size,
+    life: 8000,
+    created: Date.now(),
+    value: Math.floor(tapPower * multiplier * (Math.random() < 0.3 ? 8 : 3))
+  });
 }
 
-// --- Dibujar Billy con aura de combo ---
-function drawBilly(){
- ctx.save();
- let offsetX=billy.shake? (Math.random()-0.5)*8:0;
- let offsetY=billy.shake? (Math.random()-0.5)*8:0;
- ctx.translate(billy.x+offsetX,billy.y+offsetY);
- ctx.rotate(billy.rotation);
- ctx.scale(billy.scale + (billy.pulse/20), billy.scale + (billy.pulse/20));
- 
- // Aura de combo alto
- if(combo > 10){
-   ctx.shadowBlur = 20 + combo/2;
-   ctx.shadowColor = combo > 20 ? '#ff0066' : '#ff6600';
- }
- 
- // Efecto de evolución
- if(evolutionStage === 3){
-   ctx.shadowColor = '#ff66ff';
-   ctx.shadowBlur = 25;
- } else if(evolutionStage === 2){
-   ctx.shadowColor = '#FFD700';
-   ctx.shadowBlur = 20;
- } else if(evolutionStage === 1){
-   ctx.shadowColor = '#C0C0C0';
-   ctx.shadowBlur = 15;
- }
- 
- ctx.drawImage(currentBilly,-billy.size/2,-billy.size/2,billy.size,billy.size);
- ctx.restore();
+function checkBubbleClick(x, y) {
+  for (let i = bonusBubbles.length - 1; i >= 0; i--) {
+    const b = bonusBubbles[i];
+    const dx = x - b.x, dy = y - b.y;
+    if (Math.sqrt(dx * dx + dy * dy) < b.size / 2) {
+      coins += b.value;
+      floatingText(`+${b.value}`, '#fbbf24', b.x, b.y, true);
+      createParticles('#fbbf24', b.x, b.y, 15);
+      audioManager.playCrit();
+      bonusBubbles.splice(i, 1);
+      updateUI();
+      updateLevel();
+      break;
+    }
+  }
 }
 
-// --- Seguimiento ---
-let pointerX=null,pointerY=null;
-function follow(){ if(pointerX){ billy.x+= (pointerX-billy.x)*0.1; billy.y+= (pointerY-billy.y)*0.1; } }
-canvas.addEventListener('mousemove', e=>{ const rect=canvas.getBoundingClientRect(); pointerX=e.clientX-rect.left; pointerY=e.clientY-rect.top; });
-canvas.addEventListener('touchmove', e=>{ e.preventDefault(); const rect=canvas.getBoundingClientRect(); pointerX=e.touches[0].clientX-rect.left; pointerY=e.touches[0].clientY-rect.top; },{passive:false});
+// Actualizar UI
+function updateUI() {
+  document.getElementById('score').innerText = Math.floor(coins);
+  document.getElementById('level').innerText = level;
+  document.getElementById('multiplier').innerText = multiplier;
+  document.getElementById('tapPower').innerText = tapPower;
+  document.getElementById('energyCurrent').innerText = Math.floor(energy);
+  document.getElementById('energyMax').innerText = maxEnergy;
+  document.getElementById('energyFill').style.width = (energy / maxEnergy * 100) + '%';
+}
 
-// --- Eventos click/tap ---
-canvas.addEventListener('click', e=>{
-  const rect=canvas.getBoundingClientRect();
-  const x=e.clientX-rect.left;
-  const y=e.clientY-rect.top;
-  handleTap(x,y); 
-  checkBubbleClick(x,y); 
-  checkMouseClick(x,y);
+// Eventos de pantalla
+canvas.addEventListener('click', (e) => {
+  const rect = canvas.getBoundingClientRect();
+  const x = (e.clientX - rect.left) * (canvas.width / rect.width);
+  const y = (e.clientY - rect.top) * (canvas.height / rect.height);
+  handleTap(x, y);
+  checkBubbleClick(x, y);
+  checkMouseClick(x, y);
 });
-canvas.addEventListener('touchstart', e=>{
-  const rect=canvas.getBoundingClientRect();
-  const x=e.touches[0].clientX-rect.left;
-  const y=e.touches[0].clientY-rect.top;
-  handleTap(x,y); 
-  checkBubbleClick(x,y); 
-  checkMouseClick(x,y);
+
+canvas.addEventListener('touchstart', (e) => {
   e.preventDefault();
-},{passive:false});
+  const rect = canvas.getBoundingClientRect();
+  const touch = e.touches[0];
+  const x = (touch.clientX - rect.left) * (canvas.width / rect.width);
+  const y = (touch.clientY - rect.top) * (canvas.height / rect.height);
+  handleTap(x, y);
+  checkBubbleClick(x, y);
+  checkMouseClick(x, y);
+}, { passive: false });
 
-// --- Botones mejorados ---
-document.getElementById('upgradeTap').onclick=()=>{ 
- let cost = Math.floor(100 * Math.pow(1.5, tapPower-1)); 
- if(coins>=cost){
-   coins-=cost;
-   tapPower++;
-   setBillyState(billyHappy,600);
-   createParticles("#00ffff", billy.x, billy.y, 20);
-   playSound('levelup');
-   showAchievement(`💪 ¡Poder aumentado a ${tapPower}! 💪`);
-   updateUI();
- } else {
-   showAchievement(`💰 Necesitas ${cost} monedas 💰`);
- }
-}
-document.getElementById('lootBox').onclick=()=>{ 
- let roll = Math.random();
- let gain = 0;
- if(roll<0.4){
-   gain = 100 + Math.floor(Math.random()*150);
-   coins+=gain;
-   setBillyState(billyHappy,800);
-   playSound('crit');
-   createParticles("#ff66ff", billy.x, billy.y, 25);
-   showAchievement(`🎁 ¡${gain} monedas! 🎁`);
- } else if(roll<0.7){
-   gain = 50 + Math.floor(Math.random()*80);
-   coins+=gain;
-   setBillyState(billyHappy,600);
-   playSound('tap');
-   showAchievement(`📦 ${gain} monedas`);
- } else {
-   setBillyState(billyAngry,800,1);
-   showAchievement(`😿 ¡Cofre vacío! Sigue intentando 😿`);
- }
- updateUI(); 
- updateLevel();
-}
-document.getElementById('shareBtn').onclick=()=>{ 
- const text = `🐱 Billy Tap Épico - Nivel ${level} | ${Math.floor(coins)} monedas | Mejor combo ${bestCombo} 🔥 ¡Juega ahora!`; 
- window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`,'_blank');
+// Seguimiento del cursor
+let pointerX = null, pointerY = null;
+canvas.addEventListener('mousemove', (e) => {
+  const rect = canvas.getBoundingClientRect();
+  pointerX = (e.clientX - rect.left) * (canvas.width / rect.width);
+  pointerY = (e.clientY - rect.top) * (canvas.height / rect.height);
+});
+
+function follow() {
+  if (pointerX) {
+    billy.x += (pointerX - billy.x) * 0.1;
+    billy.y += (pointerY - billy.y) * 0.1;
+  }
 }
 
-// --- Fondo animado ---
-let stars = [];
-for(let i=0;i<50;i++){
-  stars.push({x:Math.random()*1000,y:Math.random()*1000,size:Math.random()*2});
-}
-function drawBackground(){
- const w=canvas.width,h=canvas.height;
- const gradient=ctx.createLinearGradient(0,0,w,h);
- gradient.addColorStop(0,"#0f172a");
- gradient.addColorStop(1,"#1e1a3a");
- ctx.fillStyle=gradient;
- ctx.fillRect(0,0,w,h);
- 
- // Estrellas
- stars.forEach(s=>{
-   ctx.fillStyle = `rgba(255,255,255,${0.3+Math.sin(Date.now()*0.001+s.x)*0.2})`;
-   ctx.beginPath();
-   ctx.arc(s.x%w, s.y%h, s.size, 0, Math.PI*2);
-   ctx.fill();
- });
-}
+// Botones
+document.getElementById('upgradeTap').onclick = () => {
+  let cost = Math.floor(80 * Math.pow(1.5, tapPower - 1));
+  if (coins >= cost) {
+    coins -= cost;
+    tapPower++;
+    updateUI();
+    showNotification(`💪 Poder aumentado a ${tapPower}!`);
+    audioManager.playLevelUp();
+    createParticles('#fbbf24', billy.x, billy.y, 15);
+  } else {
+    showNotification(`💰 Necesitas ${cost} monedas 💰`);
+  }
+};
 
-// --- Loop principal ---
-function loop(){
- ctx.clearRect(0,0,canvas.width,canvas.height);
- drawBackground();
- follow();
- updateAura();
- drawAura();
- drawBilly();
- updateParticles();
- drawParticles();
- updateFloating();
- drawFloating();
- updateBubbles();
- drawBubbles();
- updateMice();
- drawMice();
- requestAnimationFrame(loop);
-}
+document.getElementById('lootBox').onclick = () => {
+  if (coins >= 50) {
+    coins -= 50;
+    let reward = 100 + Math.floor(Math.random() * 200);
+    coins += reward;
+    showNotification(`🎁 Cofre mágico: +${reward} monedas! 🎁`);
+    audioManager.playCrit();
+    createConfetti();
+    updateUI();
+    updateLevel();
+  } else {
+    showNotification(`💔 Necesitas 50 monedas para abrir el cofre 💔`);
+  }
+};
 
-// --- Inicialización ---
-resizeCanvas();
-updateEvolution();
-updateUI();
-loop();
-setInterval(()=>{
-  let regen = Math.max(1, Math.floor(combo/5));
+document.getElementById('connectWallet').onclick = connectSolanaWallet;
+
+// Controles de sonido
+document.getElementById('toggleMusic').onclick = () => {
+  const enabled = audioManager.toggleMusic();
+  document.getElementById('toggleMusic').innerHTML = enabled ? '🎵 Música ON' : '🎵 Música OFF';
+};
+
+document.getElementById('toggleSfx').onclick = () => {
+  const enabled = audioManager.toggleSfx();
+  document.getElementById('toggleSfx').innerHTML = enabled ? '🔊 SFX ON' : '🔊 SFX OFF';
+};
+
+document.getElementById('tokenPanel').onclick = () => {
+  showNotification(`💰 Tienes ${Math.floor(billyTokens)} $BILLY Tokens! Prepárate para el lanzamiento en Solana 🚀`);
+};
+
+// Spawners
+setInterval(spawnMouse, 4000);
+setInterval(spawnBubble, 6000);
+setInterval(() => {
+  let regen = Math.max(1, Math.floor(combo / 5));
   energy = Math.min(maxEnergy, energy + regen);
   updateUI();
 }, 1000);
+
+// Guardar progreso
+setInterval(() => {
+  localStorage.setItem('billySave', JSON.stringify({
+    coins: coins,
+    level: level,
+    tapPower: tapPower,
+    billyTokens: billyTokens,
+    bestCombo: bestCombo
+  }));
+}, 30000);
+
+// Cargar progreso
+const saved = localStorage.getItem('billySave');
+if (saved) {
+  const data = JSON.parse(saved);
+  coins = data.coins || 0;
+  level = data.level || 1;
+  tapPower = data.tapPower || 1;
+  billyTokens = data.billyTokens || 0;
+  bestCombo = data.bestCombo || 0;
+  updateUI();
+  updateTokenDisplay();
+  multiplier = 1 + Math.floor(level / 4);
+}
+
+// Animaciones y partículas
+function updateParticles() {
+  particles.forEach(p => {
+    p.x += p.vx;
+    p.y += p.vy;
+    p.life--;
+  });
+  particles = particles.filter(p => p.life > 0);
+}
+
+function drawParticles() {
+  particles.forEach(p => {
+    ctx.globalAlpha = p.life / 40;
+    ctx.fillStyle = p.color;
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+    ctx.fill();
+  });
+  ctx.globalAlpha = 1;
+}
+
+function updateFloating() {
+  floating.forEach(f => {
+    f.y -= 1.5;
+    f.life--;
+  });
+  floating = floating.filter(f => f.life > 0);
+}
+
+function drawFloating() {
+  floating.forEach(f => {
+    ctx.globalAlpha = f.life / 40;
+    ctx.fillStyle = f.color;
+    ctx.font = `bold ${f.size}px "Segoe UI"`;
+    ctx.shadowBlur = 5;
+    ctx.shadowColor = '#000';
+    ctx.fillText(f.text, f.x - 15, f.y);
+  });
+  ctx.globalAlpha = 1;
+  ctx.shadowBlur = 0;
+}
+
+function updateBubbles() {
+  const now = Date.now();
+  bonusBubbles = bonusBubbles.filter(b => now - b.created < b.life);
+}
+
+function drawBubbles() {
+  bonusBubbles.forEach(b => {
+    const t = (Date.now() - b.created) / b.life;
+    const scale = 0.8 + 0.3 * Math.sin(t * Math.PI * 4);
+    ctx.save();
+    ctx.translate(b.x, b.y);
+    ctx.scale(scale, scale);
+    ctx.globalAlpha = Math.max(0, 1 - t);
+    ctx.fillStyle = '#fbbf24';
+    ctx.beginPath();
+    ctx.arc(0, 0, b.size / 2, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.fillStyle = '#000';
+    ctx.font = `${b.size / 3}px Arial`;
+    ctx.fillText('🎁', -b.size / 4, b.size / 6);
+    ctx.restore();
+  });
+}
+
+function updateMice() {
+  mice.forEach(m => m.x += m.speed * m.dir);
+  mice = mice.filter(m => m.x > -60 && m.x < canvas.width + 60);
+}
+
+function drawMice() {
+  mice.forEach(m => {
+    ctx.save();
+    ctx.translate(m.x, m.y);
+    ctx.fillStyle = m.isGolden ? '#fbbf24' : '#8B4513';
+    ctx.beginPath();
+    ctx.arc(0, 0, m.size / 2, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.fillStyle = '#000';
+    ctx.font = `${m.size / 2}px Arial`;
+    ctx.fillText('🐭', -m.size / 4, m.size / 4);
+    if (m.isGolden) {
+      ctx.fillStyle = '#fbbf24';
+      ctx.font = `${m.size / 3}px Arial`;
+      ctx.fillText('⭐', -m.size / 3, -m.size / 3);
+    }
+    ctx.restore();
+  });
+}
+
+function drawBackground() {
+  const gradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
+  gradient.addColorStop(0, '#1a0f2a');
+  gradient.addColorStop(1, '#2d1b3a');
+  ctx.fillStyle = gradient;
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  
+  // Estrellas
+  for (let i = 0; i < 30; i++) {
+    ctx.fillStyle = `rgba(255,255,255,${0.2 + Math.sin(Date.now() * 0.001 + i) * 0.1})`;
+    ctx.beginPath();
+    ctx.arc((i * 131) % canvas.width, (i * 97) % canvas.height, 1.5, 0, Math.PI * 2);
+    ctx.fill();
+  }
+}
+
+// Loop principal
+function animate() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  drawBackground();
+  follow();
+  drawBilly();
+  updateParticles();
+  drawParticles();
+  updateFloating();
+  drawFloating();
+  updateBubbles();
+  drawBubbles();
+  updateMice();
+  drawMice();
+  requestAnimationFrame(animate);
+}
+
+animate();
 </script>
 </body>
 </html>
