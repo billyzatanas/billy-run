@@ -19,10 +19,9 @@
             overflow: hidden;
             position: relative;
             touch-action: none;
-            transition: background 0.5s ease;
         }
 
-        /* Fondo dinámico según nivel */
+        /* Fondo dinámico */
         .dynamic-bg {
             position: fixed;
             top: 0;
@@ -161,26 +160,28 @@
         .btn-sound { background: linear-gradient(145deg, #334155, #1e293b); flex: 0.4; }
 
         /* Paneles adicionales */
-        .achievements-panel, .daily-panel, .challenges-panel {
+        .challenges-panel {
             position: fixed;
-            background: rgba(0,0,0,0.85);
-            backdrop-filter: blur(12px);
-            border-radius: 20px;
-            padding: 10px;
-            z-index: 40;
-            max-width: 280px;
-            transition: all 0.3s;
-            border: 1px solid rgba(255,200,100,0.3);
+            top: 180px;
+            left: 12px;
+            right: 12px;
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+            background: rgba(0,0,0,0.7);
+            border-radius: 30px;
+            padding: 6px;
+            z-index: 30;
+            backdrop-filter: blur(5px);
         }
-        .achievements-panel { bottom: 140px; left: 12px; font-size: 10px; display: none; }
-        .daily-panel { bottom: 140px; right: 12px; font-size: 10px; display: none; text-align: center; }
-        .challenges-panel { top: 180px; left: 12px; right: 12px; font-size: 10px; display: flex; gap: 8px; justify-content: center; background: rgba(0,0,0,0.7); border-radius: 30px; padding: 6px; }
-        
-        .panel-title { font-weight: bold; color: #FFD966; margin-bottom: 5px; font-size: 11px; }
-        .achievement-item { margin: 3px 0; color: #ccc; }
-        .achievement-unlocked { color: #FFD966; text-shadow: 0 0 3px gold; }
-        .daily-streak { font-size: 20px; font-weight: bold; color: #FFD966; }
-        .challenge-item { background: rgba(0,0,0,0.5); padding: 4px 8px; border-radius: 20px; white-space: nowrap; }
+        .challenge-item {
+            background: rgba(0,0,0,0.5);
+            padding: 4px 8px;
+            border-radius: 20px;
+            white-space: nowrap;
+            font-size: 10px;
+            color: #FFD966;
+        }
 
         /* Notificaciones */
         .notification {
@@ -198,6 +199,7 @@
             white-space: nowrap;
             animation: fadeOutUp 1s forwards;
             box-shadow: 0 4px 15px black;
+            pointer-events: none;
         }
         @keyframes fadeOutUp {
             0% { opacity: 1; transform: translate(-50%, -50%) scale(0.9); top: 45%;}
@@ -259,6 +261,7 @@
             .btn { padding: 8px 4px; font-size: 10px; }
             .stat-card { font-size: 9px; padding: 3px 8px; }
             .challenges-panel { top: 165px; }
+            .challenge-item { font-size: 8px; padding: 3px 6px; }
         }
     </style>
 </head>
@@ -287,7 +290,7 @@
 </div>
 
 <div class="challenges-panel" id="challengesPanel">
-    <div class="challenge-item" id="challenge1">🏆 0/30 ratones</div>
+    <div class="challenge-item" id="challenge1">🐭 0/30 ratones</div>
     <div class="challenge-item" id="challenge2">⚡ 0/20 críticos</div>
     <div class="challenge-item" id="challenge3">🔥 0/15 combo</div>
 </div>
@@ -307,43 +310,34 @@
     <button class="btn btn-solana" id="shareXBtn">🐦 X</button>
 </div>
 
-<div class="achievements-panel" id="achievementsPanel">
-    <div class="panel-title">🏅 LOGROS</div>
-    <div id="achievementsList"></div>
-</div>
-
-<div class="daily-panel" id="dailyPanel">
-    <div class="panel-title">📅 RECOMPENSA DIARIA</div>
-    <div class="daily-streak" id="dailyStreak">Día 1</div>
-    <div id="dailyRewardBtn" style="background:#fbbf24; padding:4px 8px; border-radius:20px; margin-top:5px; cursor:pointer;">🎁 Reclamar</div>
-</div>
-
 <canvas id="billyCanvas"></canvas>
 <div id="gameArea" style="position:fixed; top:0; left:0; width:100%; height:100%; z-index:5; cursor:crosshair;"></div>
 
 <script>
     // ==================== CONFIGURACIÓN INICIAL ====================
-    // Imágenes de Billy
+    const BILLY_BASE_SIZE = 130;
+    
+    // Imágenes de Billy (usando emojis como fallback mientras cargan las imágenes)
     const images = {
-        happy: new Image(), angry: new Image(), sad: new Image(), coins: new Image(),
-        skin2: new Image(), skin3: new Image()
+        happy: new Image(), 
+        angry: new Image(), 
+        sad: new Image(), 
+        coins: new Image()
     };
+    
+    // Cargar imágenes - si no existen, se usarán emojis
     images.happy.src = 'billy_happy.png';
     images.angry.src = 'billy_Angry.png';
     images.sad.src = 'billy_Triste.png';
     images.coins.src = 'billy_coins.png';
-    images.skin2.src = 'billy_happy.png'; // Skin alternativa (podrías usar otra imagen)
-    images.skin3.src = 'billy_happy.png';
     
     let currentImg = images.happy;
-    let currentSkin = 1;
     let billyX = window.innerWidth/2, billyY = window.innerHeight/2;
     let billyScale = 1, billyShake = 0, billyRotation = 0;
     let targetX = window.innerWidth/2, targetY = window.innerHeight/2;
     let goldenBilly = false;
-    let billyBaseSize = 130;
     
-    // Canvas
+    // Canvas para Billy
     const billyCanvas = document.getElementById('billyCanvas');
     const billyCtx = billyCanvas.getContext('2d');
     
@@ -351,14 +345,18 @@
         billyCanvas.width = window.innerWidth;
         billyCanvas.height = window.innerHeight;
     }
-    window.addEventListener('resize', () => { resizeCanvas(); targetX = window.innerWidth/2; targetY = window.innerHeight/2; });
+    window.addEventListener('resize', () => { 
+        resizeCanvas(); 
+        targetX = window.innerWidth/2; 
+        targetY = window.innerHeight/2;
+    });
     resizeCanvas();
     
     function updateBillyPosition() {
         billyX += (targetX - billyX) * 0.12;
         billyY += (targetY - billyY) * 0.12;
-        let sizeOffset = Math.floor(level / 5) * 4;
-        let currentSize = Math.min(BILLY_BASE_SIZE + sizeOffset, 200);
+        let currentSize = BILLY_BASE_SIZE + Math.floor(level / 5) * 5;
+        currentSize = Math.min(currentSize, 180);
         billyX = Math.min(Math.max(billyX, currentSize/2 + 15), window.innerWidth - currentSize/2 - 15);
         billyY = Math.min(Math.max(billyY, currentSize/2 + 90), window.innerHeight - currentSize/2 - 100);
         requestAnimationFrame(updateBillyPosition);
@@ -371,6 +369,7 @@
         let shakeX = billyShake ? (Math.random()-0.5)*10 : 0;
         let shakeY = billyShake ? (Math.random()-0.5)*10 : 0;
         billyCtx.translate(billyX + shakeX, billyY + shakeY);
+        
         let sizeMulti = 1 + (Math.floor(level / 5) * 0.03);
         billyCtx.scale(billyScale * sizeMulti, billyScale * sizeMulti);
         billyCtx.rotate(billyRotation);
@@ -378,41 +377,40 @@
         billyCtx.shadowColor = goldenBilly ? '#ffaa44' : '#ff884d';
         
         billyCtx.beginPath();
-        let currentSize = BILLY_BASE_SIZE;
-        billyCtx.arc(0, 0, currentSize/2.2, 0, Math.PI*2);
+        billyCtx.arc(0, 0, BILLY_BASE_SIZE/2.2, 0, Math.PI*2);
         billyCtx.closePath();
         billyCtx.clip();
         
         if(currentImg.complete && currentImg.naturalWidth > 0) {
-            billyCtx.drawImage(currentImg, -currentSize/2, -currentSize/2, currentSize, currentSize);
+            billyCtx.drawImage(currentImg, -BILLY_BASE_SIZE/2, -BILLY_BASE_SIZE/2, BILLY_BASE_SIZE, BILLY_BASE_SIZE);
         } else {
+            // Fallback con emoji
             billyCtx.fillStyle = "#2c2c2c";
             billyCtx.beginPath();
-            billyCtx.arc(0, 0, currentSize/2.2, 0, Math.PI*2);
+            billyCtx.arc(0, 0, BILLY_BASE_SIZE/2.2, 0, Math.PI*2);
             billyCtx.fill();
             billyCtx.fillStyle = "#FFD966";
-            billyCtx.font = "50px Arial";
-            billyCtx.fillText("🐱", -35, -20);
+            billyCtx.font = `${BILLY_BASE_SIZE/2}px Arial`;
+            billyCtx.fillText("🐱", -BILLY_BASE_SIZE/3, BILLY_BASE_SIZE/5);
         }
         billyCtx.restore();
         requestAnimationFrame(drawBilly);
     }
     drawBilly();
     
-    const BILLY_BASE_SIZE = 130;
-    
-    // ==================== SISTEMA DE AUDIO PROFESIONAL ====================
+    // ==================== SISTEMA DE AUDIO ====================
     class AudioPro {
         constructor() {
             this.enabled = true;
             this.musicEnabled = true;
             this.ctx = null;
-            this.meowSounds = [440, 520, 380];
         }
         init() {
             if(this.ctx) return;
-            this.ctx = new (window.AudioContext || window.webkitAudioContext)();
-            this.playMusic();
+            try {
+                this.ctx = new (window.AudioContext || window.webkitAudioContext)();
+                this.playMusic();
+            } catch(e) { console.log("Audio no soportado"); }
         }
         playMusic() {
             if(!this.musicEnabled || !this.ctx) return;
@@ -424,14 +422,14 @@
                 gain.connect(this.ctx.destination);
                 osc.type = 'sine';
                 osc.frequency.value = 175;
-                gain.gain.value = 0.06;
+                gain.gain.value = 0.05;
                 osc.start();
-                gain.gain.exponentialRampToValueAtTime(0.0001, now + 95);
-                osc.stop(now + 95);
+                gain.gain.exponentialRampToValueAtTime(0.0001, now + 90);
+                osc.stop(now + 90);
                 this.currentMusic = osc;
             } catch(e) {}
         }
-        play(effect, volume = 0.12) {
+        play(effect, volume = 0.1) {
             if(!this.enabled || !this.ctx) return;
             try {
                 const now = this.ctx.currentTime;
@@ -446,35 +444,23 @@
                 else if(effect === 'mouse') { osc.frequency.value = 540; osc.type = 'square'; gain.gain.exponentialRampToValueAtTime(0.0001, now+0.18); osc.stop(now+0.18); }
                 else if(effect === 'coin') { osc.frequency.value = 920; osc.type = 'sine'; gain.gain.exponentialRampToValueAtTime(0.0001, now+0.2); osc.stop(now+0.2); }
                 else if(effect === 'golden') { osc.frequency.value = 1300; osc.type = 'sine'; gain.gain.exponentialRampToValueAtTime(0.0001, now+0.35); osc.stop(now+0.35); }
-                else if(effect === 'achievement') { osc.frequency.value = 880; osc.type = 'sine'; gain.gain.exponentialRampToValueAtTime(0.0001, now+0.4); osc.stop(now+0.4); }
                 osc.start();
             } catch(e) {}
         }
         meow() { 
             if(!this.enabled || !this.ctx) return;
-            let freq = this.meowSounds[Math.floor(Math.random() * this.meowSounds.length)];
-            try {
-                const now = this.ctx.currentTime;
-                const osc = this.ctx.createOscillator();
-                const gain = this.ctx.createGain();
-                osc.connect(gain);
-                gain.connect(this.ctx.destination);
-                osc.frequency.value = freq;
-                gain.gain.value = 0.08;
-                osc.type = 'sine';
-                osc.start();
-                gain.gain.exponentialRampToValueAtTime(0.0001, now+0.25);
-                osc.stop(now+0.25);
-            } catch(e) {}
+            this.play('tap', 0.07);
         }
-        toggleMusic() { this.musicEnabled = !this.musicEnabled; if(this.musicEnabled) this.playMusic(); else if(this.currentMusic) this.currentMusic.stop(); return this.musicEnabled; }
-        toggleSfx() { this.enabled = !this.enabled; return this.enabled; }
+        toggleMusic() { 
+            this.musicEnabled = !this.musicEnabled; 
+            if(this.musicEnabled) this.playMusic(); 
+            else if(this.currentMusic) this.currentMusic.stop(); 
+            return this.musicEnabled; 
+        }
     }
     const audio = new AudioPro();
-    document.body.addEventListener('touchstart', () => audio.init(), {once:true});
-    document.body.addEventListener('click', () => audio.init(), {once:true});
     
-    // ==================== SISTEMA DE JUEGO ====================
+    // ==================== VARIABLES DEL JUEGO ====================
     let coins = 0, level = 1, multiplier = 1, tapPower = 1;
     let energy = 100, maxEnergy = 100;
     let combo = 0, bestCombo = 0, highScore = 0;
@@ -483,23 +469,15 @@
     let goldenHourActive = false, superComboActive = false;
     let totalTaps = 0, totalMiceCaught = 0, totalCrits = 0;
     
-    // Sistema de skins
+    // Skins
     let skinsUnlocked = [true, false, false];
     let skinPrices = [0, 500, 1500];
     
-    // Sistema de logros
-    let achievements = {
-        taps100: false, taps1000: false, mice50: false, mice200: false,
-        crits50: false, combo30: false, level10: false, level25: false,
-        coins10000: false, goldenHour: false, daily7: false, allSkins: false
-    };
-    
-    // Sistema diario
-    let dailyStreak = 1, lastDailyClaim = 0;
+    // Desafíos semanales
     let challenges = { mice: 0, crits: 0, maxCombo: 0 };
     let weeklyRewards = { mice: 30, crits: 20, combo: 15 };
     
-    // Cargar datos guardados
+    // Cargar datos
     const saved = localStorage.getItem('billyUltimateEpic');
     if(saved) {
         try {
@@ -507,9 +485,6 @@
             coins = d.coins || 0; level = d.level || 1; tapPower = d.tapPower || 1;
             billyTokens = d.billyTokens || 0; bestCombo = d.bestCombo || 0; highScore = d.highScore || 0;
             skinsUnlocked = d.skinsUnlocked || [true, false, false];
-            achievements = d.achievements || achievements;
-            dailyStreak = d.dailyStreak || 1;
-            lastDailyClaim = d.lastDailyClaim || 0;
             totalTaps = d.totalTaps || 0;
             totalMiceCaught = d.totalMiceCaught || 0;
             totalCrits = d.totalCrits || 0;
@@ -517,17 +492,7 @@
         } catch(e) {}
     }
     
-    // Actualizar fondo según nivel
-    function updateBackground() {
-        const bg = document.getElementById('dynamicBg');
-        let color;
-        if(level < 5) color = 'radial-gradient(circle at center, #0a0a2a 0%, #050510 100%)';
-        else if(level < 10) color = 'radial-gradient(circle at center, #1a0a2a 0%, #0a0515 100%)';
-        else if(level < 20) color = 'radial-gradient(circle at center, #2a0a2a 0%, #150a20 100%)';
-        else color = 'radial-gradient(circle at center, #3a0a3a 0%, #200a2a 100%)';
-        bg.style.background = color;
-    }
-    
+    // Elementos UI
     function updateUI() {
         document.getElementById('level').innerText = level;
         document.getElementById('coins').innerText = Math.floor(coins);
@@ -542,7 +507,14 @@
         let sizePercent = 100 + Math.floor(level/5) * 5;
         document.getElementById('billySize').innerText = Math.min(sizePercent, 150);
         updateBackground();
-        updateAchievementsUI();
+    }
+    
+    function updateBackground() {
+        const bg = document.getElementById('dynamicBg');
+        if(level < 5) bg.style.background = 'radial-gradient(circle at center, #0a0a2a 0%, #050510 100%)';
+        else if(level < 10) bg.style.background = 'radial-gradient(circle at center, #1a0a2a 0%, #0a0515 100%)';
+        else if(level < 20) bg.style.background = 'radial-gradient(circle at center, #2a0a2a 0%, #150a20 100%)';
+        else bg.style.background = 'radial-gradient(circle at center, #3a0a3a 0%, #200a2a 100%)';
     }
     
     function showNotification(msg) {
@@ -606,90 +578,6 @@
         }
     }
     
-    // Sistema de logros
-    function checkAchievements() {
-        let newAchieve = false;
-        if(totalTaps >= 100 && !achievements.taps100) { achievements.taps100 = true; newAchieve = true; showNotification("🏅 LOGRO: 100 TAPS!"); audio.play('achievement'); }
-        if(totalTaps >= 1000 && !achievements.taps1000) { achievements.taps1000 = true; newAchieve = true; showNotification("🏅 LOGRO: 1000 TAPS!"); audio.play('achievement'); }
-        if(totalMiceCaught >= 50 && !achievements.mice50) { achievements.mice50 = true; newAchieve = true; showNotification("🏅 LOGRO: 50 RATONES!"); audio.play('achievement'); }
-        if(totalMiceCaught >= 200 && !achievements.mice200) { achievements.mice200 = true; newAchieve = true; showNotification("🏅 LOGRO: 200 RATONES!"); audio.play('achievement'); }
-        if(totalCrits >= 50 && !achievements.crits50) { achievements.crits50 = true; newAchieve = true; showNotification("🏅 LOGRO: 50 CRÍTICOS!"); audio.play('achievement'); }
-        if(bestCombo >= 30 && !achievements.combo30) { achievements.combo30 = true; newAchieve = true; showNotification("🏅 LOGRO: COMBO 30!"); audio.play('achievement'); }
-        if(level >= 10 && !achievements.level10) { achievements.level10 = true; newAchieve = true; showNotification("🏅 LOGRO: NIVEL 10!"); audio.play('achievement'); }
-        if(level >= 25 && !achievements.level25) { achievements.level25 = true; newAchieve = true; showNotification("🏅 LOGRO: NIVEL 25!"); audio.play('achievement'); }
-        if(coins >= 10000 && !achievements.coins10000) { achievements.coins10000 = true; newAchieve = true; showNotification("🏅 LOGRO: 10000 MONEDAS!"); audio.play('achievement'); }
-        if(goldenHourActive && !achievements.goldenHour) { achievements.goldenHour = true; newAchieve = true; showNotification("🏅 LOGRO: HORA DORADA!"); }
-        if(skinsUnlocked.every(s => s === true) && !achievements.allSkins) { achievements.allSkins = true; newAchieve = true; showNotification("🏅 LOGRO: COLECCIÓN COMPLETA!"); }
-        if(newAchieve) updateAchievementsUI();
-    }
-    
-    function updateAchievementsUI() {
-        const list = document.getElementById('achievementsList');
-        const achieveList = [
-            {key:'taps100', name:'100 Taps', desc:'Toca 100 veces'},
-            {key:'taps1000', name:'1000 Taps', desc:'Toca 1000 veces'},
-            {key:'mice50', name:'Cazador', desc:'Atrapa 50 ratones'},
-            {key:'mice200', name:'Exterminador', desc:'Atrapa 200 ratones'},
-            {key:'crits50', name:'Crítico', desc:'50 golpes críticos'},
-            {key:'combo30', name:'Leyenda', desc:'Combo 30'},
-            {key:'level10', name:'Aprendiz', desc:'Nivel 10'},
-            {key:'level25', name:'Maestro', desc:'Nivel 25'},
-            {key:'coins10000', name:'Rico', desc:'10000 monedas'},
-            {key:'goldenHour', name:'Dorado', desc:'Hora dorada'},
-            {key:'allSkins', name:'Coleccionista', desc:'Todas las skins'}
-        ];
-        list.innerHTML = achieveList.map(a => `<div class="achievement-item ${achievements[a.key] ? 'achievement-unlocked' : ''}">${achievements[a.key] ? '✅' : '🔒'} ${a.name}</div>`).join('');
-    }
-    
-    // Sistema diario
-    function claimDaily() {
-        const now = Date.now();
-        const dayMs = 86400000;
-        if(now - lastDailyClaim > dayMs) {
-            let reward = 100 + (dailyStreak * 25);
-            coins += reward;
-            dailyStreak = Math.min(dailyStreak + 1, 30);
-            lastDailyClaim = now;
-            updateUI();
-            showNotification(`📅 Día ${dailyStreak-1}: +${reward} monedas!`);
-            audio.play('coin');
-            if(dailyStreak >= 7 && !achievements.daily7) { achievements.daily7 = true; checkAchievements(); }
-            document.getElementById('dailyStreak').innerText = `🔥 Día ${dailyStreak-1}`;
-        } else {
-            let hoursLeft = Math.ceil((dayMs - (now - lastDailyClaim)) / 3600000);
-            showNotification(`⏰ Recompensa en ${hoursLeft}h`);
-        }
-    }
-    
-    // Sistema de desafíos semanales
-    function updateChallenges() {
-        document.getElementById('challenge1').innerHTML = `🐭 ${challenges.mice}/${weeklyRewards.mice} ratones`;
-        document.getElementById('challenge2').innerHTML = `⚡ ${challenges.crits}/${weeklyRewards.crits} críticos`;
-        document.getElementById('challenge3').innerHTML = `🔥 ${challenges.maxCombo}/${weeklyRewards.combo} combo`;
-        
-        if(challenges.mice >= weeklyRewards.mice && challenges.mice < weeklyRewards.mice + 100) {
-            let reward = 300;
-            coins += reward;
-            challenges.mice += 100;
-            showNotification(`🏆 Desafío ratones completado! +${reward} monedas`);
-            updateUI();
-        }
-        if(challenges.crits >= weeklyRewards.crits && challenges.crits < weeklyRewards.crits + 100) {
-            let reward = 250;
-            coins += reward;
-            challenges.crits += 100;
-            showNotification(`🏆 Desafío críticos completado! +${reward} monedas`);
-            updateUI();
-        }
-        if(challenges.maxCombo >= weeklyRewards.combo && challenges.maxCombo < weeklyRewards.combo + 100) {
-            let reward = 400;
-            coins += reward;
-            challenges.maxCombo += 100;
-            showNotification(`🏆 Desafío combo completado! +${reward} monedas`);
-            updateUI();
-        }
-    }
-    
     function addCombo() {
         combo++;
         if(combo > bestCombo) bestCombo = combo;
@@ -723,7 +611,6 @@
             createParticles(billyX, billyY, '#FFD966');
             energy = Math.min(maxEnergy, energy+30);
             updateUI();
-            checkAchievements();
         }
     }
     
@@ -742,7 +629,35 @@
         if(duration>0) setTimeout(()=> currentImg = images.happy, duration);
     }
     
-    // ==================== SISTEMA DE RATONES MEJORADO ====================
+    function updateChallenges() {
+        document.getElementById('challenge1').innerHTML = `🐭 ${challenges.mice}/${weeklyRewards.mice} ratones`;
+        document.getElementById('challenge2').innerHTML = `⚡ ${challenges.crits}/${weeklyRewards.crits} críticos`;
+        document.getElementById('challenge3').innerHTML = `🔥 ${challenges.maxCombo}/${weeklyRewards.combo} combo`;
+        
+        if(challenges.mice >= weeklyRewards.mice) {
+            let reward = 300;
+            coins += reward;
+            challenges.mice = 0;
+            showNotification(`🏆 Desafío ratones completado! +${reward} monedas`);
+            updateUI();
+        }
+        if(challenges.crits >= weeklyRewards.crits) {
+            let reward = 250;
+            coins += reward;
+            challenges.crits = 0;
+            showNotification(`🏆 Desafío críticos completado! +${reward} monedas`);
+            updateUI();
+        }
+        if(challenges.maxCombo >= weeklyRewards.combo) {
+            let reward = 400;
+            coins += reward;
+            challenges.maxCombo = 0;
+            showNotification(`🏆 Desafío combo completado! +${reward} monedas`);
+            updateUI();
+        }
+    }
+    
+    // ==================== RATONES ====================
     let mice = [];
     let mouseStreak = 0;
     
@@ -805,7 +720,6 @@
             div.style.fontSize = (m.size/2.2)+'px';
             div.innerText = m.isBoss ? '🐀👑' : '🐭';
             div.style.fontWeight = 'bold';
-            div.dataset.type = 'mouse';
             div.dataset.idx = idx;
             div.onclick = (e) => { e.stopPropagation(); catchMouse(idx, e.clientX, e.clientY); };
             container.appendChild(div);
@@ -823,7 +737,6 @@
             div.style.boxShadow = '0 0 15px gold';
             div.style.fontSize = (b.size/2.2)+'px';
             div.innerText = '🎁';
-            div.dataset.type = 'bubble';
             div.dataset.idx = idx;
             div.onclick = (e) => { e.stopPropagation(); catchBubble(idx, e.clientX, e.clientY); };
             container.appendChild(div);
@@ -854,22 +767,25 @@
         setExpression('happy', 200);
         mice.splice(idx,1);
         renderEntities();
-        checkAchievements();
         updateChallenges();
     }
     
-    // Burbujas
+    // ==================== BURBUJAS ====================
     let bubbles = [];
+    
     function spawnBubble() {
         if(bubbles.length >= 5) return;
         const size = 50 + Math.random()*45;
         bubbles.push({
             x: 40 + Math.random()*(window.innerWidth - size - 40),
             y: 100 + Math.random()*(window.innerHeight - 210),
-            size: size, value: Math.floor(tapPower * multiplier * (Math.random() < 0.3 ? 6 : 2.5)),
-            life: 9000, created: Date.now()
+            size: size, 
+            value: Math.floor(tapPower * multiplier * (Math.random() < 0.3 ? 6 : 2.5)),
+            life: 9000, 
+            created: Date.now()
         });
     }
+    
     function catchBubble(idx, x, y) {
         if(idx >= bubbles.length) return;
         const b = bubbles[idx];
@@ -917,7 +833,7 @@
         let baseCrit = 15 + Math.floor(combo/2.2);
         if(noCritCounter >= 10) { baseCrit = 100; noCritCounter = 0; showNotification("💥 ¡CRÍTICO GARANTIZADO!"); }
         let isCrit = Math.random()*100 < baseCrit;
-        if(isCrit) { noCritCounter = 0; totalCrits++; }
+        if(isCrit) { noCritCounter = 0; totalCrits++; challenges.crits++; }
         else noCritCounter++;
         
         let gain = Math.floor(tapPower * multiplier * (isCrit ? 5 : 1) * (1 + combo*0.045));
@@ -936,9 +852,7 @@
         else { audio.play('tap'); setExpression('happy', 150); }
         if(Math.random()<0.08) audio.meow();
         if(coins > highScore) { highScore = Math.floor(coins); updateUI(); }
-        challenges.crits += isCrit ? 1 : 0;
         updateChallenges();
-        checkAchievements();
     }
     
     // Eventos de interacción
@@ -966,6 +880,7 @@
             createParticles(billyX, billyY, '#FFD966');
         } else showNotification(`💰 Faltan ${Math.floor(cost - coins)}`);
     };
+    
     document.getElementById('lootBtn').onclick = () => {
         if(coins >= 40) {
             coins -= 40;
@@ -978,7 +893,6 @@
         } else showNotification(`💔 40 monedas necesarias`);
     };
     
-    let skinsPanelVisible = false;
     document.getElementById('skinsBtn').onclick = () => {
         let msg = "🎨 SKINS:\n";
         msg += skinsUnlocked[0] ? "✅ Original\n" : "🔒 Original\n";
@@ -990,7 +904,7 @@
                 skinsUnlocked[1] = true;
                 updateUI();
                 showNotification("🎨 Skin Dorado desbloqueada!");
-                audio.play('achievement');
+                audio.play('golden');
             }
         } else if(!skinsUnlocked[2] && coins >= skinPrices[2]) {
             if(confirm(msg + "\n¿Comprar skin Élite?")) {
@@ -998,7 +912,7 @@
                 skinsUnlocked[2] = true;
                 updateUI();
                 showNotification("🎨 Skin Élite desbloqueada!");
-                audio.play('achievement');
+                audio.play('golden');
             }
         } else alert(msg);
     };
@@ -1008,47 +922,19 @@
         musicOn = audio.toggleMusic();
         document.getElementById('toggleMusicBtn').innerHTML = musicOn ? '🎵 ON' : '🎵 OFF';
     };
+    
     document.getElementById('shareXBtn').onclick = () => {
         const text = `🐱 ¡Billy El Gato! Nivel ${level} | ${Math.floor(coins)} monedas | Mejor combo ${bestCombo} | ${totalMiceCaught} ratones 🐭 Prepárate para $BILLY en Solana. @BillyZatanas`;
         window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`, '_blank');
     };
-    document.getElementById('tokenBar').onclick = () => showNotification(`💰 ${Math.floor(billyTokens)} $BILLY tokens. ¡Próximo lanzamiento en Solana!`);
-    document.getElementById('dailyRewardBtn').onclick = claimDaily;
     
-    // Paneles toggle
-    let achievementsVisible = false;
-    document.getElementById('achievementsPanel').style.display = 'none';
-    document.getElementById('dailyPanel').style.display = 'none';
-    document.getElementById('skinsBtn').onclick = () => {
-        let msg = "🎨 SKINS:\n";
-        msg += skinsUnlocked[0] ? "✅ Original\n" : "🔒 Original\n";
-        msg += skinsUnlocked[1] ? "✅ Dorado\n" : `🔒 Dorado (${skinPrices[1]} monedas)\n`;
-        msg += skinsUnlocked[2] ? "✅ Élite\n" : `🔒 Élite (${skinPrices[2]} monedas)\n`;
-        if(!skinsUnlocked[1] && coins >= skinPrices[1]) {
-            if(confirm(msg + "\n¿Comprar skin Dorado?")) {
-                coins -= skinPrices[1];
-                skinsUnlocked[1] = true;
-                updateUI();
-                showNotification("🎨 Skin Dorado desbloqueada!");
-                audio.play('achievement');
-            }
-        } else if(!skinsUnlocked[2] && coins >= skinPrices[2]) {
-            if(confirm(msg + "\n¿Comprar skin Élite?")) {
-                coins -= skinPrices[2];
-                skinsUnlocked[2] = true;
-                updateUI();
-                showNotification("🎨 Skin Élite desbloqueada!");
-                audio.play('achievement');
-            }
-        } else alert(msg);
-    };
+    document.getElementById('tokenBar').onclick = () => showNotification(`💰 ${Math.floor(billyTokens)} $BILLY tokens. ¡Próximo lanzamiento en Solana!`);
     
     // Guardado automático
     setInterval(() => {
         localStorage.setItem('billyUltimateEpic', JSON.stringify({
             coins, level, tapPower, billyTokens, bestCombo, highScore,
-            skinsUnlocked, achievements, dailyStreak, lastDailyClaim,
-            totalTaps, totalMiceCaught, totalCrits
+            skinsUnlocked, totalTaps, totalMiceCaught, totalCrits
         }));
     }, 15000);
     
@@ -1059,7 +945,8 @@
         updateUI();
     }, 1300);
     
-    setInterval(spawnMouse, 3800);
+    // Spawners
+    setInterval(spawnMouse, 4000);
     setInterval(spawnBubble, 5500);
     setInterval(() => { updateMice(); }, 80);
     setInterval(() => renderEntities(), 100);
@@ -1067,7 +954,7 @@
     // Estrellas
     function generateStars() {
         const starsDiv = document.getElementById('stars');
-        for(let i=0;i<200;i++) {
+        for(let i=0;i<150;i++) {
             const star = document.createElement('div');
             star.style.position = 'absolute';
             star.style.left = Math.random()*100+'%';
@@ -1085,9 +972,12 @@
     document.head.appendChild(styleStar);
     generateStars();
     
+    // Inicializar audio al primer toque
+    document.body.addEventListener('touchstart', () => audio.init(), {once:true});
+    document.body.addEventListener('click', () => audio.init(), {once:true});
+    
     updateUI();
     updateBackground();
-    updateAchievementsUI();
     showNotification("🐱 ¡BILLY ULTRA ÉPICO! Toca para ganar 🐭");
 </script>
 </body>
