@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
-    <title>🐱 BILLY THE CAT - ULTRA EDITION</title>
+    <title>🐱 BILLY THE CAT - ULTRA EDITION+</title>
     <style>
         * {
             margin: 0;
@@ -202,6 +202,57 @@
             z-index: 30;
             color: #FFD966;
             text-align: center;
+            cursor: pointer;
+        }
+        
+        /* Panel de estadísticas expandible */
+        .stats-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.95);
+            z-index: 400;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(10px);
+        }
+        
+        .stats-content {
+            background: linear-gradient(135deg, #1e293b, #0f172a);
+            border-radius: 40px;
+            padding: 25px;
+            max-width: 90%;
+            width: 350px;
+            border: 2px solid #ffaa44;
+            text-align: center;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        
+        .stats-content h2 {
+            color: #FFD966;
+            margin-bottom: 20px;
+        }
+        
+        .stat-line {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px;
+            border-bottom: 1px solid rgba(255,255,255,0.2);
+            color: white;
+        }
+        
+        .close-stats {
+            margin-top: 20px;
+            background: #334155;
+            padding: 10px 30px;
+            border-radius: 30px;
+            cursor: pointer;
+            border: none;
+            color: white;
         }
 
         .challenges-panel {
@@ -329,6 +380,16 @@
         @keyframes pulseGold {
             0%, 100% { box-shadow: 0 0 20px gold; }
             50% { box-shadow: 0 0 40px #ffaa44; }
+        }
+        
+        .combo-flash {
+            animation: comboFlash 0.3s ease-out;
+        }
+        
+        @keyframes comboFlash {
+            0% { text-shadow: 0 0 0px orange; }
+            50% { text-shadow: 0 0 20px #ffaa44, 0 0 30px #ff884d; }
+            100% { text-shadow: 0 0 0px orange; }
         }
 
         #gameArea {
@@ -504,6 +565,16 @@
             pointer-events: none;
         }
         
+        .notification.crit {
+            background: linear-gradient(135deg, #ff6b6b, #ff4444);
+            color: white;
+        }
+        
+        .notification.achievement {
+            background: linear-gradient(135deg, #14f195, #9945ff);
+            color: white;
+        }
+        
         @keyframes fadeOutUp {
             0% { opacity: 1; transform: translate(-50%, -50%) scale(0.9); }
             100% { opacity: 0; transform: translate(-50%, -70%) scale(1.1); }
@@ -539,12 +610,28 @@
             100% { transform: scale(5); opacity: 0; }
         }
         
+        /* Indicador de racha rápida */
+        .streak-indicator {
+            position: fixed;
+            bottom: 220px;
+            right: 10px;
+            background: rgba(0,0,0,0.85);
+            padding: 8px 12px;
+            border-radius: 30px;
+            font-size: 14px;
+            font-weight: bold;
+            color: #ffaa44;
+            z-index: 30;
+            transition: all 0.2s;
+        }
+        
         @media (max-width: 600px) {
             .btn { font-size: 10px; padding: 8px 4px; }
             .stat-card { font-size: 10px; padding: 4px 8px; }
             #billy { width: 110px; height: 110px; font-size: 60px; }
             .combo-panel { font-size: 14px; padding: 6px 12px; top: 115px; }
             .records-panel { font-size: 9px; top: 115px; }
+            .streak-indicator { font-size: 10px; bottom: 200px; }
         }
         
         @media (min-width: 601px) {
@@ -569,7 +656,7 @@
         </div>
         <p id="startDescription">Tap on Billy, catch mice, collect coins!</p>
         <button class="start-btn" id="startBtn" onclick="startGame()">▶ START GAME</button>
-        <p id="versionText" style="font-size: 10px; margin-top: 15px;">v2.0 - Ultra Edition</p>
+        <p id="versionText" style="font-size: 10px; margin-top: 15px;">v2.1 - Ultra Edition+</p>
     </div>
 </div>
 
@@ -627,7 +714,23 @@
             equipped: "EQUIPADA",
             equip: "EQUIPAR",
             priceTokens: "{price} BILLY",
-            close: "CERRAR"
+            close: "CERRAR",
+            stats: "📊 Estadísticas",
+            totalTaps: "Toques totales",
+            totalMice: "Ratones atrapados",
+            totalCrits: "Golpes críticos",
+            critRate: "Tasa crítica",
+            achievements: "🏆 Logros",
+            achievement1: "100 taps",
+            achievement2: "500 taps",
+            achievement3: "1000 taps",
+            achievement4: "50 ratones",
+            achievement5: "200 ratones",
+            achievement6: "Combo 20",
+            achievement7: "Nivel 10",
+            achievement8: "100 críticos",
+            streakBonus: "🔥 RACHA RÁPIDA! +bonus",
+            tapStreak: "Racha"
         },
         en: {
             gameTitle: "🐱 BILLY THE CAT",
@@ -678,7 +781,23 @@
             equipped: "EQUIPPED",
             equip: "EQUIP",
             priceTokens: "{price} BILLY",
-            close: "CLOSE"
+            close: "CLOSE",
+            stats: "📊 Stats",
+            totalTaps: "Total taps",
+            totalMice: "Mice caught",
+            totalCrits: "Critical hits",
+            critRate: "Crit rate",
+            achievements: "🏆 Achievements",
+            achievement1: "100 taps",
+            achievement2: "500 taps",
+            achievement3: "1000 taps",
+            achievement4: "50 mice",
+            achievement5: "200 mice",
+            achievement6: "Combo 20",
+            achievement7: "Level 10",
+            achievement8: "100 crits",
+            streakBonus: "🔥 QUICK STREAK! +bonus",
+            tapStreak: "Streak"
         }
     };
     
@@ -690,6 +809,7 @@
         document.getElementById('startDescription').textContent = t.startDesc;
         document.getElementById('startBtn').textContent = t.startBtn;
         localStorage.setItem('billyLang', currentLang);
+        if(window.updateUITexts) window.updateUITexts();
     }
     
     function setLanguage(lang) {
@@ -717,6 +837,23 @@
     let superComboActive = false;
     let goldenBilly = false;
     let musicEnabled = true;
+    
+    // Sistema de racha rápida
+    let quickTapStreak = 0;
+    let lastTapTime = 0;
+    let streakBonusMultiplier = 1;
+    
+    // Logros/Achievements
+    let achievements = {
+        taps100: false,
+        taps500: false,
+        taps1000: false,
+        mice50: false,
+        mice200: false,
+        combo20: false,
+        level10: false,
+        crits100: false
+    };
     
     // Entidades
     let mice = [];
@@ -756,6 +893,7 @@
                 totalCrits = data.totalCrits || 0;
                 skins = data.skins || skins;
                 currentSkin = data.currentSkin || 0;
+                achievements = data.achievements || achievements;
                 multiplier = 1 + Math.floor(level / 4);
                 maxEnergy = 100 + Math.floor(level / 2) * 5;
             } catch(e) {}
@@ -765,8 +903,67 @@
     function saveGame() {
         localStorage.setItem('billyCompleteV2', JSON.stringify({
             coins, level, tapPower, billyTokens, bestCombo, highScore,
-            totalMiceCaught, totalCrits, skins, currentSkin
+            totalMiceCaught, totalCrits, skins, currentSkin, achievements
         }));
+    }
+    
+    // ==================== SISTEMA DE LOGROS ====================
+    function checkAchievements() {
+        let newAchievement = false;
+        
+        if(!achievements.taps100 && totalTaps >= 100) {
+            achievements.taps100 = true;
+            billyTokens += 100;
+            newAchievement = true;
+            showNotification(t.achievement1 + " +100 BILLY", "achievement");
+        }
+        if(!achievements.taps500 && totalTaps >= 500) {
+            achievements.taps500 = true;
+            billyTokens += 300;
+            newAchievement = true;
+            showNotification(t.achievement2 + " +300 BILLY", "achievement");
+        }
+        if(!achievements.taps1000 && totalTaps >= 1000) {
+            achievements.taps1000 = true;
+            billyTokens += 500;
+            newAchievement = true;
+            showNotification(t.achievement3 + " +500 BILLY", "achievement");
+        }
+        if(!achievements.mice50 && totalMiceCaught >= 50) {
+            achievements.mice50 = true;
+            billyTokens += 150;
+            newAchievement = true;
+            showNotification(t.achievement4 + " +150 BILLY", "achievement");
+        }
+        if(!achievements.mice200 && totalMiceCaught >= 200) {
+            achievements.mice200 = true;
+            billyTokens += 400;
+            newAchievement = true;
+            showNotification(t.achievement5 + " +400 BILLY", "achievement");
+        }
+        if(!achievements.combo20 && bestCombo >= 20) {
+            achievements.combo20 = true;
+            billyTokens += 250;
+            newAchievement = true;
+            showNotification(t.achievement6 + " +250 BILLY", "achievement");
+        }
+        if(!achievements.level10 && level >= 10) {
+            achievements.level10 = true;
+            billyTokens += 500;
+            newAchievement = true;
+            showNotification(t.achievement7 + " +500 BILLY", "achievement");
+        }
+        if(!achievements.crits100 && totalCrits >= 100) {
+            achievements.crits100 = true;
+            billyTokens += 200;
+            newAchievement = true;
+            showNotification(t.achievement8 + " +200 BILLY", "achievement");
+        }
+        
+        if(newAchievement) {
+            updateUI();
+            saveGame();
+        }
     }
     
     // ==================== FUNCIONES UI ====================
@@ -791,6 +988,15 @@
             document.getElementById('highScore').textContent = highScore;
         }
         
+        // Actualizar indicador de racha rápida
+        const streakEl = document.getElementById('streakIndicator');
+        if(streakEl && quickTapStreak > 1) {
+            streakEl.innerHTML = `⚡ ${t.tapStreak} ${quickTapStreak}x`;
+            streakEl.style.display = 'block';
+        } else if(streakEl) {
+            streakEl.style.display = 'none';
+        }
+        
         // Aplicar skin
         const billyDiv = document.getElementById('billy');
         if(currentSkin === 1) billyDiv.style.background = 'radial-gradient(circle, #FFD700, #FFA500)';
@@ -804,9 +1010,9 @@
         }
     }
     
-    function showNotification(msg) {
+    function showNotification(msg, type = "normal") {
         const div = document.createElement('div');
-        div.className = 'notification';
+        div.className = `notification ${type}`;
         div.textContent = msg;
         document.body.appendChild(div);
         setTimeout(() => div.remove(), 1200);
@@ -879,6 +1085,11 @@
             if(combo > challenges.maxCombo) challenges.maxCombo = combo;
         }
         
+        // Efecto visual de combo
+        const comboEl = document.getElementById('comboCount');
+        comboEl.classList.add('combo-flash');
+        setTimeout(() => comboEl.classList.remove('combo-flash'), 300);
+        
         if(combo >= 12 && !superComboActive) {
             superComboActive = true;
             goldenBilly = true;
@@ -904,6 +1115,28 @@
         updateChallenges();
     }
     
+    // ==================== SISTEMA DE RACHA RÁPIDA ====================
+    function updateQuickTapStreak() {
+        const now = Date.now();
+        if(now - lastTapTime < 800) {
+            quickTapStreak++;
+            if(quickTapStreak > 10) quickTapStreak = 10;
+            streakBonusMultiplier = 1 + (quickTapStreak * 0.05);
+        } else {
+            quickTapStreak = 1;
+            streakBonusMultiplier = 1;
+        }
+        lastTapTime = now;
+        
+        if(quickTapStreak >= 5 && quickTapStreak % 5 === 0) {
+            showNotification(`${t.streakBonus} +${Math.floor(quickTapStreak * 5)} BILLY`);
+            billyTokens += quickTapStreak * 5;
+            updateUI();
+        }
+        
+        return streakBonusMultiplier;
+    }
+    
     // ==================== SISTEMA DE NIVEL ====================
     function updateLevel() {
         let needed = 120 * Math.pow(1.28, level - 1);
@@ -914,6 +1147,7 @@
             energy = Math.min(maxEnergy, energy + 40);
             showNotification(t.levelUp.replace("{level}", level));
             updateUI();
+            checkAchievements();
             updateLevel();
         }
     }
@@ -945,7 +1179,7 @@
         requestAnimationFrame(updateBillyPosition);
     }
     
-    // ==================== TAP EN BILLY (CORREGIDO) ====================
+    // ==================== TAP EN BILLY ====================
     function tapBilly(event) {
         if(!gameStarted) return;
         if(energy <= 0) {
@@ -953,15 +1187,23 @@
             return;
         }
         
+        // Sistema de racha rápida
+        const streakBonus = updateQuickTapStreak();
+        
         addCombo();
         totalTaps++;
+        
+        // Vibración en móviles
+        if(window.navigator && window.navigator.vibrate) {
+            window.navigator.vibrate(50);
+        }
         
         // Calcular crítico
         let critChance = 12 + Math.floor(combo / 2.5);
         if(noCritCounter >= 8) {
             critChance = 100;
             noCritCounter = 0;
-            showNotification(t.critGuaranteed);
+            showNotification(t.critGuaranteed, "crit");
         }
         
         const isCrit = Math.random() * 100 < critChance;
@@ -974,7 +1216,7 @@
         }
         
         // Calcular ganancia
-        let gain = tapPower * multiplier * (isCrit ? 4 : 1) * (1 + combo * 0.03);
+        let gain = tapPower * multiplier * (isCrit ? 4 : 1) * (1 + combo * 0.03) * streakBonus;
         if(superComboActive) gain = gain * 1.5;
         if(doubleEventActive) gain = gain * 2;
         gain = Math.floor(Math.max(1, gain));
@@ -1001,6 +1243,7 @@
         floatingNumber(gain, clickX, clickY, isCrit);
         
         updateChallenges();
+        checkAchievements();
         
         // Audio simple
         playSound(isCrit ? 880 : 660);
@@ -1084,6 +1327,7 @@
         updateUI();
         updateLevel();
         updateChallenges();
+        checkAchievements();
         
         mice.splice(index, 1);
         renderEntities();
@@ -1217,14 +1461,44 @@
         }
     }
     
+    // ==================== PANEL DE ESTADÍSTICAS ====================
+    function openStats() {
+        const critRate = totalTaps > 0 ? ((totalCrits / totalTaps) * 100).toFixed(1) : 0;
+        const modal = document.createElement('div');
+        modal.className = 'stats-modal';
+        modal.innerHTML = `
+            <div class="stats-content">
+                <h2>${t.stats}</h2>
+                <div class="stat-line"><span>${t.totalTaps}:</span><span>${totalTaps}</span></div>
+                <div class="stat-line"><span>${t.totalMice}:</span><span>${totalMiceCaught}</span></div>
+                <div class="stat-line"><span>${t.totalCrits}:</span><span>${totalCrits}</span></div>
+                <div class="stat-line"><span>${t.critRate}:</span><span>${critRate}%</span></div>
+                <div class="stat-line"><span>${t.bestCombo}:</span><span>${bestCombo}</span></div>
+                <div class="stat-line"><span>🏆 ${t.achievements}:</span><span></span></div>
+                <div class="stat-line"><span>  ${t.achievement1}:</span><span>${achievements.taps100 ? '✅' : '❌'}</span></div>
+                <div class="stat-line"><span>  ${t.achievement2}:</span><span>${achievements.taps500 ? '✅' : '❌'}</span></div>
+                <div class="stat-line"><span>  ${t.achievement3}:</span><span>${achievements.taps1000 ? '✅' : '❌'}</span></div>
+                <div class="stat-line"><span>  ${t.achievement4}:</span><span>${achievements.mice50 ? '✅' : '❌'}</span></div>
+                <div class="stat-line"><span>  ${t.achievement5}:</span><span>${achievements.mice200 ? '✅' : '❌'}</span></div>
+                <div class="stat-line"><span>  ${t.achievement6}:</span><span>${achievements.combo20 ? '✅' : '❌'}</span></div>
+                <div class="stat-line"><span>  ${t.achievement7}:</span><span>${achievements.level10 ? '✅' : '❌'}</span></div>
+                <div class="stat-line"><span>  ${t.achievement8}:</span><span>${achievements.crits100 ? '✅' : '❌'}</span></div>
+                <button class="close-stats" onclick="this.closest('.stats-modal').remove()">${t.close}</button>
+            </div>
+        `;
+        document.body.appendChild(modal);
+    }
+    
     // ==================== DESAFÍOS ====================
     function updateChallenges() {
         const panel = document.getElementById('challengesPanel');
-        panel.innerHTML = `
-            <div class="challenge-item">${t.mouse} ${challenges.mice}/${weeklyRewards.mice}</div>
-            <div class="challenge-item">${t.crits} ${challenges.crits}/${weeklyRewards.crits}</div>
-            <div class="challenge-item">🔥 ${challenges.maxCombo}/${weeklyRewards.combo}</div>
-        `;
+        if(panel) {
+            panel.innerHTML = `
+                <div class="challenge-item">${t.mouse} ${challenges.mice}/${weeklyRewards.mice}</div>
+                <div class="challenge-item">${t.crits} ${challenges.crits}/${weeklyRewards.crits}</div>
+                <div class="challenge-item">🔥 ${challenges.maxCombo}/${weeklyRewards.combo}</div>
+            `;
+        }
         
         if(challenges.mice >= weeklyRewards.mice) {
             let reward = 250;
@@ -1323,6 +1597,9 @@
         document.getElementById('tokenBar').onclick = () => {
             showNotification(t.tokenMessage.replace("{tokens}", Math.floor(billyTokens)));
         };
+        
+        // Panel de estadísticas al hacer clic en records
+        document.querySelector('.records-panel').onclick = () => openStats();
     }
     
     // ==================== INICIAR JUEGO ====================
@@ -1439,6 +1716,7 @@
                 </div>
                 <div class="energy-bg"><div class="energy-fill" id="energyFill"></div></div>
             </div>
+            <div class="streak-indicator" id="streakIndicator" style="display:none;"></div>
             <div class="challenges-panel" id="challengesPanel"></div>
             <div class="action-buttons">
                 <button class="btn" id="upgradeBtn">💪 <span id="upgradeText">Mejorar</span></button>
@@ -1468,8 +1746,6 @@
         }
         
         updateUITexts();
-        
-        // Observar cambios de idioma
         window.updateUITexts = updateUITexts;
     }
     
@@ -1479,7 +1755,6 @@
     window.startGame = startGame;
     window.buySkin = buySkin;
     window.equipSkin = equipSkin;
-    window.t = () => t;
 </script>
 </body>
 </html>
