@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
-    <title>🐱 BILLY THE CAT - Dual Game Mode</title>
+    <title>🐱 BILLY THE CAT - ULTRA EDITION</title>
     <style>
         * {
             margin: 0;
@@ -18,231 +18,207 @@
             min-height: 100vh;
             overflow: hidden;
             position: relative;
-            background: #0a0a2a;
+            background: radial-gradient(circle at center, #0a0a2a 0%, #050510 100%);
         }
 
-        /* Animaciones globales */
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); filter: brightness(1); }
-            50% { transform: scale(1.02); filter: brightness(1.1); }
-        }
-        
-        @keyframes glowPulse {
-            0% { box-shadow: 0 0 5px rgba(255,200,100,0.3); }
-            100% { box-shadow: 0 0 30px rgba(255,200,100,0.6); }
-        }
-        
-        @keyframes glowRed {
-            0% { box-shadow: 0 0 5px rgba(255,100,100,0.3); }
-            100% { box-shadow: 0 0 25px rgba(255,100,100,0.5); }
-        }
-        
-        @keyframes glowGreen {
-            0% { box-shadow: 0 0 5px rgba(100,255,100,0.3); }
-            100% { box-shadow: 0 0 25px rgba(100,255,100,0.5); }
-        }
-        
-        @keyframes bounceIn {
-            0% { transform: scale(0); opacity: 0; }
-            80% { transform: scale(1.05); }
-            100% { transform: scale(1); opacity: 1; }
-        }
-        
-        @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-8px); }
-        }
-        
-        @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-5px); }
-            75% { transform: translateX(5px); }
-        }
-
-        /* Pantalla de selección de juego (MAIN MENU) */
-        .game-selector {
+        /* ==================== PANTALLA DE INICIO ÉPICA ==================== */
+        .start-screen {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(135deg, #0a0a1a 0%, #1a1a2e 100%);
+            background: linear-gradient(135deg, #0a0a1a 0%, #1a1a2e 50%, #0f0f23 100%);
             z-index: 1000;
             display: flex;
-            flex-direction: column;
             align-items: center;
             justify-content: center;
-            transition: opacity 0.5s ease;
+            transition: opacity 0.6s ease;
             overflow-y: auto;
         }
         
-        .game-selector::before {
+        .start-screen::before {
             content: '';
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: radial-gradient(circle at 50% 30%, rgba(255,200,100,0.08) 0%, transparent 70%);
+            background: radial-gradient(circle at 30% 20%, rgba(255,200,100,0.15) 0%, transparent 60%),
+                        radial-gradient(circle at 80% 70%, rgba(255,100,50,0.1) 0%, transparent 50%);
             pointer-events: none;
         }
         
-        .selector-container {
+        .start-card {
             position: relative;
             z-index: 10;
-            width: 100%;
-            max-width: 500px;
-            padding: 20px;
-        }
-        
-        /* Logo principal con GIF animado */
-        .main-logo {
+            background: rgba(0, 0, 0, 0.75);
+            backdrop-filter: blur(20px);
+            border-radius: 70px;
+            padding: 35px 30px;
             text-align: center;
-            margin-bottom: 40px;
-            animation: float 3s ease-in-out infinite;
+            max-width: 90%;
+            width: 450px;
+            border: 2px solid rgba(255, 170, 68, 0.6);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.5), 0 0 30px rgba(255,170,68,0.2);
+            animation: fadeInUp 0.7s ease;
         }
         
-        .main-logo img {
-            width: 160px;
-            height: 160px;
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .billy-logo {
+            position: relative;
+            margin-bottom: 15px;
+        }
+        
+        .billy-logo img {
+            width: 140px;
+            height: 140px;
             object-fit: contain;
             filter: drop-shadow(0 10px 25px rgba(0,0,0,0.5));
-            transition: all 0.3s;
-            border-radius: 50%;
-            background: radial-gradient(circle, rgba(255,200,100,0.2), transparent);
+            animation: floatBilly 3s ease-in-out infinite;
         }
         
-        .main-logo h1 {
-            font-size: 28px;
-            background: linear-gradient(135deg, #FFD966, #FFA500, #FF884D);
+        @keyframes floatBilly {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        .glow-ring {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 160px;
+            height: 160px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(255,200,100,0.3) 0%, transparent 70%);
+            animation: pulseGlow 2s infinite;
+            pointer-events: none;
+        }
+        
+        @keyframes pulseGlow {
+            0%, 100% { opacity: 0.5; transform: translate(-50%, -50%) scale(1); }
+            50% { opacity: 1; transform: translate(-50%, -50%) scale(1.1); }
+        }
+        
+        .start-card h1 {
+            font-size: 36px;
+            margin: 10px 0 5px;
+            background: linear-gradient(135deg, #FFD966, #FFA500, #FF6B6B);
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
-            margin-top: 15px;
             letter-spacing: 2px;
         }
         
-        /* Tarjetas de juegos */
-        .game-cards {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-            margin-bottom: 30px;
+        .start-tagline {
+            color: rgba(255,255,200,0.7);
+            font-size: 12px;
+            margin-bottom: 25px;
+            letter-spacing: 1px;
         }
         
-        .game-card {
-            background: rgba(0, 0, 0, 0.8);
-            backdrop-filter: blur(15px);
-            border-radius: 50px;
-            padding: 18px 22px;
+        .game-modes {
             display: flex;
-            align-items: center;
-            gap: 18px;
+            gap: 20px;
+            margin: 25px 0;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        .mode-card {
+            background: linear-gradient(145deg, rgba(30,41,59,0.8), rgba(15,23,42,0.9));
+            border-radius: 40px;
+            padding: 18px 20px;
+            flex: 1;
+            min-width: 160px;
             cursor: pointer;
             transition: all 0.3s ease;
-            border: 2px solid rgba(255, 200, 100, 0.4);
-            animation: glowPulse 2s infinite alternate;
+            border: 1px solid rgba(255,200,100,0.3);
+            backdrop-filter: blur(5px);
         }
         
-        .game-card:hover {
-            transform: scale(1.02) translateY(-3px);
+        .mode-card:hover {
+            transform: translateY(-5px);
             border-color: #ffaa44;
-            background: rgba(0, 0, 0, 0.9);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3), 0 0 20px rgba(255,170,68,0.3);
         }
         
-        .game-card:active {
+        .mode-card:active {
             transform: scale(0.98);
         }
         
-        .game-icon {
-            width: 70px;
-            height: 70px;
-            background: linear-gradient(135deg, rgba(251,191,36,0.2), rgba(230,126,34,0.2));
-            border-radius: 30px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s;
+        .mode-icon {
+            font-size: 48px;
+            margin-bottom: 10px;
         }
         
-        .game-card:hover .game-icon {
-            transform: scale(1.05);
-        }
-        
-        .game-icon img {
+        .mode-icon img {
             width: 55px;
             height: 55px;
             object-fit: contain;
-            filter: drop-shadow(0 2px 5px rgba(0,0,0,0.5));
         }
         
-        .game-info {
-            flex: 1;
-        }
-        
-        .game-info h2 {
+        .mode-card h3 {
             color: #FFD966;
-            font-size: 22px;
+            font-size: 20px;
             margin-bottom: 5px;
         }
         
-        .game-info p {
+        .mode-card p {
             color: rgba(255,255,255,0.6);
             font-size: 11px;
         }
         
-        .game-stats {
+        .mode-stats {
             display: flex;
-            gap: 12px;
-            margin-top: 8px;
-        }
-        
-        .game-stats span {
-            background: rgba(0,0,0,0.5);
-            padding: 3px 10px;
-            border-radius: 20px;
-            font-size: 10px;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 12px;
+            font-size: 11px;
             color: #FFD966;
-            display: flex;
-            align-items: center;
-            gap: 4px;
         }
         
-        .game-stats img {
-            width: 14px;
-            height: 14px;
-        }
-        
-        /* Panel de recursos compartidos */
-        .resources-panel {
-            background: rgba(0, 0, 0, 0.85);
-            backdrop-filter: blur(10px);
-            border-radius: 60px;
-            padding: 15px 20px;
+        .resources-bar {
+            background: rgba(0,0,0,0.6);
+            border-radius: 50px;
+            padding: 12px 20px;
             display: flex;
             justify-content: space-between;
-            margin-top: 15px;
-            border: 1px solid rgba(255, 200, 100, 0.5);
+            margin: 20px 0;
+            border: 1px solid rgba(255,200,100,0.3);
         }
         
-        .resource-item {
+        .resource {
             display: flex;
             align-items: center;
             gap: 10px;
-            font-weight: bold;
         }
         
-        .resource-item img {
+        .resource img {
             width: 32px;
             height: 32px;
             object-fit: contain;
-            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
+        }
+        
+        .resource-info {
+            text-align: left;
         }
         
         .resource-value {
             font-size: 20px;
-            color: #FFD966;
             font-weight: bold;
+            color: #FFD966;
         }
         
         .resource-label {
@@ -250,97 +226,27 @@
             color: rgba(255,255,255,0.6);
         }
         
-        /* Botones inferiores */
-        .menu-buttons {
+        .language-selector {
             display: flex;
-            gap: 12px;
-            margin-top: 20px;
-        }
-        
-        .menu-btn {
-            flex: 1;
-            background: rgba(30, 41, 59, 0.9);
-            border: none;
-            padding: 12px;
-            border-radius: 50px;
-            color: white;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.2s;
-            backdrop-filter: blur(5px);
-            font-size: 14px;
-        }
-        
-        .menu-btn:active {
-            transform: scale(0.95);
+            gap: 15px;
+            justify-content: center;
+            margin-top: 15px;
         }
         
         .lang-btn {
-            background: linear-gradient(135deg, #fbbf24, #e67e22);
+            background: linear-gradient(145deg, #fbbf24, #e67e22);
+            border: none;
+            padding: 8px 20px;
+            border-radius: 50px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s;
             color: #1e1a2f;
         }
         
-        /* Contenedor del juego principal (Clicker) */
-        .game-container {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 1001;
-            display: none;
-            background: radial-gradient(circle at center, #0a0a2a 0%, #050510 100%);
-        }
-        
-        .game-container.active {
-            display: block;
-        }
-        
-        /* Billy con imágenes de estado de ánimo */
-        #billy {
-            position: fixed;
-            width: 140px;
-            height: 140px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            z-index: 20;
-            transition: transform 0.05s linear, left 0.1s ease-out, top 0.1s ease-out;
-            will-change: transform, left, top;
-            pointer-events: auto;
-            background: transparent;
-        }
-        
-        #billy img {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-            filter: drop-shadow(0 8px 15px rgba(0,0,0,0.4));
-            transition: all 0.2s;
-        }
-        
-        #billy:active {
-            transform: scale(0.92) !important;
-        }
-        
-        .billy-happy {
-            animation: pulse 0.5s ease-in-out;
-        }
-        
-        .billy-sad {
-            animation: shake 0.3s ease-in-out;
-        }
-        
-        .billy-angry {
-            animation: shake 0.2s ease-in-out;
-            filter: drop-shadow(0 0 10px #ff4444);
-        }
-        
-        /* Efecto de combo alto */
-        .billy-combo-high {
-            animation: glowGreen 0.5s infinite alternate;
+        .lang-btn:active {
+            transform: scale(0.95);
         }
         
         /* Estrellas animadas */
@@ -366,20 +272,568 @@
             to { opacity: 1; transform: scale(1.2); }
         }
         
-        /* Botones con imágenes */
-        .btn-icon {
-            display: inline-flex;
+        /* Contenedor del juego principal */
+        .game-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1001;
+            display: none;
+            background: radial-gradient(circle at center, #0a0a2a 0%, #050510 100%);
+        }
+        
+        .game-container.active {
+            display: block;
+        }
+        
+        /* Paneles del juego */
+        .top-panel {
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            right: 10px;
+            display: flex;
+            justify-content: space-between;
+            gap: 8px;
+            z-index: 30;
+            flex-wrap: wrap;
+        }
+        
+        .stat-card {
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(8px);
+            padding: 6px 12px;
+            border-radius: 40px;
+            font-size: 12px;
+            font-weight: bold;
+            color: #FFE484;
+            border: 1px solid rgba(255, 200, 100, 0.5);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+            cursor: pointer;
+            transition: all 0.1s;
+        }
+        
+        .stat-card:active {
+            transform: scale(0.95);
+        }
+        
+        .token-bar {
+            position: fixed;
+            top: 70px;
+            left: 10px;
+            right: 10px;
+            background: linear-gradient(135deg, #fbbf24, #f59e0b);
+            border-radius: 60px;
+            padding: 8px 16px;
+            display: flex;
+            justify-content: space-between;
+            z-index: 30;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+            font-weight: bold;
+            transition: all 0.1s;
+        }
+        
+        .token-bar:active {
+            transform: scale(0.98);
+        }
+        
+        .combo-panel {
+            position: fixed;
+            top: 120px;
+            right: 10px;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(8px);
+            padding: 8px 16px;
+            border-radius: 40px;
+            font-size: 18px;
+            font-weight: bold;
+            color: #ff884d;
+            z-index: 30;
+            border: 1px solid #ffaa44;
+            transition: all 0.1s;
+        }
+        
+        .pet-panel {
+            position: fixed;
+            top: 120px;
+            left: 10px;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(8px);
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 11px;
+            z-index: 30;
+            color: #FFD966;
+            text-align: center;
+            cursor: pointer;
+            display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 8px;
+            transition: all 0.1s;
         }
         
-        .btn-icon img {
-            width: 18px;
-            height: 18px;
-            object-fit: contain;
+        .pet-panel:active {
+            transform: scale(0.95);
         }
         
-        /* Estilos del minijuego (BILLY JUMP) */
+        .records-panel {
+            position: fixed;
+            top: 180px;
+            left: 10px;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(8px);
+            padding: 8px 12px;
+            border-radius: 20px;
+            font-size: 10px;
+            z-index: 30;
+            color: #FFD966;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.1s;
+        }
+        
+        .records-panel:active {
+            transform: scale(0.95);
+        }
+        
+        .energy-container {
+            position: fixed;
+            bottom: 150px;
+            left: 10px;
+            right: 10px;
+            background: rgba(0,0,0,0.7);
+            border-radius: 20px;
+            padding: 8px 12px;
+            backdrop-filter: blur(5px);
+            z-index: 30;
+        }
+        
+        .energy-bg {
+            height: 12px;
+            background: #2d2a3e;
+            border-radius: 20px;
+            overflow: hidden;
+        }
+        
+        .energy-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #22c55e, #facc15);
+            border-radius: 20px;
+            transition: width 0.2s;
+        }
+        
+        .challenges-panel {
+            position: fixed;
+            bottom: 95px;
+            left: 10px;
+            right: 10px;
+            background: rgba(0,0,0,0.8);
+            border-radius: 20px;
+            padding: 8px;
+            z-index: 30;
+            backdrop-filter: blur(5px);
+            display: flex;
+            justify-content: space-around;
+            gap: 8px;
+        }
+        
+        .challenge-item {
+            font-size: 10px;
+            color: #FFD966;
+            text-align: center;
+            flex: 1;
+            background: rgba(0,0,0,0.5);
+            padding: 4px;
+            border-radius: 12px;
+        }
+        
+        .action-buttons {
+            position: fixed;
+            bottom: 15px;
+            left: 10px;
+            right: 10px;
+            display: flex;
+            gap: 8px;
+            z-index: 30;
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            flex: 1;
+            padding: 10px 6px;
+            border: none;
+            border-radius: 50px;
+            font-weight: bold;
+            font-size: 11px;
+            cursor: pointer;
+            background: linear-gradient(145deg, #1e293b, #0f172a);
+            color: white;
+            transition: all 0.08s;
+            box-shadow: 0 4px 0 #0a0a1a;
+            text-align: center;
+        }
+        
+        .btn:active {
+            transform: translateY(2px);
+            box-shadow: 0 1px 0 #0a0a1a;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(145deg, #fbbf24, #e67e22);
+            color: #1e1a2f;
+        }
+        
+        .btn-solana {
+            background: linear-gradient(145deg, #14f195, #9945ff);
+        }
+        
+        .btn-skill {
+            background: linear-gradient(145deg, #8b5cf6, #6d28d9);
+        }
+        
+        .btn-pet {
+            background: linear-gradient(145deg, #ec489a, #db2777);
+        }
+        
+        .btn-shop {
+            background: linear-gradient(145deg, #06b6d4, #0891b2);
+        }
+        
+        /* Billy */
+        #billy {
+            position: fixed;
+            width: 140px;
+            height: 140px;
+            background: radial-gradient(circle, #FFD966, #FFA500);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 75px;
+            cursor: pointer;
+            z-index: 20;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+            transition: transform 0.05s linear, left 0.1s ease-out, top 0.1s ease-out;
+            will-change: transform, left, top;
+            pointer-events: auto;
+        }
+        
+        #billy:active {
+            transform: scale(0.92) !important;
+        }
+        
+        .billy-golden {
+            box-shadow: 0 0 20px gold;
+            animation: pulseGold 0.5s infinite;
+        }
+        
+        @keyframes pulseGold {
+            0%, 100% { box-shadow: 0 0 20px gold; }
+            50% { box-shadow: 0 0 40px #ffaa44; }
+        }
+        
+        .pet-follower {
+            position: fixed;
+            z-index: 18;
+            font-size: 32px;
+            pointer-events: none;
+            transition: all 0.2s ease;
+            filter: drop-shadow(0 4px 6px rgba(0,0,0,0.3));
+            animation: floatPet 2s infinite;
+        }
+        
+        @keyframes floatPet {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+        
+        #gameArea {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 15;
+            pointer-events: auto;
+        }
+        
+        .game-entity {
+            position: fixed;
+            cursor: pointer;
+            z-index: 25;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            filter: drop-shadow(0 4px 6px rgba(0,0,0,0.3));
+            transition: transform 0.05s;
+            pointer-events: auto;
+            animation: bounceIn 0.3s ease;
+        }
+        
+        @keyframes bounceIn {
+            0% { transform: scale(0); }
+            80% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+        
+        .game-entity:active {
+            transform: scale(0.95);
+        }
+        
+        .mouse-normal {
+            background: radial-gradient(circle, #8B5A2B, #5D3A1A);
+            border-radius: 50%;
+            border: 2px solid #b97f44;
+        }
+        
+        .mouse-golden {
+            background: radial-gradient(circle, #FBBF24, #E67E22);
+            border-radius: 50%;
+            border: 3px solid gold;
+            animation: pulseGoldMouse 0.8s infinite;
+        }
+        
+        .mouse-boss {
+            background: radial-gradient(circle, #4a2a1a, #2a1a0a);
+            border-radius: 50%;
+            border: 3px solid #c97e3a;
+            font-size: 32px !important;
+        }
+        
+        .bubble {
+            background: radial-gradient(circle, #FFE484, #F59E0B);
+            border-radius: 50%;
+            box-shadow: 0 0 15px gold;
+            animation: float 2s ease-in-out infinite;
+        }
+        
+        @keyframes pulseGoldMouse {
+            0% { transform: scale(1); box-shadow: 0 0 5px gold; }
+            100% { transform: scale(1.05); box-shadow: 0 0 20px #ffaa44; }
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-5px); }
+        }
+        
+        .notification {
+            position: fixed;
+            top: 45%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: linear-gradient(135deg, #facc15, #f59e0b);
+            color: #0c0a1a;
+            padding: 12px 24px;
+            border-radius: 50px;
+            font-weight: bold;
+            font-size: 16px;
+            z-index: 200;
+            white-space: nowrap;
+            animation: fadeOutUp 1s forwards;
+            box-shadow: 0 4px 15px black;
+            pointer-events: none;
+        }
+        
+        .notification.crit {
+            background: linear-gradient(135deg, #ff6b6b, #ff4444);
+            color: white;
+        }
+        
+        .notification.achievement {
+            background: linear-gradient(135deg, #14f195, #9945ff);
+            color: white;
+        }
+        
+        .notification.pet {
+            background: linear-gradient(135deg, #ec489a, #db2777);
+            color: white;
+        }
+        
+        @keyframes fadeOutUp {
+            0% { opacity: 1; transform: translate(-50%, -50%) scale(0.9); }
+            100% { opacity: 0; transform: translate(-50%, -70%) scale(1.1); }
+        }
+        
+        .floating-number {
+            position: fixed;
+            font-weight: bold;
+            font-size: 28px;
+            text-shadow: 0 0 5px black;
+            pointer-events: none;
+            z-index: 150;
+            animation: floatUp 0.8s forwards;
+            color: white;
+        }
+        
+        @keyframes floatUp {
+            0% { opacity: 1; transform: translateY(0px); }
+            100% { opacity: 0; transform: translateY(-70px); }
+        }
+        
+        .ripple {
+            position: fixed;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(251,191,36,0.6) 0%, rgba(251,191,36,0) 80%);
+            pointer-events: none;
+            animation: rippleAnim 0.5s ease-out forwards;
+            z-index: 90;
+        }
+        
+        @keyframes rippleAnim {
+            0% { transform: scale(0); opacity: 0.7; }
+            100% { transform: scale(5); opacity: 0; }
+        }
+        
+        .streak-indicator {
+            position: fixed;
+            bottom: 220px;
+            right: 10px;
+            background: rgba(0,0,0,0.85);
+            padding: 8px 12px;
+            border-radius: 30px;
+            font-size: 14px;
+            font-weight: bold;
+            color: #ffaa44;
+            z-index: 30;
+            transition: all 0.2s;
+        }
+        
+        /* Modal de tienda unificada */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.95);
+            z-index: 400;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(10px);
+            animation: fadeIn 0.2s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .modal-content {
+            background: linear-gradient(135deg, #1e293b, #0f172a);
+            border-radius: 40px;
+            padding: 25px;
+            max-width: 90%;
+            width: 380px;
+            border: 2px solid #ffaa44;
+            text-align: center;
+            max-height: 85vh;
+            overflow-y: auto;
+            animation: slideUp 0.3s ease;
+        }
+        
+        @keyframes slideUp {
+            from { transform: translateY(50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        
+        .modal-content h2 {
+            color: #FFD966;
+            margin-bottom: 20px;
+        }
+        
+        .shop-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            border-bottom: 1px solid rgba(255,200,100,0.3);
+            padding-bottom: 10px;
+        }
+        
+        .shop-tab {
+            flex: 1;
+            padding: 8px;
+            background: rgba(0,0,0,0.5);
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.2s;
+            color: white;
+        }
+        
+        .shop-tab.active {
+            background: linear-gradient(135deg, #fbbf24, #e67e22);
+            color: #1e1a2f;
+        }
+        
+        .shop-section {
+            display: none;
+        }
+        
+        .shop-section.active {
+            display: block;
+        }
+        
+        .skin-item, .pet-card, .skill-branch {
+            background: rgba(0,0,0,0.5);
+            border-radius: 20px;
+            padding: 12px;
+            margin-bottom: 12px;
+            border: 1px solid rgba(255,200,100,0.3);
+            transition: all 0.1s;
+            cursor: pointer;
+        }
+        
+        .skin-item:active, .pet-card:active {
+            transform: scale(0.98);
+        }
+        
+        .skin-item.equipped, .pet-card.equipped {
+            border: 2px solid #14f195;
+            background: rgba(20,241,149,0.1);
+        }
+        
+        .skin-info, .pet-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .skin-name, .pet-name {
+            font-weight: bold;
+            color: white;
+        }
+        
+        .skin-price, .pet-price {
+            font-size: 12px;
+            color: #FFD966;
+        }
+        
+        .buy-btn, .upgrade-btn, .equip-btn {
+            background: linear-gradient(145deg, #fbbf24, #e67e22);
+            border: none;
+            padding: 5px 15px;
+            border-radius: 30px;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 11px;
+        }
+        
+        .close-modal {
+            margin-top: 20px;
+            background: #334155;
+            padding: 10px 30px;
+            border-radius: 30px;
+            cursor: pointer;
+            border: none;
+            color: white;
+        }
+        
+        /* Minijuego BILLY JUMP */
         .jump-game-container {
             position: fixed;
             top: 0;
@@ -392,7 +846,6 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            transition: all 0.3s ease;
         }
         
         .jump-game-canvas {
@@ -422,14 +875,6 @@
             font-weight: bold;
             font-size: 20px;
             backdrop-filter: blur(5px);
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        
-        .jump-score img {
-            width: 28px;
-            height: 28px;
         }
         
         .jump-exit {
@@ -439,8 +884,6 @@
             color: white;
             font-weight: bold;
             cursor: pointer;
-            transition: all 0.1s;
-            backdrop-filter: blur(5px);
         }
         
         .jump-exit:active {
@@ -455,27 +898,23 @@
             text-align: center;
             color: rgba(255,255,255,0.8);
             font-size: 14px;
-            background: rgba(0,0,0,0.5);
-            padding: 8px;
-            margin: 0 20px;
-            border-radius: 30px;
         }
         
-        /* Responsive */
         @media (max-width: 600px) {
-            .main-logo img { width: 120px; height: 120px; }
-            .game-card { padding: 12px 16px; }
-            .game-icon { width: 55px; height: 55px; }
-            .game-icon img { width: 45px; height: 45px; }
-            .game-info h2 { font-size: 18px; }
-            .resource-value { font-size: 16px; }
-            .resource-item img { width: 24px; height: 24px; }
-            #billy { width: 100px; height: 100px; }
-            .jump-score { font-size: 16px; padding: 6px 12px; }
+            .btn { font-size: 9px; padding: 8px 4px; }
+            .stat-card { font-size: 9px; padding: 4px 6px; }
+            #billy { width: 110px; height: 110px; font-size: 60px; }
+            .combo-panel { font-size: 14px; padding: 6px 12px; top: 115px; }
+            .pet-panel { top: 115px; font-size: 10px; }
+            .records-panel { top: 170px; font-size: 9px; }
+            .mode-card { min-width: 130px; padding: 12px; }
+            .mode-icon img { width: 40px; height: 40px; }
+            .billy-logo img { width: 100px; height: 100px; }
+            .start-card { padding: 25px 20px; }
         }
         
         @media (min-width: 601px) {
-            #billy { width: 150px; height: 150px; }
+            #billy { width: 150px; height: 150px; font-size: 80px; }
         }
     </style>
 </head>
@@ -483,66 +922,64 @@
 
 <div class="stars" id="stars"></div>
 
-<!-- Pantalla de selección de juego (MAIN MENU) -->
-<div class="game-selector" id="gameSelector">
-    <div class="selector-container">
-        <div class="main-logo">
-            <img src="billy.gif" alt="Billy" id="mainLogoImg" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22%3E%3Ccircle cx=%2250%22 cy=%2250%22 r=%2245%22 fill=%22%23FFD966%22/%3E%3Ctext x=%2250%22 y=%2270%22 text-anchor=%22middle%22 fill=%22%23FFA500%22 font-size=%2240%22%3E🐱%3C/text%3E%3C/svg%3E'">
-            <h1>BILLY THE CAT</h1>
+<!-- Pantalla de inicio ÉPICA -->
+<div class="start-screen" id="startScreen">
+    <div class="start-card">
+        <div class="billy-logo">
+            <div class="glow-ring"></div>
+            <img src="billy.gif" alt="Billy" id="billyGif" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22%3E%3Ccircle cx=%2250%22 cy=%2250%22 r=%2245%22 fill=%22%23FFD966%22/%3E%3Ctext x=%2250%22 y=%2270%22 text-anchor=%22middle%22 fill=%22%23FFA500%22 font-size=%2240%22%3E🐱%3C/text%3E%3C/svg%3E'">
         </div>
+        <h1>BILLY THE CAT</h1>
+        <div class="start-tagline">🐱 ¡El gato más famoso de la blockchain! 🚀</div>
         
-        <div class="game-cards">
-            <div class="game-card clicker-card" id="selectClickerBtn">
-                <div class="game-icon">
-                    <img src="billy_happy.png" alt="Clicker" id="clickerIconImg" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22%3E%3Ccircle cx=%2250%22 cy=%2250%22 r=%2245%22 fill=%22%23FFD966%22/%3E%3Ctext x=%2250%22 y=%2270%22 text-anchor=%22middle%22 fill=%22%23FFA500%22 font-size=%2240%22%3E🐱%3C/text%3E%3C/svg%3E'">
+        <div class="game-modes">
+            <div class="mode-card" id="selectClickerBtn">
+                <div class="mode-icon">
+                    <img src="billy_happy.png" alt="Clicker" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22%3E%3Ctext x=%2250%22 y=%2270%22 text-anchor=%22middle%22 fill=%22%23FFD966%22 font-size=%2240%22%3E🐱%3C/text%3E%3C/svg%3E'">
                 </div>
-                <div class="game-info">
-                    <h2>🐱 BILLY CLICKER</h2>
-                    <p>Toca a Billy, atrapa ratones, mejora habilidades y consigue mascotas</p>
-                    <div class="game-stats">
-                        <span>🎯 Clicker</span>
-                        <span>⚡ Combos</span>
-                        <span>🐾 Mascotas</span>
-                    </div>
+                <h3>🐱 CLICKER</h3>
+                <p>Toca a Billy, atrapa ratones, mejora habilidades</p>
+                <div class="mode-stats">
+                    <span>⚡ Combos</span>
+                    <span>🐾 Mascotas</span>
+                    <span>🌳 Habilidades</span>
                 </div>
             </div>
             
-            <div class="game-card jump-card" id="selectJumpBtn">
-                <div class="game-icon">
-                    <img src="billy_coins.png" alt="Jump" id="jumpIconImg" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22%3E%3Ccircle cx=%2250%22 cy=%2250%22 r=%2245%22 fill=%22%2314f195%22/%3E%3Ctext x=%2250%22 y=%2270%22 text-anchor=%22middle%22 fill=%22white%22 font-size=%2240%22%3E🦘%3C/text%3E%3C/svg%3E'">
+            <div class="mode-card" id="selectJumpBtn">
+                <div class="mode-icon">
+                    <img src="billy_coins.png" alt="Jump" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22%3E%3Ctext x=%2250%22 y=%2270%22 text-anchor=%22middle%22 fill=%22%2314f195%22 font-size=%2240%22%3E🦘%3C/text%3E%3C/svg%3E'">
                 </div>
-                <div class="game-info">
-                    <h2>🦘 BILLY JUMP</h2>
-                    <p>Salta obstáculos con el gato negro, consigue puntuaciones récord</p>
-                    <div class="game-stats">
-                        <span>🦘 Saltos</span>
-                        <span>⚡ Velocidad</span>
-                        <span>🏆 Récords</span>
-                    </div>
+                <h3>🦘 BILLY JUMP</h3>
+                <p>Salta obstáculos con el gato negro, consigue récords</p>
+                <div class="mode-stats">
+                    <span>🦘 Saltos</span>
+                    <span>⚡ Velocidad</span>
+                    <span>🏆 Récords</span>
                 </div>
             </div>
         </div>
         
-        <div class="resources-panel">
-            <div class="resource-item">
-                <img src="billy_coins.png" alt="Coins" id="coinIconImg" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22%3E%3Ccircle cx=%2250%22 cy=%2250%22 r=%2245%22 fill=%22%23fbbf24%22/%3E%3Ctext x=%2250%22 y=%2270%22 text-anchor=%22middle%22 fill=%22white%22 font-size=%2240%22%3E💰%3C/text%3E%3C/svg%3E'">
-                <div>
+        <div class="resources-bar">
+            <div class="resource">
+                <img src="billy_coins.png" alt="Coins" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22%3E%3Ctext x=%2250%22 y=%2270%22 text-anchor=%22middle%22 fill=%22%23fbbf24%22 font-size=%2240%22%3E💰%3C/text%3E%3C/svg%3E'">
+                <div class="resource-info">
                     <div class="resource-value" id="menuCoins">0</div>
                     <div class="resource-label">Monedas</div>
                 </div>
             </div>
-            <div class="resource-item">
-                <img src="billy_happy.png" alt="Tokens" id="tokenIconImg" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22%3E%3Ccircle cx=%2250%22 cy=%2250%22 r=%2245%22 fill=%22%239945ff%22/%3E%3Ctext x=%2250%22 y=%2270%22 text-anchor=%22middle%22 fill=%22white%22 font-size=%2240%22%3E⭐%3C/text%3E%3C/svg%3E'">
-                <div>
+            <div class="resource">
+                <img src="billy_happy.png" alt="Tokens" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22%3E%3Ctext x=%2250%22 y=%2270%22 text-anchor=%22middle%22 fill=%22%239945ff%22 font-size=%2240%22%3E⭐%3C/text%3E%3C/svg%3E'">
+                <div class="resource-info">
                     <div class="resource-value" id="menuTokens">0</div>
                     <div class="resource-label">BILLY Tokens</div>
                 </div>
             </div>
         </div>
         
-        <div class="menu-buttons">
-            <button class="menu-btn lang-btn" id="langEsBtn">🇪🇸 Español</button>
-            <button class="menu-btn lang-btn" id="langEnBtn">🇺🇸 English</button>
+        <div class="language-selector">
+            <button class="lang-btn" id="langEsBtn">🇪🇸 Español</button>
+            <button class="lang-btn" id="langEnBtn">🇺🇸 English</button>
         </div>
     </div>
 </div>
@@ -550,9 +987,7 @@
 <!-- Contenedor del juego Clicker -->
 <div class="game-container" id="clickerGameContainer">
     <div id="gameArea"></div>
-    <div id="billy">
-        <img src="billy_happy.png" id="billyMoodImg" alt="Billy" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22%3E%3Ccircle cx=%2250%22 cy=%2250%22 r=%2245%22 fill=%22%23FFD966%22/%3E%3Ctext x=%2250%22 y=%2270%22 text-anchor=%22middle%22 fill=%22%23FFA500%22 font-size=%2240%22%3E🐱%3C/text%3E%3C/svg%3E'">
-    </div>
+    <div id="billy">🐱</div>
     <div class="pet-follower" id="petFollower"></div>
 </div>
 
@@ -562,10 +997,10 @@
     
     const translations = {
         es: {
-            clickerTitle: "BILLY CLICKER",
+            clickerTitle: "CLICKER",
             jumpTitle: "BILLY JUMP",
             clickerDesc: "Toca a Billy, atrapa ratones",
-            jumpDesc: "Salta obstáculos con el gato negro",
+            jumpDesc: "Salta obstáculos",
             coins: "Monedas",
             tokens: "Tokens",
             back: "VOLVER",
@@ -574,13 +1009,80 @@
             jumpInstructions: "¡Toca la pantalla para saltar! Evita los obstáculos",
             jumpReward: "🎉 ¡Has ganado {reward} monedas!",
             gameOver: "GAME OVER",
-            restart: "Toca para reiniciar"
+            restart: "Toca para reiniciar",
+            level: "Nv",
+            multiplier: "⚡ x",
+            tapPower: "💪",
+            combo: "COMBO",
+            bestCombo: "Mejor Combo",
+            record: "Récord",
+            energy: "Energía",
+            upgrade: "Mejorar",
+            loot: "Cofre",
+            skills: "Habilidades",
+            pets: "Mascotas",
+            shop: "Tienda",
+            music: "🎵",
+            share: "X",
+            tokensLabel: "BILLY Tokens",
+            mouse: "Ratones",
+            crits: "Críticos",
+            noEnergy: "💤 Sin energía! Espera",
+            critGuaranteed: "💥 ¡CRÍTICO GARANTIZADO!",
+            superCombo: "✨ SUPER COMBO ACTIVADO! x1.5 ✨",
+            comboLost: "🔥 Combo perdido!",
+            levelUp: "🎉 NIVEL {level}! +40 energía 🎉",
+            goldenHour: "✨ ¡HORA DORADA! Ratones dorados ✨",
+            goldenHourEnd: "⌛ Hora dorada terminada",
+            doubleEvent: "🎉 ¡EVENTO! Doble monedas por 15s 🎉",
+            doubleEnd: "Evento terminado",
+            mouseStreak: "🐱 ¡Racha de ratones! +bonus",
+            lootReward: "🎁 +{reward} monedas!",
+            upgradeCost: "💰 Faltan {cost} monedas",
+            powerUp: "💪 Poder aumentado a {power}!",
+            shopTitle: "🏪 TIENDA BILLY",
+            skinsTab: "🎨 Skins",
+            petsTab: "🐾 Mascotas",
+            skillsTab: "🌳 Habilidades",
+            original: "Original",
+            golden: "Dorado",
+            elite: "Élite",
+            buy: "COMPRAR",
+            equipped: "EQUIPADA",
+            equip: "EQUIPAR",
+            priceTokens: "{price} BILLY",
+            close: "CERRAR",
+            petDog: "🐕 Perrito Ayudante",
+            petDogDesc: "Recolecta ratones automáticamente",
+            petOwl: "🦉 Búho Sabio",
+            petOwlDesc: "Aumenta probabilidad de crítico",
+            petBee: "🐝 Abeja Trabajadora",
+            petBeeDesc: "Genera monedas pasivamente",
+            petDragon: "🐉 Dragón Mítico",
+            petDragonDesc: "Mejora todas las estadísticas",
+            petLevel: "Nivel {level}",
+            petUpgrade: "MEJORAR",
+            petUnlock: "DESBLOQUEAR",
+            petCollect: "🐕 ¡Perrito atrapó un ratón! +{value}",
+            petGenerate: "🐝 Abeja generó {value} monedas",
+            petCrit: "🦉 Búho aumentó crítico",
+            needTokens: "💔 Necesitas {cost} BILLY tokens",
+            skillStrength: "💪 FUERZA",
+            skillStrengthDesc: "+5% poder por nivel",
+            skillEnergy: "⚡ ENERGÍA",
+            skillEnergyDesc: "+20 energía máx por nivel",
+            skillLuck: "🍀 SUERTE",
+            skillLuckDesc: "+3% crítico por nivel",
+            skillEconomy: "💰 ECONOMÍA",
+            skillEconomyDesc: "+10% monedas por nivel",
+            skillUpgrade: "Mejorar",
+            skillMax: "MAX"
         },
         en: {
-            clickerTitle: "BILLY CLICKER",
+            clickerTitle: "CLICKER",
             jumpTitle: "BILLY JUMP",
             clickerDesc: "Tap Billy, catch mice",
-            jumpDesc: "Jump obstacles with the black cat",
+            jumpDesc: "Jump obstacles",
             coins: "Coins",
             tokens: "Tokens",
             back: "BACK",
@@ -589,7 +1091,74 @@
             jumpInstructions: "Tap to jump! Avoid obstacles",
             jumpReward: "🎉 You earned {reward} coins!",
             gameOver: "GAME OVER",
-            restart: "Tap to restart"
+            restart: "Tap to restart",
+            level: "Lv",
+            multiplier: "⚡ x",
+            tapPower: "💪",
+            combo: "COMBO",
+            bestCombo: "Best Combo",
+            record: "Record",
+            energy: "Energy",
+            upgrade: "Upgrade",
+            loot: "Chest",
+            skills: "Skills",
+            pets: "Pets",
+            shop: "Shop",
+            music: "🎵",
+            share: "X",
+            tokensLabel: "BILLY Tokens",
+            mouse: "Mice",
+            crits: "Crits",
+            noEnergy: "💤 No energy! Wait",
+            critGuaranteed: "💥 CRITICAL GUARANTEED!",
+            superCombo: "✨ SUPER COMBO ACTIVATED! x1.5 ✨",
+            comboLost: "🔥 Combo lost!",
+            levelUp: "🎉 LEVEL {level}! +40 energy 🎉",
+            goldenHour: "✨ GOLDEN HOUR! Golden mice ✨",
+            goldenHourEnd: "⌛ Golden hour ended",
+            doubleEvent: "🎉 EVENT! Double coins for 15s 🎉",
+            doubleEnd: "Event ended",
+            mouseStreak: "🐱 Mouse streak! +bonus",
+            lootReward: "🎁 +{reward} coins!",
+            upgradeCost: "💰 Need {cost} more coins",
+            powerUp: "💪 Power increased to {power}!",
+            shopTitle: "🏪 BILLY SHOP",
+            skinsTab: "🎨 Skins",
+            petsTab: "🐾 Pets",
+            skillsTab: "🌳 Skills",
+            original: "Original",
+            golden: "Golden",
+            elite: "Elite",
+            buy: "BUY",
+            equipped: "EQUIPPED",
+            equip: "EQUIP",
+            priceTokens: "{price} BILLY",
+            close: "CLOSE",
+            petDog: "🐕 Helper Dog",
+            petDogDesc: "Automatically collects mice",
+            petOwl: "🦉 Wise Owl",
+            petOwlDesc: "Increases critical chance",
+            petBee: "🐝 Worker Bee",
+            petBeeDesc: "Passively generates coins",
+            petDragon: "🐉 Mythical Dragon",
+            petDragonDesc: "Boosts all stats",
+            petLevel: "Level {level}",
+            petUpgrade: "UPGRADE",
+            petUnlock: "UNLOCK",
+            petCollect: "🐕 Dog caught a mouse! +{value}",
+            petGenerate: "🐝 Bee generated {value} coins",
+            petCrit: "🦉 Owl increased crit",
+            needTokens: "💔 Need {cost} BILLY tokens",
+            skillStrength: "💪 STRENGTH",
+            skillStrengthDesc: "+5% power per level",
+            skillEnergy: "⚡ ENERGY",
+            skillEnergyDesc: "+20 max energy per level",
+            skillLuck: "🍀 LUCK",
+            skillLuckDesc: "+3% crit per level",
+            skillEconomy: "💰 ECONOMY",
+            skillEconomyDesc: "+10% coins per level",
+            skillUpgrade: "Upgrade",
+            skillMax: "MAX"
         }
     };
     
@@ -600,22 +1169,22 @@
         t = translations[currentLang];
         localStorage.setItem('billyLang', currentLang);
         updateMenuTexts();
+        if(typeof updateGameTexts === 'function') updateGameTexts();
     }
     
     function updateMenuTexts() {
-        document.querySelector('#selectClickerBtn .game-info h2').innerHTML = `🐱 ${t.clickerTitle}`;
-        document.querySelector('#selectClickerBtn .game-info p').textContent = t.clickerDesc;
-        document.querySelector('#selectJumpBtn .game-info h2').innerHTML = `🦘 ${t.jumpTitle}`;
-        document.querySelector('#selectJumpBtn .game-info p').textContent = t.jumpDesc;
-        document.querySelector('.resource-item:first-child .resource-label').textContent = t.coins;
-        document.querySelector('.resource-item:last-child .resource-label').textContent = t.tokens;
+        document.querySelector('#selectClickerBtn h3').innerHTML = `🐱 ${t.clickerTitle}`;
+        document.querySelector('#selectClickerBtn p').textContent = t.clickerDesc;
+        document.querySelector('#selectJumpBtn h3').innerHTML = `🦘 ${t.jumpTitle}`;
+        document.querySelector('#selectJumpBtn p').textContent = t.jumpDesc;
+        document.querySelectorAll('.resource-label')[0].textContent = t.coins;
+        document.querySelectorAll('.resource-label')[1].textContent = t.tokens;
     }
     
     // ==================== VARIABLES COMPARTIDAS ====================
     let globalCoins = 0;
     let globalTokens = 0;
     
-    // Cargar datos guardados
     function loadGlobalData() {
         const saved = localStorage.getItem('billyGlobalData');
         if(saved) {
@@ -652,35 +1221,22 @@
         saveGlobalData();
     }
     
-    // ==================== FUNCIONES DE IMÁGENES Y ESTADO DE ÁNIMO ====================
-    function updateBillyMood(combo, energy) {
-        const billyImg = document.getElementById('billyMoodImg');
-        if(!billyImg) return;
-        
-        if(combo >= 15) {
-            billyImg.src = 'billy_happy.png';
-            billyImg.parentElement.classList.add('billy-combo-high');
-            document.getElementById('billy').classList.add('billy-happy');
-            setTimeout(() => document.getElementById('billy').classList.remove('billy-happy'), 500);
-        } else if(energy <= 20) {
-            billyImg.src = 'billy_Triste.png';
-            document.getElementById('billy').classList.add('billy-sad');
-            setTimeout(() => document.getElementById('billy').classList.remove('billy-sad'), 500);
-        } else if(combo <= 2 && energy > 50) {
-            billyImg.src = 'billy_Enfadado.png';
-            document.getElementById('billy').classList.add('billy-angry');
-            setTimeout(() => document.getElementById('billy').classList.remove('billy-angry'), 500);
-        } else {
-            billyImg.src = 'billy_happy.png';
+    // ==================== GENERAR ESTRELLAS ====================
+    function generateStars() {
+        const starsDiv = document.getElementById('stars');
+        for(let i = 0; i < 200; i++) {
+            const star = document.createElement('div');
+            star.className = 'star';
+            star.style.left = Math.random() * 100 + '%';
+            star.style.top = Math.random() * 100 + '%';
+            star.style.width = star.style.height = (1 + Math.random() * 2) + 'px';
+            star.style.animationDelay = Math.random() * 2 + 's';
+            starsDiv.appendChild(star);
         }
-        
-        // Manejar error de carga de imagen
-        billyImg.onerror = function() {
-            this.src = 'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22%3E%3Ccircle cx=%2250%22 cy=%2250%22 r=%2245%22 fill=%22%23FFD966%22/%3E%3Ctext x=%2250%22 y=%2270%22 text-anchor=%22middle%22 fill=%22%23FFA500%22 font-size=%2240%22%3E🐱%3C/text%3E%3C/svg%3E';
-        };
     }
+    generateStars();
     
-    // ==================== MINIJUEGO BILLY JUMP ====================
+    // ==================== MINIJUEGO BILLY JUMP MEJORADO ====================
     let jumpGameActive = false;
     let jumpGame = {
         canvas: null,
@@ -693,19 +1249,21 @@
         bestScore: 0,
         gameOver: false,
         animationId: null,
-        spawnCounter: 0
+        spawnCounter: 0,
+        frameCount: 0
     };
     
     function initJumpGame() {
         jumpGame.width = Math.min(window.innerWidth - 40, 380);
-        jumpGame.height = 500;
+        jumpGame.height = 520;
         jumpGame.player.y = jumpGame.height - 80;
-        jumpGame.player.width = 32;
-        jumpGame.player.height = 32;
+        jumpGame.player.width = 34;
+        jumpGame.player.height = 34;
         jumpGame.obstacles = [];
         jumpGame.score = 0;
         jumpGame.gameOver = false;
         jumpGame.spawnCounter = 0;
+        jumpGame.frameCount = 0;
         
         const savedBest = localStorage.getItem('billyJumpBest');
         jumpGame.bestScore = savedBest ? parseInt(savedBest) : 0;
@@ -715,13 +1273,8 @@
         container.id = 'jumpGameContainer';
         container.innerHTML = `
             <div class="jump-stats">
-                <div class="jump-score">
-                    <img src="billy_coins.png" onerror="this.style.display='none'"> 
-                    <span id="jumpScore">0</span>
-                </div>
-                <div class="jump-score">
-                    🏆 <span id="jumpBest">${jumpGame.bestScore}</span>
-                </div>
+                <div class="jump-score">🏆 ${t.jumpBest}: <span id="jumpBest">${jumpGame.bestScore}</span></div>
+                <div class="jump-score">⭐ ${t.jumpScore}: <span id="jumpScore">0</span></div>
                 <div class="jump-exit" id="jumpExitBtn">✖️ ${t.back}</div>
             </div>
             <canvas id="jumpCanvas" class="jump-game-canvas" width="${jumpGame.width}" height="${jumpGame.height}"></canvas>
@@ -758,29 +1311,24 @@
         
         ctx.clearRect(0, 0, w, h);
         
-        // Fondo con gradiente
+        // Fondo con gradiente dinámico según puntuación
+        const intensity = Math.min(0.5, jumpGame.score / 200);
         const grad = ctx.createLinearGradient(0, 0, 0, h);
-        grad.addColorStop(0, '#1a2a3a');
-        grad.addColorStop(1, '#2a3a4a');
+        grad.addColorStop(0, `rgb(26, 42, 58)`);
+        grad.addColorStop(1, `rgb(42, 58, 74)`);
         ctx.fillStyle = grad;
         ctx.fillRect(0, 0, w, h);
         
-        // Dibujar suelo con efecto de profundidad
+        // Suelo con efecto de profundidad
         ctx.fillStyle = '#5D3A1A';
         ctx.fillRect(0, h - 45, w, 45);
         ctx.fillStyle = '#8B5A2B';
         ctx.fillRect(0, h - 48, w, 3);
-        ctx.fillStyle = '#C97E3A';
-        for(let i = 0; i < 10; i++) {
-            ctx.fillRect(i * 40, h - 50, 15, 5);
-        }
         
-        // Dibujar estrellas decorativas
-        ctx.fillStyle = 'rgba(255,255,200,0.5)';
-        for(let i = 0; i < 30; i++) {
-            if(jumpGame.frameCount % 60 === i % 60) {
-                ctx.fillRect((i * 37) % w, (i * 23) % (h - 100), 2, 2);
-            }
+        // Decoración del suelo
+        ctx.fillStyle = '#C97E3A';
+        for(let i = 0; i < 15; i++) {
+            ctx.fillRect((i * 35 + jumpGame.frameCount) % w, h - 52, 12, 4);
         }
         
         if(!jumpGame.gameOver) {
@@ -798,17 +1346,17 @@
                 if(jumpGame.player.vy < 0) jumpGame.player.vy = 0;
             }
             
-            // Spawn de obstáculos
+            // Spawn de obstáculos (más difícil con la puntuación)
             jumpGame.spawnCounter++;
-            let spawnRate = Math.max(35, 55 - Math.floor(jumpGame.score / 25));
+            let spawnRate = Math.max(40, 60 - Math.floor(jumpGame.score / 20));
             if(jumpGame.spawnCounter > spawnRate) {
                 jumpGame.spawnCounter = 0;
                 const obstacleType = Math.random() > 0.7 ? 'bird' : 'rock';
                 jumpGame.obstacles.push({
                     x: w,
-                    y: h - 45 - (obstacleType === 'rock' ? 35 : 40),
-                    width: obstacleType === 'rock' ? 28 : 32,
-                    height: obstacleType === 'rock' ? 35 : 32,
+                    y: h - 45 - (obstacleType === 'rock' ? 38 : 42),
+                    width: obstacleType === 'rock' ? 30 : 34,
+                    height: obstacleType === 'rock' ? 38 : 34,
                     type: obstacleType
                 });
             }
@@ -816,7 +1364,7 @@
             // Actualizar obstáculos
             for(let i = 0; i < jumpGame.obstacles.length; i++) {
                 const obs = jumpGame.obstacles[i];
-                obs.x -= 4.5 + Math.floor(jumpGame.score / 120);
+                obs.x -= 4.8 + Math.floor(jumpGame.score / 100);
                 
                 if(obs.x + obs.width < 0) {
                     jumpGame.obstacles.splice(i, 1);
@@ -825,7 +1373,7 @@
                     i--;
                 }
                 
-                // Colisión
+                // Colisión mejorada
                 if(obs.x < jumpGame.player.x + jumpGame.player.width &&
                     obs.x + obs.width > jumpGame.player.x &&
                     obs.y < jumpGame.player.y + jumpGame.player.height &&
@@ -836,23 +1384,23 @@
                         localStorage.setItem('billyJumpBest', jumpGame.bestScore);
                         document.getElementById('jumpBest').textContent = jumpGame.bestScore;
                     }
-                    const reward = Math.floor(jumpGame.score * 5);
+                    const reward = Math.floor(jumpGame.score * 6);
                     addCoins(reward);
                     showJumpNotification(t.jumpReward.replace("{reward}", reward));
-                    document.getElementById('jumpInstruction').textContent = t.gameOver + " - " + t.restart;
+                    document.getElementById('jumpInstruction').innerHTML = `${t.gameOver} - ${t.restart}`;
                 }
             }
         }
         
-        // Dibujar obstáculos
+        // Dibujar obstáculos con estilo mejorado
         for(const obs of jumpGame.obstacles) {
             if(obs.type === 'rock') {
                 ctx.fillStyle = '#6B4E2E';
-                ctx.shadowBlur = 5;
+                ctx.shadowBlur = 4;
                 ctx.fillRect(obs.x, obs.y, obs.width, obs.height);
                 ctx.fillStyle = '#4A2A1A';
-                ctx.fillRect(obs.x + 5, obs.y + 8, 6, 12);
-                ctx.fillRect(obs.x + 15, obs.y + 5, 6, 15);
+                ctx.fillRect(obs.x + 6, obs.y + 10, 6, 12);
+                ctx.fillRect(obs.x + 16, obs.y + 6, 6, 16);
             } else {
                 ctx.fillStyle = '#4A4A4A';
                 ctx.beginPath();
@@ -860,23 +1408,23 @@
                 ctx.fill();
                 ctx.fillStyle = '#2D2D2D';
                 ctx.beginPath();
-                ctx.ellipse(obs.x + obs.width/2 - 6, obs.y + obs.height/2 - 4, 3, 3, 0, 0, Math.PI * 2);
-                ctx.ellipse(obs.x + obs.width/2 + 6, obs.y + obs.height/2 - 4, 3, 3, 0, 0, Math.PI * 2);
+                ctx.ellipse(obs.x + obs.width/2 - 7, obs.y + obs.height/2 - 5, 3, 3, 0, 0, Math.PI * 2);
+                ctx.ellipse(obs.x + obs.width/2 + 7, obs.y + obs.height/2 - 5, 3, 3, 0, 0, Math.PI * 2);
                 ctx.fill();
                 ctx.fillStyle = '#FF6B6B';
                 ctx.beginPath();
-                ctx.moveTo(obs.x + obs.width/2, obs.y + obs.height/2 + 5);
-                ctx.lineTo(obs.x + obs.width/2 - 5, obs.y + obs.height/2 + 12);
-                ctx.lineTo(obs.x + obs.width/2 + 5, obs.y + obs.height/2 + 12);
+                ctx.moveTo(obs.x + obs.width/2, obs.y + obs.height/2 + 6);
+                ctx.lineTo(obs.x + obs.width/2 - 6, obs.y + obs.height/2 + 14);
+                ctx.lineTo(obs.x + obs.width/2 + 6, obs.y + obs.height/2 + 14);
                 ctx.fill();
             }
         }
         
         ctx.shadowBlur = 0;
         
-        // Dibujar jugador (gato negro estilo Uni Jump)
+        // Dibujar jugador (gato negro con animación de salto)
         ctx.fillStyle = '#1a1a2a';
-        ctx.shadowBlur = 3;
+        ctx.shadowBlur = 4;
         ctx.beginPath();
         ctx.ellipse(jumpGame.player.x + jumpGame.player.width/2, jumpGame.player.y + jumpGame.player.height/2, 
                     jumpGame.player.width/2, jumpGame.player.height/2, 0, 0, Math.PI * 2);
@@ -885,17 +1433,17 @@
         // Orejas
         ctx.fillStyle = '#0a0a1a';
         ctx.beginPath();
-        ctx.moveTo(jumpGame.player.x + 6, jumpGame.player.y + 8);
-        ctx.lineTo(jumpGame.player.x + 14, jumpGame.player.y - 5);
-        ctx.lineTo(jumpGame.player.x + 22, jumpGame.player.y + 8);
+        ctx.moveTo(jumpGame.player.x + 7, jumpGame.player.y + 8);
+        ctx.lineTo(jumpGame.player.x + 15, jumpGame.player.y - 6);
+        ctx.lineTo(jumpGame.player.x + 23, jumpGame.player.y + 8);
         ctx.fill();
         ctx.beginPath();
-        ctx.moveTo(jumpGame.player.x + jumpGame.player.width - 6, jumpGame.player.y + 8);
-        ctx.lineTo(jumpGame.player.x + jumpGame.player.width - 14, jumpGame.player.y - 5);
-        ctx.lineTo(jumpGame.player.x + jumpGame.player.width - 22, jumpGame.player.y + 8);
+        ctx.moveTo(jumpGame.player.x + jumpGame.player.width - 7, jumpGame.player.y + 8);
+        ctx.lineTo(jumpGame.player.x + jumpGame.player.width - 15, jumpGame.player.y - 6);
+        ctx.lineTo(jumpGame.player.x + jumpGame.player.width - 23, jumpGame.player.y + 8);
         ctx.fill();
         
-        // Ojos
+        // Ojos brillantes
         ctx.fillStyle = '#FFD966';
         ctx.beginPath();
         ctx.ellipse(jumpGame.player.x + jumpGame.player.width/2 - 8, jumpGame.player.y + jumpGame.player.height/2 - 4, 4, 5, 0, 0, Math.PI * 2);
@@ -909,29 +1457,37 @@
         
         // Bigotes
         ctx.strokeStyle = 'white';
-        ctx.lineWidth = 1.5;
+        ctx.lineWidth = 1.2;
         ctx.beginPath();
         ctx.moveTo(jumpGame.player.x + jumpGame.player.width/2 - 12, jumpGame.player.y + jumpGame.player.height/2 - 2);
-        ctx.lineTo(jumpGame.player.x + jumpGame.player.width/2 - 22, jumpGame.player.y + jumpGame.player.height/2 - 5);
+        ctx.lineTo(jumpGame.player.x + jumpGame.player.width/2 - 24, jumpGame.player.y + jumpGame.player.height/2 - 5);
         ctx.moveTo(jumpGame.player.x + jumpGame.player.width/2 - 12, jumpGame.player.y + jumpGame.player.height/2);
-        ctx.lineTo(jumpGame.player.x + jumpGame.player.width/2 - 22, jumpGame.player.y + jumpGame.player.height/2);
+        ctx.lineTo(jumpGame.player.x + jumpGame.player.width/2 - 24, jumpGame.player.y + jumpGame.player.height/2);
         ctx.moveTo(jumpGame.player.x + jumpGame.player.width/2 - 12, jumpGame.player.y + jumpGame.player.height/2 + 2);
-        ctx.lineTo(jumpGame.player.x + jumpGame.player.width/2 - 22, jumpGame.player.y + jumpGame.player.height/2 + 5);
+        ctx.lineTo(jumpGame.player.x + jumpGame.player.width/2 - 24, jumpGame.player.y + jumpGame.player.height/2 + 5);
         ctx.stroke();
         ctx.beginPath();
         ctx.moveTo(jumpGame.player.x + jumpGame.player.width/2 + 12, jumpGame.player.y + jumpGame.player.height/2 - 2);
-        ctx.lineTo(jumpGame.player.x + jumpGame.player.width/2 + 22, jumpGame.player.y + jumpGame.player.height/2 - 5);
+        ctx.lineTo(jumpGame.player.x + jumpGame.player.width/2 + 24, jumpGame.player.y + jumpGame.player.height/2 - 5);
         ctx.moveTo(jumpGame.player.x + jumpGame.player.width/2 + 12, jumpGame.player.y + jumpGame.player.height/2);
-        ctx.lineTo(jumpGame.player.x + jumpGame.player.width/2 + 22, jumpGame.player.y + jumpGame.player.height/2);
+        ctx.lineTo(jumpGame.player.x + jumpGame.player.width/2 + 24, jumpGame.player.y + jumpGame.player.height/2);
         ctx.moveTo(jumpGame.player.x + jumpGame.player.width/2 + 12, jumpGame.player.y + jumpGame.player.height/2 + 2);
-        ctx.lineTo(jumpGame.player.x + jumpGame.player.width/2 + 22, jumpGame.player.y + jumpGame.player.height/2 + 5);
+        ctx.lineTo(jumpGame.player.x + jumpGame.player.width/2 + 24, jumpGame.player.y + jumpGame.player.height/2 + 5);
         ctx.stroke();
         
         ctx.shadowBlur = 0;
         
+        // Efecto de velocidad al fondo
+        if(jumpGame.score > 30) {
+            ctx.fillStyle = `rgba(255,255,200,${Math.min(0.3, jumpGame.score / 300)})`;
+            for(let i = 0; i < 10; i++) {
+                ctx.fillRect((jumpGame.frameCount * 3 + i * 50) % w, h - 70, 3, 8);
+            }
+        }
+        
         // Game Over
         if(jumpGame.gameOver) {
-            ctx.fillStyle = 'rgba(0,0,0,0.7)';
+            ctx.fillStyle = 'rgba(0,0,0,0.75)';
             ctx.fillRect(0, 0, w, h);
             ctx.fillStyle = 'white';
             ctx.font = 'bold 28px "Segoe UI"';
@@ -939,10 +1495,11 @@
             ctx.fillText(t.gameOver, w/2, h/2 - 30);
             ctx.font = '16px "Segoe UI"';
             ctx.fillText(t.restart, w/2, h/2 + 30);
-            ctx.fillText(`🏆 ${jumpGame.score} pts`, w/2, h/2 + 70);
+            ctx.fillStyle = '#FFD966';
+            ctx.fillText(`🏆 ${jumpGame.score} pts`, w/2, h/2 + 80);
         }
         
-        jumpGame.frameCount = (jumpGame.frameCount || 0) + 1;
+        jumpGame.frameCount++;
         jumpGame.animationId = requestAnimationFrame(updateJumpGame);
     }
     
@@ -955,7 +1512,7 @@
         jumpGame.gameOver = false;
         jumpGame.spawnCounter = 0;
         document.getElementById('jumpScore').textContent = 0;
-        document.getElementById('jumpInstruction').textContent = t.jumpInstructions;
+        document.getElementById('jumpInstruction').innerHTML = t.jumpInstructions;
     }
     
     function closeJumpGame() {
@@ -963,14 +1520,13 @@
         const container = document.getElementById('jumpGameContainer');
         if(container) container.remove();
         jumpGameActive = false;
-        document.getElementById('gameSelector').style.display = 'flex';
+        document.getElementById('startScreen').style.display = 'flex';
     }
     
     function showJumpNotification(msg) {
         const div = document.createElement('div');
-        div.className = 'notification';
+        div.className = 'notification achievement';
         div.textContent = msg;
-        div.style.cssText = 'position:fixed;top:45%;left:50%;transform:translate(-50%,-50%);background:linear-gradient(135deg,#14f195,#9945ff);color:white;padding:12px24px;border-radius:50px;z-index:1200;animation:fadeOutUp1sforwards;';
         document.body.appendChild(div);
         setTimeout(() => div.remove(), 1200);
     }
@@ -978,294 +1534,454 @@
     function openJumpGame() {
         if(jumpGameActive) return;
         jumpGameActive = true;
-        document.getElementById('gameSelector').style.display = 'none';
+        document.getElementById('startScreen').style.display = 'none';
         initJumpGame();
     }
     
-    // ==================== FUNCIONES DE NAVEGACIÓN ====================
+    // ==================== NAVEGACIÓN ====================
     function openClickerGame() {
-        document.getElementById('gameSelector').style.display = 'none';
+        document.getElementById('startScreen').style.display = 'none';
         document.getElementById('clickerGameContainer').classList.add('active');
         if(typeof startClickerGame === 'function') startClickerGame();
     }
     
     function backToMenu() {
-        document.getElementById('gameSelector').style.display = 'flex';
+        document.getElementById('startScreen').style.display = 'flex';
         document.getElementById('clickerGameContainer').classList.remove('active');
         if(typeof saveClickerGame === 'function') saveClickerGame();
     }
     
     // ==================== INICIALIZACIÓN ====================
-    function init() {
-        loadGlobalData();
-        updateMenuResources();
-        updateMenuTexts();
-        
-        document.getElementById('selectClickerBtn').onclick = openClickerGame;
-        document.getElementById('selectJumpBtn').onclick = openJumpGame;
-        document.getElementById('langEsBtn').onclick = () => setLanguage('es');
-        document.getElementById('langEnBtn').onclick = () => setLanguage('en');
-        
-        generateStars();
-    }
+    document.getElementById('selectClickerBtn').onclick = openClickerGame;
+    document.getElementById('selectJumpBtn').onclick = openJumpGame;
+    document.getElementById('langEsBtn').onclick = () => setLanguage('es');
+    document.getElementById('langEnBtn').onclick = () => setLanguage('en');
     
-    function generateStars() {
-        const starsDiv = document.getElementById('stars');
-        for(let i = 0; i < 150; i++) {
-            const star = document.createElement('div');
-            star.className = 'star';
-            star.style.left = Math.random() * 100 + '%';
-            star.style.top = Math.random() * 100 + '%';
-            star.style.width = star.style.height = (1 + Math.random() * 2) + 'px';
-            star.style.animationDelay = Math.random() * 2 + 's';
-            starsDiv.appendChild(star);
-        }
-    }
-    
-    // Estilo adicional para notificaciones
-    const style = document.createElement('style');
-    style.textContent = `
-        .notification {
-            position: fixed;
-            top: 45%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: linear-gradient(135deg, #facc15, #f59e0b);
-            color: #0c0a1a;
-            padding: 12px 24px;
-            border-radius: 50px;
-            font-weight: bold;
-            font-size: 16px;
-            z-index: 1200;
-            white-space: nowrap;
-            animation: fadeOutUp 1s forwards;
-            box-shadow: 0 4px 15px black;
-            pointer-events: none;
-        }
-        @keyframes fadeOutUp {
-            0% { opacity: 1; transform: translate(-50%, -50%) scale(0.9); }
-            100% { opacity: 0; transform: translate(-50%, -70%) scale(1.1); }
-        }
-    `;
-    document.head.appendChild(style);
-    
-    init();
-    
-    // Exponer funciones globales para el juego clicker
-    window.addCoins = addCoins;
-    window.addTokens = addTokens;
-    window.updateBillyMood = updateBillyMood;
-    window.getGlobalCoins = () => globalCoins;
-    window.getGlobalTokens = () => globalTokens;
-    window.backToMenu = backToMenu;
+    loadGlobalData();
+    updateMenuTexts();
 </script>
 
-<!-- Script del juego Clicker (versión simplificada pero funcional) -->
+<!-- Script del juego Clicker (Todas las funcionalidades anteriores) -->
 <script>
     // ==================== VARIABLES DEL CLICKER ====================
-    let clickerGameStarted = false;
-    let clickerCoins = 0;
-    let clickerLevel = 1;
-    let clickerMultiplier = 1;
-    let clickerTapPower = 1;
-    let clickerEnergy = 100;
-    let clickerMaxEnergy = 100;
-    let clickerCombo = 0;
-    let clickerBestCombo = 0;
-    let clickerTokens = 0;
-    let clickerTotalTaps = 0;
-    let clickerTotalMice = 0;
-    let clickerTotalCrits = 0;
-    let clickerComboTimer = null;
-    let clickerSuperCombo = false;
-    let clickerGoldenHour = false;
-    let clickerDoubleEvent = false;
+    let gameStarted = false;
+    let coins = 0;
+    let level = 1;
+    let multiplier = 1;
+    let tapPower = 1;
+    let energy = 100;
+    let maxEnergy = 100;
+    let combo = 0;
+    let bestCombo = 0;
+    let highScore = 0;
+    let comboTimer = null;
+    let billyTokens = 0;
+    let totalTaps = 0;
+    let totalMiceCaught = 0;
+    let totalCrits = 0;
+    let noCritCounter = 0;
+    let superComboActive = false;
+    let goldenBilly = false;
+    let musicEnabled = true;
     
-    let clickerMice = [];
-    let clickerBubbles = [];
-    let clickerMouseStreak = 0;
+    let quickTapStreak = 0;
+    let lastTapTime = 0;
+    let streakBonusMultiplier = 1;
     
-    // Habilidades
-    let clickerSkills = {
-        strength: 0, energy: 0, luck: 0, economy: 0
+    // Árbol de habilidades
+    let skills = {
+        strength: { level: 0, maxLevel: 5, bonus: 0, cost: [50, 150, 400, 1000, 2500] },
+        energy: { level: 0, maxLevel: 5, bonus: 0, cost: [40, 120, 300, 800, 2000] },
+        luck: { level: 0, maxLevel: 5, bonus: 0, cost: [60, 180, 450, 1200, 3000] },
+        economy: { level: 0, maxLevel: 5, bonus: 0, cost: [50, 150, 400, 1000, 2500] }
     };
     
-    // Mascotas
-    let clickerPets = {
-        dog: { unlocked: false, level: 0, equipped: false },
-        owl: { unlocked: false, level: 0, equipped: false },
-        bee: { unlocked: false, level: 0, equipped: false },
-        dragon: { unlocked: false, level: 0, equipped: false }
+    // Mascotas con funcionalidad real
+    let pets = {
+        dog: { id: 'dog', unlocked: false, level: 0, maxLevel: 3, equipped: false, name: '🐕 Perrito', effect: 0, effectValue: [0.3, 0.6, 1.0], cost: [300, 800, 2000] },
+        owl: { id: 'owl', unlocked: false, level: 0, maxLevel: 3, equipped: false, name: '🦉 Búho', effect: 0, effectValue: [5, 10, 15], cost: [400, 1000, 2500] },
+        bee: { id: 'bee', unlocked: false, level: 0, maxLevel: 3, equipped: false, name: '🐝 Abeja', effect: 0, effectValue: [5, 12, 25], cost: [250, 600, 1500] },
+        dragon: { id: 'dragon', unlocked: false, level: 0, maxLevel: 3, equipped: false, name: '🐉 Dragón', effect: 0, effectValue: [1.05, 1.10, 1.20], cost: [1000, 2500, 6000] }
     };
-    let clickerActivePet = null;
+    let activePet = null;
+    let petIntervals = [];
     
     // Skins
-    let clickerSkins = [
-        { name: "Original", unlocked: true, price: 0 },
-        { name: "Golden", unlocked: false, price: 500 },
-        { name: "Elite", unlocked: false, price: 1500 }
+    let skins = [
+        { name: "Original", nameEn: "Original", nameEs: "Original", unlocked: true, price: 0, emoji: "🐱" },
+        { name: "Golden", nameEn: "Golden", nameEs: "Dorado", unlocked: false, price: 500, emoji: "🐱✨" },
+        { name: "Elite", nameEn: "Elite", nameEs: "Élite", unlocked: false, price: 1500, emoji: "🐱🔥" }
     ];
-    let clickerCurrentSkin = 0;
+    let currentSkin = 0;
     
     // Desafíos
-    let clickerChallenges = { mice: 0, crits: 0, maxCombo: 0 };
+    let challenges = { mice: 0, crits: 0, maxCombo: 0 };
+    let weeklyRewards = { mice: 25, crits: 15, combo: 12 };
+    
+    // Logros
+    let achievements = {
+        taps100: false, taps500: false, taps1000: false,
+        mice50: false, mice200: false, combo20: false,
+        level10: false, crits100: false
+    };
+    
+    // Entidades
+    let mice = [];
+    let bubbles = [];
+    let mouseStreak = 0;
+    
+    // Eventos
+    let goldenHourActive = false;
+    let doubleEventActive = false;
     
     // Posición de Billy
-    let clickerTargetX = window.innerWidth / 2;
-    let clickerTargetY = window.innerHeight / 2;
-    let clickerBillyX = window.innerWidth / 2;
-    let clickerBillyY = window.innerHeight / 2;
+    let targetX = window.innerWidth / 2;
+    let targetY = window.innerHeight / 2;
+    let billyX = window.innerWidth / 2;
+    let billyY = window.innerHeight / 2;
     
-    function startClickerGame() {
-        clickerGameStarted = true;
-        loadClickerData();
-        updateClickerUI();
-        setupClickerEvents();
-        startClickerIntervals();
-        showClickerNotification("🐱 ¡Toca a Billy para comenzar!");
+    // ==================== FUNCIONES DE HABILIDADES ====================
+    function updateSkillBonuses() {
+        skills.strength.bonus = skills.strength.level * 0.5;
+        skills.energy.bonus = skills.energy.level * 20;
+        skills.luck.bonus = skills.luck.level * 3;
+        skills.economy.bonus = 1 + (skills.economy.level * 0.1);
+        
+        maxEnergy = 100 + Math.floor(level / 2) * 5 + skills.energy.bonus;
+        if(energy > maxEnergy) energy = maxEnergy;
+        return skills;
     }
     
-    function loadClickerData() {
-        const saved = localStorage.getItem('billyClickerData');
-        if(saved) {
-            try {
-                const data = JSON.parse(saved);
-                clickerCoins = data.coins || 0;
-                clickerLevel = data.level || 1;
-                clickerTapPower = data.tapPower || 1;
-                clickerTokens = data.tokens || 0;
-                clickerBestCombo = data.bestCombo || 0;
-                clickerTotalMice = data.totalMice || 0;
-                clickerTotalCrits = data.totalCrits || 0;
-                clickerSkills = data.skills || clickerSkills;
-                clickerPets = data.pets || clickerPets;
-                clickerActivePet = data.activePet || null;
-                clickerSkins = data.skins || clickerSkins;
-                clickerCurrentSkin = data.currentSkin || 0;
-            } catch(e) {}
+    function getLuckBonus() { return skills.luck.bonus; }
+    function getEconomyBonus() { return skills.economy.bonus; }
+    function getTapPowerBonus() { return 1 + (skills.strength.bonus / 10); }
+    function getDragonBonus() { return activePet === 'dragon' ? pets.dragon.effect : 1; }
+    
+    function upgradeSkill(skillId) {
+        const skill = skills[skillId];
+        if(skill.level < skill.maxLevel) {
+            const cost = skill.cost[skill.level];
+            if(billyTokens >= cost) {
+                billyTokens -= cost;
+                skill.level++;
+                updateSkillBonuses();
+                updateUI();
+                saveGame();
+                showNotification(`${t.skillUpgrade} ${skillId} ${skill.level}/${skill.maxLevel}`, "achievement");
+                return true;
+            } else {
+                showNotification(t.needTokens.replace("{cost}", cost - billyTokens));
+            }
         }
-        clickerMultiplier = 1 + Math.floor(clickerLevel / 4);
-        clickerMaxEnergy = 100 + Math.floor(clickerLevel / 2) * 5 + (clickerSkills.energy * 20);
-        clickerEnergy = clickerMaxEnergy;
-        updateClickerUI();
+        return false;
     }
     
-    function saveClickerData() {
-        localStorage.setItem('billyClickerData', JSON.stringify({
-            coins: clickerCoins, level: clickerLevel, tapPower: clickerTapPower,
-            tokens: clickerTokens, bestCombo: clickerBestCombo,
-            totalMice: clickerTotalMice, totalCrits: clickerTotalCrits,
-            skills: clickerSkills, pets: clickerPets, activePet: clickerActivePet,
-            skins: clickerSkins, currentSkin: clickerCurrentSkin
-        }));
-    }
-    
-    function updateClickerUI() {
-        document.getElementById('clickerCoins').textContent = Math.floor(clickerCoins);
-        document.getElementById('clickerLevel').textContent = clickerLevel;
-        document.getElementById('clickerMultiplier').textContent = clickerMultiplier;
-        document.getElementById('clickerTapPower').textContent = clickerTapPower;
-        document.getElementById('clickerCombo').textContent = clickerCombo;
-        document.getElementById('clickerEnergy').textContent = Math.floor(clickerEnergy);
-        document.getElementById('clickerMaxEnergy').textContent = clickerMaxEnergy;
-        document.getElementById('clickerEnergyFill').style.width = (clickerEnergy / clickerMaxEnergy * 100) + '%';
-        document.getElementById('clickerTokens').textContent = Math.floor(clickerTokens);
-        document.getElementById('clickerBestCombo').textContent = clickerBestCombo;
+    // ==================== MASCOTAS FUNCIONALES ====================
+    function startPetEffects() {
+        petIntervals.forEach(clearInterval);
+        petIntervals = [];
+        if(!activePet) return;
         
-        // Actualizar estado de ánimo
-        updateBillyMood(clickerCombo, clickerEnergy);
+        const pet = pets[activePet];
         
-        // Actualizar recursos globales
-        window.addCoins(0);
-        window.addTokens(clickerTokens);
-    }
-    
-    function tapBillyClicker(event) {
-        if(!clickerGameStarted || clickerEnergy <= 0) {
-            if(clickerEnergy <= 0) showClickerNotification("💤 ¡Sin energía!");
-            return;
+        if(activePet === 'dog') {
+            const interval = setInterval(() => {
+                if(gameStarted && mice.length > 0 && Math.random() < pet.effect * 0.5) {
+                    const randomMouse = mice[Math.floor(Math.random() * mice.length)];
+                    if(randomMouse) {
+                        const gain = Math.floor(randomMouse.value);
+                        coins += gain;
+                        totalMiceCaught++;
+                        showNotification(t.petCollect.replace("{value}", gain), "pet");
+                        mice = mice.filter(m => m !== randomMouse);
+                        renderEntities();
+                        updateUI();
+                        updateLevel();
+                    }
+                }
+            }, 8000);
+            petIntervals.push(interval);
         }
         
-        clickerCombo++;
-        if(clickerCombo > clickerBestCombo) clickerBestCombo = clickerBestCombo;
-        clickerTotalTaps++;
-        
-        // Crítico
-        let critChance = 10 + clickerSkills.luck * 2 + Math.floor(clickerCombo / 3);
-        if(clickerActivePet === 'owl') critChance += 10;
-        const isCrit = Math.random() * 100 < critChance;
-        if(isCrit) clickerTotalCrits++;
-        
-        // Ganancia
-        let gain = clickerTapPower * clickerMultiplier * (isCrit ? 3 : 1) * (1 + clickerCombo * 0.02);
-        if(clickerActivePet === 'dragon') gain *= (1 + clickerPets.dragon.level * 0.05);
-        if(clickerSuperCombo) gain *= 1.3;
-        if(clickerDoubleEvent) gain *= 2;
-        gain = Math.floor(gain);
-        
-        clickerCoins += gain;
-        clickerTokens += Math.floor(gain / 10);
-        
-        // Energía
-        let energyCost = Math.max(1, Math.floor(clickerCombo / 10));
-        clickerEnergy = Math.max(0, clickerEnergy - energyCost);
-        
-        updateClickerUI();
-        
-        // Reset combo timer
-        if(clickerComboTimer) clearTimeout(clickerComboTimer);
-        clickerComboTimer = setTimeout(() => {
-            if(clickerCombo >= 3) showClickerNotification("🔥 Combo perdido!");
-            clickerCombo = 0;
-            clickerSuperCombo = false;
-            updateClickerUI();
-        }, 2000);
-        
-        // Super combo
-        if(clickerCombo >= 12 && !clickerSuperCombo) {
-            clickerSuperCombo = true;
-            showClickerNotification("✨ SUPER COMBO! x1.3 ✨");
-            setTimeout(() => { clickerSuperCombo = false; }, 5000);
+        if(activePet === 'bee') {
+            const interval = setInterval(() => {
+                if(gameStarted) {
+                    const gain = Math.floor(pet.effect * getEconomyBonus());
+                    coins += gain;
+                    floatingNumber(gain, billyX, billyY - 30, false);
+                    showNotification(t.petGenerate.replace("{value}", gain), "pet");
+                    updateUI();
+                    updateLevel();
+                }
+            }, 30000);
+            petIntervals.push(interval);
         }
         
-        // Efectos visuales
+        if(activePet === 'owl') {
+            const interval = setInterval(() => {
+                if(gameStarted) showNotification(`🦉 ${t.petCrit} +${pet.effect}%`, "pet");
+            }, 45000);
+            petIntervals.push(interval);
+        }
+        
+        if(activePet === 'dragon') {
+            const interval = setInterval(() => {
+                if(gameStarted) showNotification(`🐉 ${t.petDragonDesc} x${pet.effect}`, "pet");
+            }, 60000);
+            petIntervals.push(interval);
+        }
+    }
+    
+    function unlockPet(petId) {
+        const pet = pets[petId];
+        if(!pet.unlocked) {
+            const cost = pet.cost[0];
+            if(billyTokens >= cost) {
+                billyTokens -= cost;
+                pet.unlocked = true;
+                pet.level = 1;
+                pet.effect = pet.effectValue[0];
+                updateUI();
+                saveGame();
+                showNotification(`🐾 ${pet.name} ${t.petUnlock}ed!`, "achievement");
+                return true;
+            } else {
+                showNotification(t.needTokens.replace("{cost}", cost - billyTokens));
+            }
+        }
+        return false;
+    }
+    
+    function upgradePet(petId) {
+        const pet = pets[petId];
+        if(pet.unlocked && pet.level < pet.maxLevel) {
+            const cost = pet.cost[pet.level];
+            if(billyTokens >= cost) {
+                billyTokens -= cost;
+                pet.level++;
+                pet.effect = pet.effectValue[pet.level - 1];
+                updateUI();
+                saveGame();
+                showNotification(`🐾 ${pet.name} ${t.petUpgrade} ${pet.level}/${pet.maxLevel}`, "achievement");
+                if(activePet === petId) startPetEffects();
+                return true;
+            } else {
+                showNotification(t.needTokens.replace("{cost}", cost - billyTokens));
+            }
+        }
+        return false;
+    }
+    
+    function equipPet(petId) {
+        if(activePet) pets[activePet].equipped = false;
+        if(pets[petId].unlocked) {
+            activePet = petId;
+            pets[petId].equipped = true;
+            updateUI();
+            saveGame();
+            startPetEffects();
+            showNotification(`🐾 ${pets[petId].name} ${t.equip}ed!`, "pet");
+            updatePetFollower();
+        }
+    }
+    
+    // ==================== TIENDA UNIFICADA ====================
+    function openShop() {
+        const modal = document.createElement('div');
+        modal.className = 'modal';
+        modal.innerHTML = `
+            <div class="modal-content">
+                <h2>${t.shopTitle}</h2>
+                <div class="shop-tabs">
+                    <div class="shop-tab active" data-tab="skins">${t.skinsTab}</div>
+                    <div class="shop-tab" data-tab="pets">${t.petsTab}</div>
+                    <div class="shop-tab" data-tab="skills">${t.skillsTab}</div>
+                </div>
+                <div id="skinsSection" class="shop-section active">
+                    ${skins.map((skin, idx) => `
+                        <div class="skin-item ${currentSkin === idx ? 'equipped' : ''}" onclick="equipSkin(${idx})">
+                            <div class="skin-info">
+                                <div class="skin-name">${skin[currentLang === 'es' ? 'nameEs' : 'nameEn']} ${skin.emoji}</div>
+                                ${!skin.unlocked ? `<div class="skin-price">${t.priceTokens.replace("{price}", skin.price)}</div>` : ''}
+                            </div>
+                            ${!skin.unlocked ? 
+                                `<button class="buy-btn" onclick="event.stopPropagation(); buySkin(${idx})">${t.buy}</button>` :
+                                `<button class="equip-btn" style="background:#22c55e;" onclick="event.stopPropagation(); equipSkin(${idx})">${currentSkin === idx ? t.equipped : t.equip}</button>`
+                            }
+                        </div>
+                    `).join('')}
+                </div>
+                <div id="petsSection" class="shop-section">
+                    ${Object.entries(pets).map(([id, pet]) => `
+                        <div class="pet-card ${activePet === id ? 'equipped' : ''}">
+                            <div class="pet-info">
+                                <div class="pet-name">${pet.name}</div>
+                                <div class="pet-desc">${pet.id === 'dog' ? t.petDogDesc : pet.id === 'owl' ? t.petOwlDesc : pet.id === 'bee' ? t.petBeeDesc : t.petDragonDesc}</div>
+                                ${pet.unlocked ? `<div class="pet-price">${t.petLevel.replace("{level}", `${pet.level}/${pet.maxLevel}`)} - ${pet.id === 'dog' ? `${pet.effect*100}%` : pet.id === 'bee' ? `${pet.effect} mon/min` : pet.id === 'owl' ? `+${pet.effect}%` : `x${pet.effect}`}</div>` : `<div class="pet-price">${t.priceTokens.replace("{price}", pet.cost[0])}</div>`}
+                            </div>
+                            <div>
+                                ${!pet.unlocked ? 
+                                    `<button class="buy-btn" onclick="unlockPet('${id}')">${t.petUnlock}</button>` :
+                                    pet.level < pet.maxLevel ?
+                                    `<button class="upgrade-btn" onclick="upgradePet('${id}')">${t.petUpgrade} (${pet.cost[pet.level]} BILLY)</button>` : ''
+                                }
+                                ${pet.unlocked && activePet !== id ? 
+                                    `<button class="equip-btn" onclick="equipPet('${id}')">${t.equip}</button>` :
+                                    activePet === id ? `<button class="equip-btn" disabled style="opacity:0.5;background:#22c55e;">${t.equipped}</button>` : ''
+                                }
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+                <div id="skillsSection" class="shop-section">
+                    ${Object.entries(skills).map(([id, skill]) => `
+                        <div class="skill-branch">
+                            <div class="skin-info">
+                                <div class="skin-name">${t[`skill${id.charAt(0).toUpperCase() + id.slice(1)}`] || id}</div>
+                                <div class="skin-price">${t[`skill${id.charAt(0).toUpperCase() + id.slice(1)}Desc`] || ''} (${skill.level}/${skill.maxLevel})</div>
+                            </div>
+                            <button class="buy-btn" onclick="upgradeSkill('${id}')" ${skill.level >= skill.maxLevel ? 'disabled' : ''}>
+                                ${skill.level >= skill.maxLevel ? t.skillMax : `${t.skillUpgrade} (${skill.cost[skill.level]} BILLY)`}
+                            </button>
+                        </div>
+                    `).join('')}
+                </div>
+                <button class="close-modal" onclick="this.closest('.modal').remove()">${t.close}</button>
+            </div>
+        `;
+        document.body.appendChild(modal);
+        
+        // Tabs functionality
+        const tabs = modal.querySelectorAll('.shop-tab');
+        const sections = { skins: modal.querySelector('#skinsSection'), pets: modal.querySelector('#petsSection'), skills: modal.querySelector('#skillsSection') };
+        tabs.forEach(tab => {
+            tab.onclick = () => {
+                tabs.forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                Object.keys(sections).forEach(s => sections[s].classList.remove('active'));
+                sections[tab.dataset.tab].classList.add('active');
+            };
+        });
+    }
+    
+    function buySkin(skinIndex) {
+        const skin = skins[skinIndex];
+        if(billyTokens >= skin.price) {
+            billyTokens -= skin.price;
+            skins[skinIndex].unlocked = true;
+            currentSkin = skinIndex;
+            updateUI();
+            showNotification(t.skinUnlocked.replace("{skin}", skin[currentLang === 'es' ? 'nameEs' : 'nameEn']), "achievement");
+            saveGame();
+            document.querySelector('.modal')?.remove();
+            openShop();
+        } else {
+            showNotification(t.needTokens.replace("{cost}", skin.price - billyTokens));
+        }
+    }
+    
+    function equipSkin(skinIndex) {
+        if(skins[skinIndex].unlocked) {
+            currentSkin = skinIndex;
+            updateUI();
+            showNotification(t.skinEquipped.replace("{skin}", skins[skinIndex][currentLang === 'es' ? 'nameEs' : 'nameEn']), "achievement");
+            saveGame();
+            document.querySelector('.modal')?.remove();
+            openShop();
+        }
+    }
+    
+    // ==================== FUNCIONES UI ====================
+    function updateUI() {
+        document.getElementById('level').textContent = level;
+        document.getElementById('coins').textContent = Math.floor(coins);
+        document.getElementById('multiplier').textContent = multiplier;
+        document.getElementById('tapPower').textContent = tapPower;
+        document.getElementById('comboCount').textContent = combo;
+        document.getElementById('energyCurrent').textContent = Math.floor(energy);
+        document.getElementById('energyMax').textContent = maxEnergy;
+        document.getElementById('energyFill').style.width = (energy / maxEnergy * 100) + '%';
+        document.getElementById('billyTokens').textContent = Math.floor(billyTokens);
+        document.getElementById('bestCombo').textContent = bestCombo;
+        document.getElementById('highScore').textContent = highScore;
+        
+        const petPanel = document.getElementById('petPanel');
+        if(activePet && pets[activePet]) {
+            petPanel.innerHTML = `<div class="pet-avatar">${pets[activePet].name.split(' ')[0]}</div><span>${pets[activePet].name} Lv${pets[activePet].level}</span>`;
+        } else {
+            petPanel.innerHTML = `<div class="pet-avatar">🐾</div><span>${t.pets}</span>`;
+        }
+        
+        if(coins > highScore) highScore = Math.floor(coins);
+        
+        const streakEl = document.getElementById('streakIndicator');
+        if(streakEl && quickTapStreak > 1) {
+            streakEl.innerHTML = `⚡ ${t.tapStreak || 'Racha'} ${quickTapStreak}x`;
+            streakEl.style.display = 'block';
+        } else if(streakEl) streakEl.style.display = 'none';
+        
         const billyDiv = document.getElementById('billy');
-        billyDiv.style.transform = 'scale(0.92)';
-        setTimeout(() => billyDiv.style.transform = 'scale(1)', 100);
+        if(currentSkin === 1) billyDiv.style.background = 'radial-gradient(circle, #FFD700, #FFA500)';
+        else if(currentSkin === 2) billyDiv.style.background = 'radial-gradient(circle, #FF6B6B, #FF4444)';
+        else billyDiv.style.background = 'radial-gradient(circle, #FFD966, #FFA500)';
         
-        const clickX = event.clientX || (event.touches ? event.touches[0].clientX : clickerBillyX);
-        const clickY = event.clientY || (event.touches ? event.touches[0].clientY : clickerBillyY);
-        createClickerRipple(clickX, clickY);
-        createClickerParticles(clickX, clickY, isCrit ? '#FFD966' : '#A5F0A0');
-        createClickerFloatingNumber(gain, clickX, clickY, isCrit);
+        if(goldenBilly || superComboActive) billyDiv.classList.add('billy-golden');
+        else billyDiv.classList.remove('billy-golden');
         
-        // Nivel up
-        let neededCoins = 100 * Math.pow(1.3, clickerLevel - 1);
-        if(clickerCoins >= neededCoins) {
-            clickerLevel++;
-            clickerMultiplier = 1 + Math.floor(clickerLevel / 4);
-            clickerMaxEnergy = 100 + Math.floor(clickerLevel / 2) * 5 + (clickerSkills.energy * 20);
-            clickerEnergy = Math.min(clickerMaxEnergy, clickerEnergy + 40);
-            showClickerNotification(`🎉 NIVEL ${clickerLevel}! +40 energía 🎉`);
-            updateClickerUI();
-        }
-        
-        saveClickerData();
+        updatePetFollower();
     }
     
-    function createClickerRipple(x, y) {
+    function updatePetFollower() {
+        const follower = document.getElementById('petFollower');
+        if(activePet) {
+            let emoji = '';
+            switch(activePet) {
+                case 'dog': emoji = '🐕'; break;
+                case 'owl': emoji = '🦉'; break;
+                case 'bee': emoji = '🐝'; break;
+                case 'dragon': emoji = '🐉'; break;
+            }
+            follower.textContent = emoji;
+            follower.style.display = 'block';
+        } else {
+            follower.style.display = 'none';
+        }
+    }
+    
+    function showNotification(msg, type = "normal") {
+        const div = document.createElement('div');
+        div.className = `notification ${type}`;
+        div.textContent = msg;
+        document.body.appendChild(div);
+        setTimeout(() => div.remove(), 1200);
+    }
+    
+    function floatingNumber(value, x, y, isCrit = false) {
+        const div = document.createElement('div');
+        div.className = 'floating-number';
+        div.textContent = `+${Math.floor(value)}`;
+        div.style.left = x + 'px';
+        div.style.top = y + 'px';
+        div.style.color = isCrit ? '#FFD966' : '#FFFFFF';
+        document.body.appendChild(div);
+        setTimeout(() => div.remove(), 700);
+    }
+    
+    function createRipple(x, y) {
         const ripple = document.createElement('div');
-        ripple.style.cssText = `position:fixed;left:${x-35}px;top:${y-35}px;width:70px;height:70px;border-radius:50%;background:radial-gradient(circle,rgba(251,191,36,0.6) 0%,rgba(251,191,36,0) 80%);pointer-events:none;z-index:90;animation:rippleAnim 0.5s ease-out forwards;`;
+        ripple.className = 'ripple';
+        ripple.style.left = (x - 35) + 'px';
+        ripple.style.top = (y - 35) + 'px';
         document.body.appendChild(ripple);
         setTimeout(() => ripple.remove(), 500);
     }
     
-    function createClickerParticles(x, y, color) {
-        for(let i = 0; i < 8; i++) {
+    function createParticles(x, y, color) {
+        for(let i = 0; i < 12; i++) {
             const particle = document.createElement('div');
             particle.style.cssText = `position:fixed;left:${x}px;top:${y}px;width:6px;height:6px;background:${color};border-radius:50%;pointer-events:none;z-index:100;`;
             const angle = Math.random() * Math.PI * 2;
-            const speed = 2 + Math.random() * 4;
+            const speed = 2 + Math.random() * 5;
             let vx = Math.cos(angle) * speed;
             let vy = Math.sin(angle) * speed - 2;
             let life = 30;
@@ -1282,46 +1998,489 @@
         }
     }
     
-    function createClickerFloatingNumber(value, x, y, isCrit) {
-        const div = document.createElement('div');
-        div.style.cssText = `position:fixed;left:${x}px;top:${y}px;font-weight:bold;font-size:${isCrit ? '32px' : '28px'};color:${isCrit ? '#FFD966' : 'white'};text-shadow:0 0 5px black;pointer-events:none;z-index:150;animation:floatUp 0.8s forwards;`;
-        div.textContent = `+${Math.floor(value)}`;
-        document.body.appendChild(div);
-        setTimeout(() => div.remove(), 700);
-    }
-    
-    function showClickerNotification(msg) {
-        const div = document.createElement('div');
-        div.className = 'notification';
-        div.textContent = msg;
-        document.body.appendChild(div);
-        setTimeout(() => div.remove(), 1200);
-    }
-    
-    function setupClickerEvents() {
-        const billyDiv = document.getElementById('billy');
-        billyDiv.addEventListener('click', tapBillyClicker);
-        billyDiv.addEventListener('touchstart', (e) => { e.preventDefault(); tapBillyClicker(e); });
-        
-        document.addEventListener('mousemove', (e) => { clickerTargetX = e.clientX; clickerTargetY = e.clientY; });
-        document.addEventListener('touchmove', (e) => {
-            e.preventDefault();
-            const t = e.touches[0];
-            clickerTargetX = t.clientX; clickerTargetY = t.clientY;
-        }, { passive: false });
-        
-        function updateBillyPosition() {
-            if(!clickerGameStarted) return;
-            clickerBillyX += (clickerTargetX - clickerBillyX) * 0.12;
-            clickerBillyY += (clickerTargetY - clickerBillyY) * 0.12;
-            const billyDiv = document.getElementById('billy');
-            billyDiv.style.left = (clickerBillyX - billyDiv.offsetWidth / 2) + 'px';
-            billyDiv.style.top = (clickerBillyY - billyDiv.offsetHeight / 2) + 'px';
-            requestAnimationFrame(updateBillyPosition);
+    // ==================== SISTEMA DE COMBO ====================
+    function addCombo() {
+        combo++;
+        if(combo > bestCombo) {
+            bestCombo = combo;
+            if(combo > challenges.maxCombo) challenges.maxCombo = combo;
         }
+        
+        const comboEl = document.getElementById('comboCount');
+        comboEl.style.animation = 'none';
+        comboEl.offsetHeight;
+        comboEl.style.animation = 'glow 0.3s ease';
+        setTimeout(() => comboEl.style.animation = '', 300);
+        
+        if(combo >= 12 && !superComboActive) {
+            superComboActive = true;
+            goldenBilly = true;
+            showNotification(t.superCombo);
+            setTimeout(() => {
+                if(combo < 12) { goldenBilly = false; superComboActive = false; }
+            }, 5000);
+        }
+        
+        clearTimeout(comboTimer);
+        comboTimer = setTimeout(() => {
+            if(combo >= 3) showNotification(t.comboLost);
+            combo = 0;
+            superComboActive = false;
+            goldenBilly = false;
+            updateUI();
+        }, 2000);
+        
+        updateUI();
+        updateChallenges();
+    }
+    
+    function updateQuickTapStreak() {
+        const now = Date.now();
+        if(now - lastTapTime < 800) {
+            quickTapStreak++;
+            if(quickTapStreak > 10) quickTapStreak = 10;
+            streakBonusMultiplier = 1 + (quickTapStreak * 0.05);
+        } else {
+            quickTapStreak = 1;
+            streakBonusMultiplier = 1;
+        }
+        lastTapTime = now;
+        
+        if(quickTapStreak >= 5 && quickTapStreak % 5 === 0) {
+            showNotification(`${t.streakBonus || '🔥 RACHA RÁPIDA!'} +${Math.floor(quickTapStreak * 5)} BILLY`, "achievement");
+            billyTokens += quickTapStreak * 5;
+            updateUI();
+        }
+        return streakBonusMultiplier;
+    }
+    
+    // ==================== SISTEMA DE NIVEL ====================
+    function updateLevel() {
+        let needed = 120 * Math.pow(1.28, level - 1);
+        if(coins >= needed) {
+            level++;
+            multiplier = 1 + Math.floor(level / 4);
+            updateSkillBonuses();
+            energy = Math.min(maxEnergy, energy + 40);
+            showNotification(t.levelUp.replace("{level}", level), "achievement");
+            updateUI();
+            checkAchievements();
+            updateLevel();
+        }
+    }
+    
+    // ==================== TAP EN BILLY ====================
+    function tapBilly(event) {
+        if(!gameStarted) return;
+        if(energy <= 0) { showNotification(t.noEnergy); return; }
+        
+        const streakBonus = updateQuickTapStreak();
+        addCombo();
+        totalTaps++;
+        if(window.navigator && window.navigator.vibrate) window.navigator.vibrate(50);
+        
+        let critChance = 12 + Math.floor(combo / 2.5) + getLuckBonus();
+        if(activePet === 'owl') critChance += pets.owl.effect;
+        if(noCritCounter >= 8) { critChance = 100; noCritCounter = 0; showNotification(t.critGuaranteed, "crit"); }
+        
+        const isCrit = Math.random() * 100 < critChance;
+        if(isCrit) { noCritCounter = 0; totalCrits++; challenges.crits++; }
+        else noCritCounter++;
+        
+        let gain = tapPower * multiplier * (isCrit ? 4 : 1) * (1 + combo * 0.03) * streakBonus * getTapPowerBonus() * getEconomyBonus() * getDragonBonus();
+        if(superComboActive) gain *= 1.5;
+        if(doubleEventActive) gain *= 2;
+        gain = Math.floor(Math.max(1, gain));
+        coins += gain;
+        
+        let energyCost = Math.max(1, Math.floor(combo / 8));
+        energy = Math.max(0, energy - energyCost);
+        
+        updateUI();
+        updateLevel();
+        billyTokens += Math.floor(gain / 10);
+        
+        const billyDiv = document.getElementById('billy');
+        billyDiv.style.transform = 'scale(0.92)';
+        setTimeout(() => billyDiv.style.transform = 'scale(1)', 100);
+        
+        const clickX = event.clientX || (event.touches ? event.touches[0].clientX : billyX);
+        const clickY = event.clientY || (event.touches ? event.touches[0].clientY : billyY);
+        
+        createRipple(clickX, clickY);
+        createParticles(clickX, clickY, isCrit ? '#FFD966' : '#A5F0A0');
+        floatingNumber(gain, clickX, clickY, isCrit);
+        
+        updateChallenges();
+        checkAchievements();
+        playSound(isCrit ? 880 : 660);
+    }
+    
+    function playSound(freq) {
+        try {
+            const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            const osc = audioCtx.createOscillator();
+            const gainNode = audioCtx.createGain();
+            osc.connect(gainNode);
+            gainNode.connect(audioCtx.destination);
+            osc.frequency.value = freq;
+            gainNode.gain.value = 0.08;
+            osc.start();
+            gainNode.gain.exponentialRampToValueAtTime(0.00001, audioCtx.currentTime + 0.2);
+            osc.stop(audioCtx.currentTime + 0.2);
+        } catch(e) {}
+    }
+    
+    // ==================== RATONES ====================
+    function spawnMouse() {
+        if(!gameStarted || mice.length > 10) return;
+        const rand = Math.random();
+        let isGolden = goldenHourActive ? true : rand < 0.12;
+        let isBoss = !isGolden && rand < 0.2 && level >= 3;
+        
+        const size = isBoss ? 70 : 45;
+        const yPos = 100 + Math.random() * (window.innerHeight - 220);
+        const fromLeft = Math.random() < 0.5;
+        const xStart = fromLeft ? -70 : window.innerWidth + 70;
+        const dir = fromLeft ? 1 : -1;
+        let valueMulti = isBoss ? 12 : (isGolden ? 7 : 2.5);
+        const value = Math.floor(tapPower * multiplier * valueMulti * getEconomyBonus() * getDragonBonus());
+        
+        mice.push({ x: xStart, y: yPos, size: size, dir: dir, speed: isBoss ? 0.9 : 1.4 + Math.random() * 1.2, isGolden: isGolden, isBoss: isBoss, value: value });
+    }
+    
+    function updateMice() {
+        for(let i = mice.length - 1; i >= 0; i--) {
+            mice[i].x += mice[i].speed * mice[i].dir;
+            if((mice[i].dir === 1 && mice[i].x > window.innerWidth + 100) || (mice[i].dir === -1 && mice[i].x < -100)) mice.splice(i, 1);
+        }
+    }
+    
+    function catchMouse(index, clickX, clickY) {
+        if(index >= mice.length) return;
+        const m = mice[index];
+        const gain = Math.floor(m.value);
+        coins += gain;
+        totalMiceCaught++;
+        challenges.mice++;
+        mouseStreak++;
+        
+        if(mouseStreak >= 3) {
+            let bonus = Math.floor(gain * 0.4);
+            coins += bonus;
+            floatingNumber(bonus, clickX, clickY - 30, false);
+            showNotification(t.mouseStreak);
+            mouseStreak = 0;
+        }
+        
+        createParticles(clickX, clickY, m.isGolden ? '#FFD966' : '#F59E0B');
+        floatingNumber(gain, clickX, clickY, m.isGolden);
+        billyTokens += Math.floor(gain / 10);
+        
+        updateUI();
+        updateLevel();
+        updateChallenges();
+        checkAchievements();
+        
+        mice.splice(index, 1);
+        renderEntities();
+    }
+    
+    // ==================== BURBUJAS ====================
+    function spawnBubble() {
+        if(!gameStarted || bubbles.length > 6) return;
+        const size = 45 + Math.random() * 35;
+        bubbles.push({
+            x: 40 + Math.random() * (window.innerWidth - size - 40),
+            y: 120 + Math.random() * (window.innerHeight - 240),
+            size: size,
+            value: Math.floor(tapPower * multiplier * (Math.random() < 0.25 ? 5 : 2.2) * getEconomyBonus() * getDragonBonus()),
+            life: 8000, created: Date.now()
+        });
+    }
+    
+    function updateBubbles() {
+        const now = Date.now();
+        for(let i = bubbles.length - 1; i >= 0; i--) {
+            if(now - bubbles[i].created > bubbles[i].life) bubbles.splice(i, 1);
+        }
+    }
+    
+    function catchBubble(index, clickX, clickY) {
+        if(index >= bubbles.length) return;
+        const b = bubbles[index];
+        const gain = Math.floor(b.value);
+        coins += gain;
+        createParticles(clickX, clickY, '#FFD966');
+        floatingNumber(gain, clickX, clickY, true);
+        billyTokens += Math.floor(gain / 10);
+        updateUI();
+        updateLevel();
+        bubbles.splice(index, 1);
+        renderEntities();
+    }
+    
+    function renderEntities() {
+        const container = document.getElementById('gameArea');
+        const existing = container.querySelectorAll('.game-entity');
+        existing.forEach(el => el.remove());
+        
+        mice.forEach((m, idx) => {
+            const div = document.createElement('div');
+            let className = 'game-entity ';
+            if(m.isBoss) className += 'mouse-boss';
+            else if(m.isGolden) className += 'mouse-golden';
+            else className += 'mouse-normal';
+            div.className = className;
+            div.style.left = (m.x - m.size/2) + 'px';
+            div.style.top = (m.y - m.size/2) + 'px';
+            div.style.width = m.size + 'px';
+            div.style.height = m.size + 'px';
+            div.style.fontSize = (m.size/2.2) + 'px';
+            div.textContent = m.isBoss ? '🐀👑' : (m.isGolden ? '🐭✨' : '🐭');
+            div.dataset.type = 'mouse';
+            div.dataset.idx = idx;
+            container.appendChild(div);
+        });
+        
+        bubbles.forEach((b, idx) => {
+            const div = document.createElement('div');
+            div.className = 'game-entity bubble';
+            div.style.left = (b.x - b.size/2) + 'px';
+            div.style.top = (b.y - b.size/2) + 'px';
+            div.style.width = b.size + 'px';
+            div.style.height = b.size + 'px';
+            div.style.fontSize = (b.size/2) + 'px';
+            div.textContent = '🎁';
+            div.dataset.type = 'bubble';
+            div.dataset.idx = idx;
+            container.appendChild(div);
+        });
+    }
+    
+    // ==================== DESAFÍOS ====================
+    function updateChallenges() {
+        const panel = document.getElementById('challengesPanel');
+        if(panel) {
+            panel.innerHTML = `
+                <div class="challenge-item">${t.mouse} ${challenges.mice}/${weeklyRewards.mice}</div>
+                <div class="challenge-item">${t.crits} ${challenges.crits}/${weeklyRewards.crits}</div>
+                <div class="challenge-item">🔥 ${challenges.maxCombo}/${weeklyRewards.combo}</div>
+            `;
+        }
+        
+        if(challenges.mice >= weeklyRewards.mice) { coins += 250; challenges.mice = 0; showNotification(t.challengeMice?.replace("{reward}", 250), "achievement"); updateUI(); }
+        if(challenges.crits >= weeklyRewards.crits) { coins += 200; challenges.crits = 0; showNotification(t.challengeCrits?.replace("{reward}", 200), "achievement"); updateUI(); }
+        if(challenges.maxCombo >= weeklyRewards.combo) { coins += 350; challenges.maxCombo = 0; showNotification(t.challengeCombo?.replace("{reward}", 350), "achievement"); updateUI(); }
+    }
+    
+    // ==================== LOGROS ====================
+    function checkAchievements() {
+        let newAchievement = false;
+        if(!achievements.taps100 && totalTaps >= 100) { achievements.taps100 = true; billyTokens += 100; newAchievement = true; showNotification(t.achievement1 + " +100 BILLY", "achievement"); }
+        if(!achievements.taps500 && totalTaps >= 500) { achievements.taps500 = true; billyTokens += 300; newAchievement = true; showNotification(t.achievement2 + " +300 BILLY", "achievement"); }
+        if(!achievements.taps1000 && totalTaps >= 1000) { achievements.taps1000 = true; billyTokens += 500; newAchievement = true; showNotification(t.achievement3 + " +500 BILLY", "achievement"); }
+        if(!achievements.mice50 && totalMiceCaught >= 50) { achievements.mice50 = true; billyTokens += 150; newAchievement = true; showNotification(t.achievement4 + " +150 BILLY", "achievement"); }
+        if(!achievements.mice200 && totalMiceCaught >= 200) { achievements.mice200 = true; billyTokens += 400; newAchievement = true; showNotification(t.achievement5 + " +400 BILLY", "achievement"); }
+        if(!achievements.combo20 && bestCombo >= 20) { achievements.combo20 = true; billyTokens += 250; newAchievement = true; showNotification(t.achievement6 + " +250 BILLY", "achievement"); }
+        if(!achievements.level10 && level >= 10) { achievements.level10 = true; billyTokens += 500; newAchievement = true; showNotification(t.achievement7 + " +500 BILLY", "achievement"); }
+        if(!achievements.crits100 && totalCrits >= 100) { achievements.crits100 = true; billyTokens += 200; newAchievement = true; showNotification(t.achievement8 + " +200 BILLY", "achievement"); }
+        if(newAchievement) { updateUI(); saveGame(); }
+    }
+    
+    // ==================== EVENTOS ESPECIALES ====================
+    setInterval(() => {
+        if(gameStarted && Math.random() < 0.15 && !goldenHourActive) {
+            goldenHourActive = true;
+            showNotification(t.goldenHour);
+            setTimeout(() => { goldenHourActive = false; showNotification(t.goldenHourEnd); }, 10000);
+        }
+    }, 35000);
+    
+    setInterval(() => {
+        if(gameStarted && Math.random() < 0.1 && !doubleEventActive) {
+            doubleEventActive = true;
+            showNotification(t.doubleEvent);
+            setTimeout(() => { doubleEventActive = false; showNotification(t.doubleEnd); updateUI(); }, 15000);
+            updateUI();
+        }
+    }, 50000);
+    
+    // ==================== CARGA Y GUARDADO ====================
+    function loadGame() {
+        const saved = localStorage.getItem('billyClickerV5');
+        if(saved) {
+            try {
+                const data = JSON.parse(saved);
+                coins = data.coins || 0;
+                level = data.level || 1;
+                tapPower = data.tapPower || 1;
+                billyTokens = data.billyTokens || 0;
+                bestCombo = data.bestCombo || 0;
+                highScore = data.highScore || 0;
+                totalMiceCaught = data.totalMiceCaught || 0;
+                totalCrits = data.totalCrits || 0;
+                skins = data.skins || skins;
+                currentSkin = data.currentSkin || 0;
+                achievements = data.achievements || achievements;
+                skills = data.skills || skills;
+                pets = data.pets || pets;
+                activePet = data.activePet || null;
+                if(activePet) pets[activePet].equipped = true;
+                multiplier = 1 + Math.floor(level / 4);
+                updateSkillBonuses();
+                maxEnergy = 100 + Math.floor(level / 2) * 5 + skills.energy.bonus;
+                energy = Math.min(maxEnergy, data.energy || 100);
+            } catch(e) {}
+        }
+        // Sincronizar con recursos globales
+        window.addCoins(0);
+        window.addTokens(billyTokens);
+    }
+    
+    function saveGame() {
+        localStorage.setItem('billyClickerV5', JSON.stringify({
+            coins, level, tapPower, billyTokens, bestCombo, highScore,
+            totalMiceCaught, totalCrits, skins, currentSkin, achievements,
+            skills, pets, activePet, energy
+        }));
+    }
+    
+    // ==================== POSICIÓN DE BILLY ====================
+    function updateBillyPosition() {
+        if(!gameStarted) return;
+        billyX += (targetX - billyX) * 0.12;
+        billyY += (targetY - billyY) * 0.12;
+        const billyDiv = document.getElementById('billy');
+        billyDiv.style.left = (billyX - billyDiv.offsetWidth / 2) + 'px';
+        billyDiv.style.top = (billyY - billyDiv.offsetHeight / 2) + 'px';
+        if(activePet) {
+            const follower = document.getElementById('petFollower');
+            follower.style.left = (billyX - 45) + 'px';
+            follower.style.top = (billyY - 35) + 'px';
+        }
+        requestAnimationFrame(updateBillyPosition);
+    }
+    
+    // ==================== BOTONES DEL JUEGO ====================
+    function setupButtons() {
+        document.getElementById('upgradeBtn').onclick = () => {
+            let cost = Math.floor(60 * Math.pow(1.42, tapPower - 1));
+            if(coins >= cost) {
+                coins -= cost;
+                tapPower++;
+                updateUI();
+                showNotification(t.powerUp.replace("{power}", tapPower), "achievement");
+                createParticles(billyX, billyY, '#FFD966');
+            } else {
+                showNotification(t.upgradeCost.replace("{cost}", Math.floor(cost - coins)));
+            }
+        };
+        
+        document.getElementById('lootBtn').onclick = () => {
+            if(coins >= 45) {
+                coins -= 45;
+                let reward = 60 + Math.floor(Math.random() * 180);
+                reward = Math.floor(reward * getEconomyBonus() * getDragonBonus());
+                coins += reward;
+                updateUI();
+                updateLevel();
+                showNotification(t.lootReward.replace("{reward}", reward), "achievement");
+                createParticles(billyX, billyY, '#FFD966');
+            } else {
+                showNotification(t.needCoins?.replace("{cost}", 45) || `💔 Necesitas 45 monedas`);
+            }
+        };
+        
+        document.getElementById('skillsBtn').onclick = () => openShop();
+        document.getElementById('petsBtn').onclick = () => openShop();
+        document.getElementById('shopBtn').onclick = () => openShop();
+        
+        document.getElementById('toggleMusicBtn').onclick = () => {
+            musicEnabled = !musicEnabled;
+            document.getElementById('toggleMusicBtn').innerHTML = `${t.music} ${musicEnabled ? 'ON' : 'OFF'}`;
+        };
+        
+        document.getElementById('shareXBtn').onclick = () => {
+            const shareText = currentLang === 'es' ?
+                `🐱 ¡Billy El Gato! Nivel ${level} | ${Math.floor(coins)} monedas | Mejor combo ${bestCombo} | Atrapé ${totalMiceCaught} ratones! 🎮 #BillyElGato #Solana` :
+                `🐱 Billy The Cat! Level ${level} | ${Math.floor(coins)} coins | Best combo ${bestCombo} | Caught ${totalMiceCaught} mice! 🎮 #BillyTheCat #Solana`;
+            window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}`, '_blank');
+        };
+        
+        document.getElementById('tokenBar').onclick = () => showNotification(t.tokenMessage?.replace("{tokens}", Math.floor(billyTokens)) || `💰 ${Math.floor(billyTokens)} BILLY tokens`);
+        document.querySelector('.records-panel').onclick = () => openStats();
+        document.querySelector('.pet-panel').onclick = () => openShop();
+    }
+    
+    function openStats() {
+        const critRate = totalTaps > 0 ? ((totalCrits / totalTaps) * 100).toFixed(1) : 0;
+        const modal = document.createElement('div');
+        modal.className = 'modal';
+        modal.innerHTML = `
+            <div class="modal-content">
+                <h2>${t.stats || '📊 Estadísticas'}</h2>
+                <div class="stat-line" style="display:flex;justify-content:space-between;padding:8px;border-bottom:1px solid rgba(255,255,255,0.2);color:white;"><span>${t.totalTaps || 'Toques'}:</span><span>${totalTaps}</span></div>
+                <div class="stat-line" style="display:flex;justify-content:space-between;padding:8px;border-bottom:1px solid rgba(255,255,255,0.2);color:white;"><span>${t.totalMice || 'Ratones'}:</span><span>${totalMiceCaught}</span></div>
+                <div class="stat-line" style="display:flex;justify-content:space-between;padding:8px;border-bottom:1px solid rgba(255,255,255,0.2);color:white;"><span>${t.totalCrits || 'Críticos'}:</span><span>${totalCrits}</span></div>
+                <div class="stat-line" style="display:flex;justify-content:space-between;padding:8px;border-bottom:1px solid rgba(255,255,255,0.2);color:white;"><span>${t.critRate || 'Tasa crítica'}:</span><span>${critRate}%</span></div>
+                <div class="stat-line" style="display:flex;justify-content:space-between;padding:8px;border-bottom:1px solid rgba(255,255,255,0.2);color:white;"><span>${t.bestCombo}:</span><span>${bestCombo}</span></div>
+                <button class="close-modal" onclick="this.closest('.modal').remove()">${t.close}</button>
+            </div>
+        `;
+        document.body.appendChild(modal);
+    }
+    
+    // ==================== INICIAR JUEGO CLICKER ====================
+    function startClickerGame() {
+        gameStarted = true;
+        loadGame();
+        updateUI();
+        updateChallenges();
+        setupButtons();
+        startPetEffects();
+        
+        const billyDiv = document.getElementById('billy');
+        billyDiv.addEventListener('click', tapBilly);
+        billyDiv.addEventListener('touchstart', (e) => { e.preventDefault(); tapBilly(e); });
+        
+        document.addEventListener('mousemove', (e) => { targetX = e.clientX; targetY = e.clientY; });
+        document.addEventListener('touchmove', (e) => { e.preventDefault(); const t = e.touches[0]; targetX = t.clientX; targetY = t.clientY; }, { passive: false });
+        
+        document.getElementById('gameArea').addEventListener('click', (e) => {
+            let target = e.target;
+            while(target && target !== document.getElementById('gameArea')) {
+                if(target.classList && target.classList.contains('game-entity')) {
+                    const type = target.dataset.type;
+                    const idx = parseInt(target.dataset.idx);
+                    if(type === 'mouse') catchMouse(idx, e.clientX, e.clientY);
+                    else if(type === 'bubble') catchBubble(idx, e.clientX, e.clientY);
+                    e.stopPropagation();
+                    return;
+                }
+                target = target.parentElement;
+            }
+        });
+        
         updateBillyPosition();
         
-        // Botón de volver
+        setInterval(() => spawnMouse(), 3800);
+        setInterval(() => spawnBubble(), 6000);
+        setInterval(() => { updateMice(); updateBubbles(); renderEntities(); }, 50);
+        
+        setInterval(() => {
+            if(gameStarted) {
+                let regen = Math.max(1, Math.floor(combo / 5)) + Math.floor(skills.energy.level / 2);
+                energy = Math.min(maxEnergy, energy + regen);
+                updateUI();
+            }
+        }, 1500);
+        
+        setInterval(() => saveGame(), 10000);
+        
+        showNotification(t.startDesc || "🐱 ¡Toca a Billy para comenzar!");
+        
+        // Botón volver
         const backBtn = document.createElement('button');
         backBtn.className = 'menu-btn';
         backBtn.style.position = 'fixed';
@@ -1330,138 +2489,81 @@
         backBtn.style.zIndex = '100';
         backBtn.style.padding = '8px 16px';
         backBtn.style.background = 'rgba(0,0,0,0.7)';
-        backBtn.innerHTML = '← VOLVER';
+        backBtn.innerHTML = '← ' + t.back;
         backBtn.onclick = () => {
-            clickerGameStarted = false;
-            saveClickerData();
+            gameStarted = false;
+            saveGame();
             backToMenu();
         };
         document.getElementById('clickerGameContainer').appendChild(backBtn);
     }
     
-    function startClickerIntervals() {
-        setInterval(() => {
-            if(clickerGameStarted) {
-                let regen = Math.max(1, Math.floor(clickerCombo / 8)) + clickerSkills.energy;
-                clickerEnergy = Math.min(clickerMaxEnergy, clickerEnergy + regen);
-                updateClickerUI();
-            }
-        }, 2000);
-        
-        setInterval(() => {
-            if(clickerGameStarted && Math.random() < 0.1 && !clickerGoldenHour) {
-                clickerGoldenHour = true;
-                showClickerNotification("✨ ¡HORA DORADA! Ratones dorados ✨");
-                setTimeout(() => { clickerGoldenHour = false; }, 10000);
-            }
-        }, 35000);
-        
-        setInterval(() => saveClickerData(), 10000);
-    }
-    
-    // Crear UI del clicker
+    // ==================== CREAR UI DEL CLICKER ====================
     function createClickerUI() {
         const container = document.getElementById('clickerGameContainer');
         const uiHTML = `
-            <div style="position:fixed;top:10px;left:10px;right:10px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;z-index:30;">
-                <div class="stat-card">😺 Nv <span id="clickerLevel">1</span></div>
-                <div class="stat-card">💰 <span id="clickerCoins">0</span></div>
-                <div class="stat-card">⚡ x<span id="clickerMultiplier">1</span></div>
-                <div class="stat-card">💪 <span id="clickerTapPower">1</span></div>
+            <div class="top-panel">
+                <div class="stat-card">😺 <span id="levelText">${t.level}</span> <span id="level">1</span></div>
+                <div class="stat-card">💰 <span id="coins">0</span></div>
+                <div class="stat-card">⚡ x<span id="multiplier">1</span></div>
+                <div class="stat-card">💪 <span id="tapPower">1</span></div>
             </div>
-            <div style="position:fixed;top:70px;left:10px;right:10px;background:linear-gradient(135deg,#fbbf24,#f59e0b);border-radius:60px;padding:8px 16px;display:flex;justify-content:space-between;z-index:30;cursor:pointer;font-weight:bold;" id="clickerTokenBar">
-                <span>🐱 BILLY Tokens</span>
-                <span><span id="clickerTokens">0</span> BILLY</span>
+            <div class="token-bar" id="tokenBar">
+                <span>🐱 ${t.tokensLabel}</span>
+                <span><span id="billyTokens">0</span> BILLY</span>
             </div>
-            <div class="combo-panel" style="top:120px;">🔥 <span id="clickerCombo">0</span> COMBO</div>
-            <div class="records-panel" style="top:180px;">🏆 Mejor Combo: <span id="clickerBestCombo">0</span></div>
-            <div class="energy-container" style="bottom:150px;">
-                <div style="display:flex;justify-content:space-between;margin-bottom:5px;">
-                    <span>⚡ Energía</span>
-                    <span><span id="clickerEnergy">100</span>/<span id="clickerMaxEnergy">100</span></span>
-                </div>
-                <div class="energy-bg"><div class="energy-fill" id="clickerEnergyFill"></div></div>
+            <div class="combo-panel">🔥 <span id="comboCount">0</span> <span id="comboLabel">${t.combo}</span></div>
+            <div class="pet-panel" id="petPanel"><div class="pet-avatar">🐾</div><span>${t.pets}</span></div>
+            <div class="records-panel">🏆 <span id="bestComboLabel">${t.bestCombo}</span>: <span id="bestCombo">0</span><br>⭐ <span id="recordLabel">${t.record}</span>: <span id="highScore">0</span></div>
+            <div class="energy-container">
+                <div style="display:flex;justify-content:space-between;margin-bottom:5px;"><span>⚡ ${t.energy}</span><span><span id="energyCurrent">100</span>/<span id="energyMax">100</span></span></div>
+                <div class="energy-bg"><div class="energy-fill" id="energyFill"></div></div>
+            </div>
+            <div class="streak-indicator" id="streakIndicator" style="display:none;"></div>
+            <div class="challenges-panel" id="challengesPanel"></div>
+            <div class="action-buttons">
+                <button class="btn" id="upgradeBtn">💪 <span id="upgradeText">${t.upgrade}</span></button>
+                <button class="btn btn-primary" id="lootBtn">🎁 <span id="lootText">${t.loot}</span></button>
+                <button class="btn btn-skill" id="skillsBtn">🌳 <span id="skillsText">${t.skills}</span></button>
+                <button class="btn btn-pet" id="petsBtn">🐾 <span id="petsText">${t.pets}</span></button>
+                <button class="btn btn-shop" id="shopBtn">🏪 ${t.shop}</button>
+                <button class="btn btn-sound" id="toggleMusicBtn">🎵 ON</button>
+                <button class="btn btn-solana" id="shareXBtn">🐦 ${t.share}</button>
             </div>
         `;
         container.insertAdjacentHTML('beforeend', uiHTML);
         
-        document.getElementById('clickerTokenBar').onclick = () => {
-            showClickerNotification(`💰 ${Math.floor(clickerTokens)} BILLY tokens`);
-        };
+        function updateGameTexts() {
+            document.getElementById('levelText').textContent = t.level;
+            document.getElementById('comboLabel').textContent = t.combo;
+            document.getElementById('bestComboLabel').textContent = t.bestCombo;
+            document.getElementById('recordLabel').textContent = t.record;
+            document.getElementById('upgradeText').textContent = t.upgrade;
+            document.getElementById('lootText').textContent = t.loot;
+            document.getElementById('skillsText').textContent = t.skills;
+            document.getElementById('petsText').textContent = t.pets;
+            document.getElementById('shopBtn').innerHTML = `🏪 ${t.shop}`;
+        }
+        window.updateGameTexts = updateGameTexts;
     }
     
     createClickerUI();
     
-    // Añadir animación de ripple al estilo
-    const rippleStyle = document.createElement('style');
-    rippleStyle.textContent = `
-        @keyframes rippleAnim {
-            0% { transform: scale(0); opacity: 0.7; }
-            100% { transform: scale(5); opacity: 0; }
-        }
-        @keyframes floatUp {
-            0% { opacity: 1; transform: translateY(0px); }
-            100% { opacity: 0; transform: translateY(-70px); }
-        }
-        .stat-card {
-            background: rgba(0,0,0,0.85);
-            backdrop-filter: blur(8px);
-            padding: 6px 12px;
-            border-radius: 40px;
-            font-size: 12px;
-            font-weight: bold;
-            color: #FFE484;
-            border: 1px solid rgba(255,200,100,0.5);
-        }
-        .combo-panel {
-            position: fixed;
-            right: 10px;
-            background: rgba(0,0,0,0.85);
-            backdrop-filter: blur(8px);
-            padding: 8px 16px;
-            border-radius: 40px;
-            font-size: 18px;
-            font-weight: bold;
-            color: #ff884d;
-            border: 1px solid #ffaa44;
-        }
-        .records-panel {
-            position: fixed;
-            left: 10px;
-            background: rgba(0,0,0,0.85);
-            backdrop-filter: blur(8px);
-            padding: 8px 12px;
-            border-radius: 20px;
-            font-size: 11px;
-            color: #FFD966;
-            text-align: center;
-        }
-        .energy-container {
-            position: fixed;
-            left: 10px;
-            right: 10px;
-            background: rgba(0,0,0,0.7);
-            border-radius: 20px;
-            padding: 8px 12px;
-            backdrop-filter: blur(5px);
-        }
-        .energy-bg {
-            height: 12px;
-            background: #2d2a3e;
-            border-radius: 20px;
-            overflow: hidden;
-        }
-        .energy-fill {
-            height: 100%;
-            background: linear-gradient(90deg, #22c55e, #facc15);
-            border-radius: 20px;
-            transition: width 0.2s;
-        }
-    `;
-    document.head.appendChild(rippleStyle);
-    
+    // Exponer funciones globales
     window.startClickerGame = startClickerGame;
-    window.saveClickerData = saveClickerData;
+    window.saveClickerGame = saveGame;
+    window.unlockPet = unlockPet;
+    window.upgradePet = upgradePet;
+    window.equipPet = equipPet;
+    window.upgradeSkill = upgradeSkill;
+    window.buySkin = buySkin;
+    window.equipSkin = equipSkin;
+    window.openShop = openShop;
+    
+    // Añadir estilo de glow
+    const glowStyle = document.createElement('style');
+    glowStyle.textContent = `@keyframes glow { from { text-shadow: 0 0 0px orange; } to { text-shadow: 0 0 10px #ffaa44; } }`;
+    document.head.appendChild(glowStyle);
 </script>
 </body>
 </html>
