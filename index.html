@@ -91,6 +91,8 @@
         .menu-btn:active { transform: scale(0.97); }
         .btn-primary { background: linear-gradient(135deg, #fbbf24, #e67e22); color: #1e1a2f; }
         .btn-solana { background: linear-gradient(135deg, #14f195, #9945ff); }
+        .btn-x { background: #000000; color: white; }
+        .btn-telegram { background: #26A5E4; color: white; }
         .game-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1100; display: none; background: radial-gradient(circle at center, #0a0a2a 0%, #050510 100%); }
         .game-container.active { display: block; }
         .game-header { position: fixed; top: 10px; left: 10px; right: 10px; display: flex; justify-content: space-between; z-index: 50; }
@@ -137,6 +139,24 @@
         .btn { flex: 1; padding: 10px 6px; border: none; border-radius: 50px; font-weight: bold; font-size: 10px; cursor: pointer; background: linear-gradient(145deg, #1e293b, #0f172a); color: white; text-align: center; transition: transform 0.05s; }
         .btn:active { transform: translateY(2px); }
         .btn-primary { background: linear-gradient(145deg, #fbbf24, #e67e22); color: #1e1a2f; }
+        
+        /* FIX PARA CLICS EN PC - IMPORTANTE */
+        .game-entity {
+            cursor: pointer !important;
+            pointer-events: auto !important;
+            z-index: 999 !important;
+        }
+        #gameArea {
+            pointer-events: none !important;
+        }
+        #billy {
+            pointer-events: auto !important;
+            z-index: 20 !important;
+        }
+        .game-entity:active {
+            transform: scale(0.95);
+        }
+        
         #billy { position: fixed; width: 130px; height: 130px; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 20; transition: transform 0.05s linear, left 0.1s ease-out, top 0.1s ease-out; }
         #billy img { width: 100%; height: 100%; object-fit: contain; filter: drop-shadow(0 8px 15px rgba(0,0,0,0.4)); }
         #billy:active { transform: scale(0.92) !important; }
@@ -144,8 +164,7 @@
         .billy-golden img { filter: drop-shadow(0 0 20px gold); animation: pulseGold 0.5s infinite; }
         .pet-follower { position: fixed; z-index: 18; font-size: 32px; pointer-events: none; animation: floatPet 2s infinite; }
         #gameArea { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 15; }
-        .game-entity { position: fixed; cursor: pointer; z-index: 25; display: flex; align-items: center; justify-content: center; font-weight: bold; animation: bounceIn 0.3s ease; pointer-events: auto; }
-        .game-entity:active { transform: scale(0.95); }
+        .game-entity { position: fixed; display: flex; align-items: center; justify-content: center; font-weight: bold; animation: bounceIn 0.3s ease; }
         .mouse-normal { background: radial-gradient(circle, #8B5A2B, #5D3A1A); border-radius: 50%; border: 2px solid #b97f44; }
         .mouse-golden { background: radial-gradient(circle, #FBBF24, #E67E22); border-radius: 50%; border: 3px solid gold; animation: pulseGold 0.8s infinite; }
         .mouse-boss { background: radial-gradient(circle, #4a2a1a, #2a1a0a); border-radius: 50%; border: 3px solid #c97e3a; font-size: 32px !important; }
@@ -248,13 +267,12 @@
 <div class="game-container" id="jumpContainer"></div>
 
 <script>
-    // ==================== CONFIGURACIÓN ====================
-    let currentLang = 'es';
-    let soundEnabled = true;
-    
-    // Telegram Bot Config
-    const TELEGRAM_BOT_TOKEN = '8671004895:AAHIVCwIox4lk5qUYS4TuOHCB_jGQk2CoFY';
-    const TELEGRAM_CHAT_ID = '7804711018'; // Tu chat ID personal
+    // ==================== CONFIGURACIÓN DE TELEGRAM ====================
+    // ⚠️ IMPORTANTE: Reemplaza estos valores con los tuyos antes de subir a GitHub ⚠️
+    // Para evitar exposición, usa variables de entorno o un archivo separado
+    const TELEGRAM_BOT_TOKEN = '8671004895:AAHIVCwIox4lk5qUYS4TuOHCB_jGQk2CoFY'; // Cámbialo o usa entorno seguro
+    const TELEGRAM_USER_CHAT_ID = '7804711018'; // Tu chat personal
+    const TELEGRAM_GROUP_CHAT_ID = ''; // 👈 Pon el CHAT ID del grupo @BillyOfficialClub cuando lo tengas
     
     // X (Twitter) Config
     const X_ACCOUNT = 'BillyZatanas';
@@ -268,10 +286,13 @@
         'SUPERFAN': { coins: 500, tokens: 0, used: false, oneTime: true }
     };
     
-    // Ranking global (se guarda en localStorage)
+    // Ranking global
     let globalRanking = [];
     
     // ==================== IDIOMAS ====================
+    let currentLang = 'es';
+    let soundEnabled = true;
+    
     const translations = {
         es: {
             welcome: "¡Bienvenido, {name}!", coins: "Monedas", tokens: "Tokens", level: "Nivel", streak: "Racha",
@@ -301,11 +322,11 @@
             bestComboLabel: "Mejor combo", upgradeBtn: "💪 Mejorar", chestBtn: "🎁 Cofre", jumpBestLabel: "🏆 BEST:", jumpScoreLabel: "⭐ SCORE:",
             jumpShield: "🛡️ Escudo", jumpMagnet: "🧲 Iman", jumpDouble: "✨ Doble", jumpInstruction: "¡Toca la pantalla para saltar!",
             jumpGameOver: "GAME OVER", jumpTapRestart: "Toca para reiniciar", jumpPoints: "⭐ {score} pts", powerupActivated: "✨ {type} activado!",
-            powerupNoStock: "No tienes {type} o ya está activo", tap: "tap", shareX: "🐦 COMPARTIR EN X", shareTelegram: "📨 ENVIAR A TELEGRAM",
+            powerupNoStock: "No tienes {type} o ya está activo", tap: "tap", shareX: "COMPARTIR EN X", shareTelegram: "ENVIAR A TELEGRAM",
             shareMessage: "🎮 Acabo de hacer {taps} taps y atrapar {mice} ratones en BILLY THE CAT! Mi nivel: {level} 🔥 #BillyTheCat @BillyZatanas",
             telegramSent: "📨 ¡Compartido en Telegram!", registerTitle: "🐱 BILLY ID", registerSubtitle: "¡Crea tu identidad en el mundo de Billy!",
-            registerBtn: "🎮 COMENZAR AVENTURA", weeklyMissions: "📅 Misiones Semanales", ranking: "🏆 RANKING", rankingTitle: "🏆 RANKING GLOBAL",
-            noRanking: "Aún no hay datos. ¡Juega y aparece aquí!", yourPosition: "Tu posición", secretCode: "🔑 Código Secreto", enterCode: "Ingresa código",
+            registerBtn: "🎮 COMENZAR AVENTURA", weeklyMissions: "📅 Misiones Semanales", ranking: "RANKING", rankingTitle: "🏆 RANKING GLOBAL",
+            noRanking: "Aún no hay datos. ¡Juega y aparece aquí!", yourPosition: "Tu posición", secretCode: "Código Secreto", enterCode: "Ingresa código",
             redeem: "Canjear", invalidCode: "Código inválido", alreadyUsed: "Código ya usado", codeRedeemed: "🎉 Código canjeado! +{coins}🪙 +{tokens}⭐"
         },
         en: {
@@ -335,11 +356,11 @@
             bestComboLabel: "Best combo", upgradeBtn: "💪 Upgrade", chestBtn: "🎁 Chest", jumpBestLabel: "🏆 BEST:", jumpScoreLabel: "⭐ SCORE:",
             jumpShield: "🛡️ Shield", jumpMagnet: "🧲 Magnet", jumpDouble: "✨ Double", jumpInstruction: "Tap the screen to jump!",
             jumpGameOver: "GAME OVER", jumpTapRestart: "Tap to restart", jumpPoints: "⭐ {score} pts", powerupActivated: "✨ {type} activated!",
-            powerupNoStock: "No {type} left or already active", tap: "tap", shareX: "🐦 SHARE ON X", shareTelegram: "📨 SEND TO TELEGRAM",
+            powerupNoStock: "No {type} left or already active", tap: "tap", shareX: "SHARE ON X", shareTelegram: "SEND TO TELEGRAM",
             shareMessage: "🎮 Just did {taps} taps and caught {mice} mice in BILLY THE CAT! My level: {level} 🔥 #BillyTheCat @BillyZatanas",
             telegramSent: "📨 Shared on Telegram!", registerTitle: "🐱 BILLY ID", registerSubtitle: "Create your identity in Billy's world!",
-            registerBtn: "🎮 START ADVENTURE", weeklyMissions: "📅 Weekly Missions", ranking: "🏆 RANKING", rankingTitle: "🏆 GLOBAL RANKING",
-            noRanking: "No data yet. Play and appear here!", yourPosition: "Your position", secretCode: "🔑 Secret Code", enterCode: "Enter code",
+            registerBtn: "🎮 START ADVENTURE", weeklyMissions: "📅 Weekly Missions", ranking: "RANKING", rankingTitle: "🏆 GLOBAL RANKING",
+            noRanking: "No data yet. Play and appear here!", yourPosition: "Your position", secretCode: "Secret Code", enterCode: "Enter code",
             redeem: "Redeem", invalidCode: "Invalid code", alreadyUsed: "Code already used", codeRedeemed: "🎉 Code redeemed! +{coins}🪙 +{tokens}⭐"
         }
     };
@@ -430,13 +451,51 @@
     
     function getWeekNumber() { const d = new Date(); const date = new Date(d.getFullYear(), 0, 1); return Math.ceil(((d - date) / 86400000 + date.getDay() + 1) / 7); }
     
-    function saveUser() { if(currentUser) { localStorage.setItem('billyUser_' + currentUser.userId, JSON.stringify(currentUser)); localStorage.setItem('billyCurrentUser', currentUser.userId); updateGlobalRanking(); } }
+    function saveUser() { 
+        if(currentUser) { 
+            localStorage.setItem('billyUser_' + currentUser.userId, JSON.stringify(currentUser)); 
+            localStorage.setItem('billyCurrentUser', currentUser.userId);
+            updateGlobalRanking();
+        } 
+    }
     
-    function loadUser(userId) { const saved = localStorage.getItem('billyUser_' + userId); if(saved) { currentUser = JSON.parse(saved); return true; } return false; }
+    function loadUser(userId) { 
+        const saved = localStorage.getItem('billyUser_' + userId); 
+        if(saved) { 
+            currentUser = JSON.parse(saved); 
+            return true; 
+        } 
+        return false; 
+    }
     
-    function getAllNicknames() { const nicknames = []; for(let i = 0; i < localStorage.length; i++) { const key = localStorage.key(i); if(key && key.startsWith('billyUser_')) { try { const user = JSON.parse(localStorage.getItem(key)); nicknames.push(user.nickname); } catch(e) {} } } return nicknames; }
+    function getAllNicknames() { 
+        const nicknames = []; 
+        for(let i = 0; i < localStorage.length; i++) { 
+            const key = localStorage.key(i); 
+            if(key && key.startsWith('billyUser_')) { 
+                try { 
+                    const user = JSON.parse(localStorage.getItem(key)); 
+                    nicknames.push(user.nickname); 
+                } catch(e) {} 
+            } 
+        } 
+        return nicknames; 
+    }
     
-    function registerUser(nickname) { if(nickname.length < 3) { document.getElementById('registerError').textContent = t.needMoreChars; return false; } if(getAllNicknames().includes(nickname)) { document.getElementById('registerError').textContent = t.nicknameExists; return false; } currentUser = createDefaultUser(nickname); saveUser(); document.getElementById('registerError').textContent = ''; return true; }
+    function registerUser(nickname) { 
+        if(nickname.length < 3) { 
+            document.getElementById('registerError').textContent = t.needMoreChars; 
+            return false; 
+        } 
+        if(getAllNicknames().includes(nickname)) { 
+            document.getElementById('registerError').textContent = t.nicknameExists; 
+            return false; 
+        } 
+        currentUser = createDefaultUser(nickname); 
+        saveUser(); 
+        document.getElementById('registerError').textContent = ''; 
+        return true; 
+    }
     
     // ==================== RANKING GLOBAL ====================
     function updateGlobalRanking() {
@@ -457,21 +516,25 @@
         try {
             const text = `🏆 ACTUALIZACIÓN DE RANKING 🏆\n\n👤 ${currentUser.nickname}\n📊 Puntuación: ${score}\n🐭 Ratones: ${currentUser.clicker.totalMice}\n⭐ Nivel: ${currentUser.clicker.level}\n👆 Taps: ${currentUser.clicker.totalTaps}`;
             const url = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
-            await fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ chat_id: TELEGRAM_CHAT_ID, text: text }) });
+            await fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ chat_id: TELEGRAM_USER_CHAT_ID, text: text }) });
         } catch(e) { console.log("Telegram send error:", e); }
     }
     
-    async function sendRankingToTelegram() {
-        if(globalRanking.length === 0) { showNotification("📊 Aún no hay datos de ranking", "normal"); return; }
-        let message = "🏆 RANKING GLOBAL - BILLY THE CAT 🏆\n\n";
-        for(let i = 0; i < Math.min(10, globalRanking.length); i++) {
-            message += `${i+1}. ${globalRanking[i].nickname} - ${globalRanking[i].score} pts (Nv${globalRanking[i].level})\n`;
+    async function shareToTelegramGroup() {
+        if(!TELEGRAM_GROUP_CHAT_ID) {
+            showNotification("⚠️ Grupo no configurado. Contacta al administrador.", "normal");
+            return;
         }
+        const message = `🎮 ¡${currentUser.nickname} acaba de lograr!\n\n👆 Taps: ${currentUser.clicker.totalTaps}\n🐭 Ratones: ${currentUser.clicker.totalMice}\n⭐ Nivel: ${currentUser.clicker.level}\n🔥 Mejor combo: ${currentUser.clicker.bestCombo}\n\n🔗 Juega tú también: ¡Billy te espera! #BillyTheCat`;
         try {
             const url = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
-            await fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ chat_id: TELEGRAM_CHAT_ID, text: message }) });
-            showNotification("📊 Ranking enviado a Telegram!", "achievement");
-        } catch(e) { console.log("Telegram ranking error:", e); }
+            await fetch(url, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ chat_id: TELEGRAM_GROUP_CHAT_ID, text: message })
+            });
+            showNotification("📢 ¡Publicado en el grupo de Billy!", "achievement");
+        } catch(e) { showNotification("❌ Error al publicar", "normal"); }
     }
     
     // ==================== CÓDIGOS SECRETOS ====================
@@ -508,7 +571,7 @@
         };
     }
     
-    // ==================== MISIONES DIARIAS Y SEMANALES ====================
+    // ==================== MISIONES ====================
     function generateDailyMissions() {
         const today = new Date().toDateString();
         if(!currentUser.dailyMissions || currentUser.dailyMissions.date !== today) {
@@ -532,7 +595,6 @@
             ], completed: [] };
             saveUser();
         }
-        updateWeeklyMissionsUI();
     }
     
     function updateDailyMissionsUI() {
@@ -542,8 +604,6 @@
             <div class="mission-item"><div><div class="mission-name">${mission.type === 'tap' ? '👆' : mission.type === 'mice' ? '🐭' : '🔥'} ${mission.type === 'tap' ? t.missionTap.replace('{count}', mission.target) : mission.type === 'mice' ? t.missionMice.replace('{count}', mission.target) : t.missionCombo.replace('{count}', mission.target)}</div><div class="mission-reward">${t.reward}: ${mission.reward} 🪙</div></div><div>${mission.completed ? `<span class="mission-completed">${t.completed}</span>` : `<span class="mission-progress">${mission.progress}/${mission.target}</span>`}</div></div>
         `).join('');
     }
-    
-    function updateWeeklyMissionsUI() { /* similar */ }
     
     function updateMissionProgress(type, amount = 1) {
         if(!currentUser) return;
@@ -569,8 +629,8 @@
     
     function updateDayNightMode() { const hour = new Date().getHours(); const body = document.body; if(hour >= 6 && hour < 18) body.classList.add('day-mode'); else body.classList.remove('day-mode'); }
     
-    // ==================== TIENDA, PERFIL, ESTADÍSTICAS ====================
-    function openShop() { /* Manteniendo la tienda funcional */ playClickSound(); const modal = document.createElement('div'); modal.className = 'modal'; modal.innerHTML = `<div class="modal-content"><h2>${t.shopTitle}</h2><div class="shop-tabs"><div class="shop-tab active" data-tab="skins">${t.skins}</div><div class="shop-tab" data-tab="pets">${t.pets}</div><div class="shop-tab" data-tab="skills">${t.skills}</div><div class="shop-tab" data-tab="powerups">${t.powerups}</div></div><div id="skinsSection" class="shop-section active"><div class="shop-item" onclick="buySkin('original')"><div class="item-info"><div class="item-name">🐱 ${t.original}</div><div class="item-desc">${t.original === 'Original' ? 'The classic Billy' : 'El clásico Billy'}</div></div><button class="shop-btn">${currentUser.inventory.skins.find(s => s.id === 'original')?.unlocked ? (currentUser.inventory.skins.find(s => s.id === 'original')?.equipped ? t.equipped : t.equip) : t.buy}</button></div><div class="shop-item" onclick="buySkin('golden')"><div class="item-info"><div class="item-name">✨ ${t.golden}</div><div class="item-desc">${t.golden === 'Golden' ? 'Golden Billy' : 'Billy dorado'}</div><div class="item-price">${t.priceTokens.replace('{price}', 500)}</div></div><button class="shop-btn">${currentUser.inventory.skins.find(s => s.id === 'golden')?.unlocked ? (currentUser.inventory.skins.find(s => s.id === 'golden')?.equipped ? t.equipped : t.equip) : t.buy}</button></div><div class="shop-item" onclick="buySkin('elite')"><div class="item-info"><div class="item-name">🔥 ${t.elite}</div><div class="item-desc">${t.elite === 'Elite' ? 'Elite Billy' : 'Billy élite'}</div><div class="item-price">${t.priceTokens.replace('{price}', 1500)}</div></div><button class="shop-btn">${currentUser.inventory.skins.find(s => s.id === 'elite')?.unlocked ? (currentUser.inventory.skins.find(s => s.id === 'elite')?.equipped ? t.equipped : t.equip) : t.buy}</button></div></div><div id="petsSection" class="shop-section"><div class="shop-item" onclick="buyPet('dog')"><div class="item-info"><div class="item-name">🐕 ${t.petDog}</div><div class="item-desc">${t.petDogDesc}</div><div class="item-price">${t.priceTokens.replace('{price}', 300)}</div></div><button class="shop-btn">${currentUser.inventory.pets.includes('dog') ? (currentUser.clicker.activePet === 'dog' ? t.equipped : t.equip) : t.buy}</button></div><div class="shop-item" onclick="buyPet('owl')"><div class="item-info"><div class="item-name">🦉 ${t.petOwl}</div><div class="item-desc">${t.petOwlDesc}</div><div class="item-price">${t.priceTokens.replace('{price}', 400)}</div></div><button class="shop-btn">${currentUser.inventory.pets.includes('owl') ? (currentUser.clicker.activePet === 'owl' ? t.equipped : t.equip) : t.buy}</button></div><div class="shop-item" onclick="buyPet('bee')"><div class="item-info"><div class="item-name">🐝 ${t.petBee}</div><div class="item-desc">${t.petBeeDesc}</div><div class="item-price">${t.priceTokens.replace('{price}', 250)}</div></div><button class="shop-btn">${currentUser.inventory.pets.includes('bee') ? (currentUser.clicker.activePet === 'bee' ? t.equipped : t.equip) : t.buy}</button></div><div class="shop-item" onclick="buyPet('dragon')"><div class="item-info"><div class="item-name">🐉 ${t.petDragon}</div><div class="item-desc">${t.petDragonDesc}</div><div class="item-price">${t.priceTokens.replace('{price}', 1000)}</div></div><button class="shop-btn">${currentUser.inventory.pets.includes('dragon') ? (currentUser.clicker.activePet === 'dragon' ? t.equipped : t.equip) : t.buy}</button></div></div><div id="skillsSection" class="shop-section"><div class="shop-item" onclick="upgradeSkill('strength')"><div class="item-info"><div class="item-name">💪 ${t.skillStrength}</div><div class="item-desc">${t.skillStrengthDesc} (${currentUser.inventory.skills.strength}/5)</div></div><button class="shop-btn">${currentUser.inventory.skills.strength >= 5 ? t.maxLevel : `${t.upgrade} (${[40,80,150,300,500][currentUser.inventory.skills.strength]} BILLY)`}</button></div><div class="shop-item" onclick="upgradeSkill('energy')"><div class="item-info"><div class="item-name">⚡ ${t.skillEnergy}</div><div class="item-desc">${t.skillEnergyDesc} (${currentUser.inventory.skills.energy}/5)</div></div><button class="shop-btn">${currentUser.inventory.skills.energy >= 5 ? t.maxLevel : `${t.upgrade} (${[30,60,120,250,400][currentUser.inventory.skills.energy]} BILLY)`}</button></div><div class="shop-item" onclick="upgradeSkill('luck')"><div class="item-info"><div class="item-name">🍀 ${t.skillLuck}</div><div class="item-desc">${t.skillLuckDesc} (${currentUser.inventory.skills.luck}/5)</div></div><button class="shop-btn">${currentUser.inventory.skills.luck >= 5 ? t.maxLevel : `${t.upgrade} (${[50,100,200,400,600][currentUser.inventory.skills.luck]} BILLY)`}</button></div><div class="shop-item" onclick="upgradeSkill('economy')"><div class="item-info"><div class="item-name">💰 ${t.skillEconomy}</div><div class="item-desc">${t.skillEconomyDesc} (${currentUser.inventory.skills.economy}/5)</div></div><button class="shop-btn">${currentUser.inventory.skills.economy >= 5 ? t.maxLevel : `${t.upgrade} (${[40,80,150,300,500][currentUser.inventory.skills.economy]} BILLY)`}</button></div></div><div id="powerupsSection" class="shop-section"><div class="shop-item" onclick="buyPowerup('shield')"><div class="item-info"><div class="item-name">🛡️ ${t.powerupShield}</div><div class="item-desc">${t.powerupShieldDesc}</div><div class="item-price">${t.priceTokens.replace('{price}', 100)}</div></div><button class="shop-btn">${t.buy} (${currentUser.inventory.powerups.shield || 0})</button></div><div class="shop-item" onclick="buyPowerup('magnet')"><div class="item-info"><div class="item-name">🧲 ${t.powerupMagnet}</div><div class="item-desc">${t.powerupMagnetDesc}</div><div class="item-price">${t.priceTokens.replace('{price}', 150)}</div></div><button class="shop-btn">${t.buy} (${currentUser.inventory.powerups.magnet || 0})</button></div><div class="shop-item" onclick="buyPowerup('double')"><div class="item-info"><div class="item-name">✨ ${t.powerupDouble}</div><div class="item-desc">${t.powerupDoubleDesc}</div><div class="item-price">${t.priceTokens.replace('{price}', 200)}</div></div><button class="shop-btn">${t.buy} (${currentUser.inventory.powerups.double || 0})</button></div></div><button class="close-modal" onclick="this.closest('.modal').remove()">${t.close}</button></div>`; document.body.appendChild(modal); const tabs = modal.querySelectorAll('.shop-tab'); const sections = { skins: modal.querySelector('#skinsSection'), pets: modal.querySelector('#petsSection'), skills: modal.querySelector('#skillsSection'), powerups: modal.querySelector('#powerupsSection') }; tabs.forEach(tab => { tab.onclick = () => { tabs.forEach(t => t.classList.remove('active')); tab.classList.add('active'); Object.values(sections).forEach(s => s.classList.remove('active')); sections[tab.dataset.tab].classList.add('active'); }; }); }
+    // ==================== TIENDA Y PERFIL ====================
+    function openShop() { playClickSound(); const modal = document.createElement('div'); modal.className = 'modal'; modal.innerHTML = `<div class="modal-content"><h2>${t.shopTitle}</h2><div class="shop-tabs"><div class="shop-tab active" data-tab="skins">${t.skins}</div><div class="shop-tab" data-tab="pets">${t.pets}</div><div class="shop-tab" data-tab="skills">${t.skills}</div><div class="shop-tab" data-tab="powerups">${t.powerups}</div></div><div id="skinsSection" class="shop-section active"><div class="shop-item" onclick="buySkin('original')"><div class="item-info"><div class="item-name">🐱 ${t.original}</div><div class="item-desc">${t.original === 'Original' ? 'The classic Billy' : 'El clásico Billy'}</div></div><button class="shop-btn">${currentUser.inventory.skins.find(s => s.id === 'original')?.unlocked ? (currentUser.inventory.skins.find(s => s.id === 'original')?.equipped ? t.equipped : t.equip) : t.buy}</button></div><div class="shop-item" onclick="buySkin('golden')"><div class="item-info"><div class="item-name">✨ ${t.golden}</div><div class="item-desc">${t.golden === 'Golden' ? 'Golden Billy' : 'Billy dorado'}</div><div class="item-price">${t.priceTokens.replace('{price}', 500)}</div></div><button class="shop-btn">${currentUser.inventory.skins.find(s => s.id === 'golden')?.unlocked ? (currentUser.inventory.skins.find(s => s.id === 'golden')?.equipped ? t.equipped : t.equip) : t.buy}</button></div><div class="shop-item" onclick="buySkin('elite')"><div class="item-info"><div class="item-name">🔥 ${t.elite}</div><div class="item-desc">${t.elite === 'Elite' ? 'Elite Billy' : 'Billy élite'}</div><div class="item-price">${t.priceTokens.replace('{price}', 1500)}</div></div><button class="shop-btn">${currentUser.inventory.skins.find(s => s.id === 'elite')?.unlocked ? (currentUser.inventory.skins.find(s => s.id === 'elite')?.equipped ? t.equipped : t.equip) : t.buy}</button></div></div><div id="petsSection" class="shop-section"><div class="shop-item" onclick="buyPet('dog')"><div class="item-info"><div class="item-name">🐕 ${t.petDog}</div><div class="item-desc">${t.petDogDesc}</div><div class="item-price">${t.priceTokens.replace('{price}', 300)}</div></div><button class="shop-btn">${currentUser.inventory.pets.includes('dog') ? (currentUser.clicker.activePet === 'dog' ? t.equipped : t.equip) : t.buy}</button></div><div class="shop-item" onclick="buyPet('owl')"><div class="item-info"><div class="item-name">🦉 ${t.petOwl}</div><div class="item-desc">${t.petOwlDesc}</div><div class="item-price">${t.priceTokens.replace('{price}', 400)}</div></div><button class="shop-btn">${currentUser.inventory.pets.includes('owl') ? (currentUser.clicker.activePet === 'owl' ? t.equipped : t.equip) : t.buy}</button></div><div class="shop-item" onclick="buyPet('bee')"><div class="item-info"><div class="item-name">🐝 ${t.petBee}</div><div class="item-desc">${t.petBeeDesc}</div><div class="item-price">${t.priceTokens.replace('{price}', 250)}</div></div><button class="shop-btn">${currentUser.inventory.pets.includes('bee') ? (currentUser.clicker.activePet === 'bee' ? t.equipped : t.equip) : t.buy}</button></div><div class="shop-item" onclick="buyPet('dragon')"><div class="item-info"><div class="item-name">🐉 ${t.petDragon}</div><div class="item-desc">${t.petDragonDesc}</div><div class="item-price">${t.priceTokens.replace('{price}', 1000)}</div></div><button class="shop-btn">${currentUser.inventory.pets.includes('dragon') ? (currentUser.clicker.activePet === 'dragon' ? t.equipped : t.equip) : t.buy}</button></div></div><div id="skillsSection" class="shop-section"><div class="shop-item" onclick="upgradeSkill('strength')"><div class="item-info"><div class="item-name">💪 ${t.skillStrength}</div><div class="item-desc">${t.skillStrengthDesc} (${currentUser.inventory.skills.strength}/5)</div></div><button class="shop-btn">${currentUser.inventory.skills.strength >= 5 ? t.maxLevel : `${t.upgrade} (${[40,80,150,300,500][currentUser.inventory.skills.strength]} BILLY)`}</button></div><div class="shop-item" onclick="upgradeSkill('energy')"><div class="item-info"><div class="item-name">⚡ ${t.skillEnergy}</div><div class="item-desc">${t.skillEnergyDesc} (${currentUser.inventory.skills.energy}/5)</div></div><button class="shop-btn">${currentUser.inventory.skills.energy >= 5 ? t.maxLevel : `${t.upgrade} (${[30,60,120,250,400][currentUser.inventory.skills.energy]} BILLY)`}</button></div><div class="shop-item" onclick="upgradeSkill('luck')"><div class="item-info"><div class="item-name">🍀 ${t.skillLuck}</div><div class="item-desc">${t.skillLuckDesc} (${currentUser.inventory.skills.luck}/5)</div></div><button class="shop-btn">${currentUser.inventory.skills.luck >= 5 ? t.maxLevel : `${t.upgrade} (${[50,100,200,400,600][currentUser.inventory.skills.luck]} BILLY)`}</button></div><div class="shop-item" onclick="upgradeSkill('economy')"><div class="item-info"><div class="item-name">💰 ${t.skillEconomy}</div><div class="item-desc">${t.skillEconomyDesc} (${currentUser.inventory.skills.economy}/5)</div></div><button class="shop-btn">${currentUser.inventory.skills.economy >= 5 ? t.maxLevel : `${t.upgrade} (${[40,80,150,300,500][currentUser.inventory.skills.economy]} BILLY)`}</button></div></div><div id="powerupsSection" class="shop-section"><div class="shop-item" onclick="buyPowerup('shield')"><div class="item-info"><div class="item-name">🛡️ ${t.powerupShield}</div><div class="item-desc">${t.powerupShieldDesc}</div><div class="item-price">${t.priceTokens.replace('{price}', 100)}</div></div><button class="shop-btn">${t.buy} (${currentUser.inventory.powerups.shield || 0})</button></div><div class="shop-item" onclick="buyPowerup('magnet')"><div class="item-info"><div class="item-name">🧲 ${t.powerupMagnet}</div><div class="item-desc">${t.powerupMagnetDesc}</div><div class="item-price">${t.priceTokens.replace('{price}', 150)}</div></div><button class="shop-btn">${t.buy} (${currentUser.inventory.powerups.magnet || 0})</button></div><div class="shop-item" onclick="buyPowerup('double')"><div class="item-info"><div class="item-name">✨ ${t.powerupDouble}</div><div class="item-desc">${t.powerupDoubleDesc}</div><div class="item-price">${t.priceTokens.replace('{price}', 200)}</div></div><button class="shop-btn">${t.buy} (${currentUser.inventory.powerups.double || 0})</button></div></div><button class="close-modal" onclick="this.closest('.modal').remove()">${t.close}</button></div>`; document.body.appendChild(modal); const tabs = modal.querySelectorAll('.shop-tab'); const sections = { skins: modal.querySelector('#skinsSection'), pets: modal.querySelector('#petsSection'), skills: modal.querySelector('#skillsSection'), powerups: modal.querySelector('#powerupsSection') }; tabs.forEach(tab => { tab.onclick = () => { tabs.forEach(t => t.classList.remove('active')); tab.classList.add('active'); Object.values(sections).forEach(s => s.classList.remove('active')); sections[tab.dataset.tab].classList.add('active'); }; }); }
     
     function buySkin(skinId) { const skinPrices = { golden: 500, elite: 1500 }; const existing = currentUser.inventory.skins.find(s => s.id === skinId); if(existing) { if(!existing.equipped) { currentUser.inventory.skins.forEach(s => s.equipped = false); existing.equipped = true; showNotification(`${skinId} ${t.equipped}`, "achievement"); saveUser(); document.querySelector('.modal')?.remove(); openShop(); updateBillySkin(); } } else { if(currentUser.resources.tokens >= skinPrices[skinId]) { currentUser.resources.tokens -= skinPrices[skinId]; currentUser.inventory.skins.forEach(s => s.equipped = false); currentUser.inventory.skins.push({ id: skinId, name: skinId, unlocked: true, equipped: true }); showNotification(`${skinId} ${t.buy}ed!`, "achievement"); saveUser(); updateMenuResources(); document.querySelector('.modal')?.remove(); openShop(); updateBillySkin(); } else { showNotification(t.notEnoughTokens); } } }
     
@@ -590,9 +650,36 @@
     
     function shareToX() { playClickSound(); const msg = t.shareMessage.replace('{taps}', currentUser.clicker.totalTaps).replace('{mice}', currentUser.clicker.totalMice).replace('{level}', currentUser.clicker.level); window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(msg)}`, '_blank', 'width=550,height=420'); }
     
-    async function sendToTelegram() { playClickSound(); const stats = `🐱 BILLY THE CAT\n👤 ${currentUser.nickname}\n👆 ${t.totalTaps}: ${currentUser.clicker.totalTaps}\n🐭 ${t.totalMice}: ${currentUser.clicker.totalMice}\n🔥 ${t.bestCombo}: ${currentUser.clicker.bestCombo}\n⭐ ${t.level}: ${currentUser.clicker.level}`; try { const url = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`; const response = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ chat_id: TELEGRAM_CHAT_ID, text: stats }) }); if(response.ok) showNotification(t.telegramSent, "achievement"); else showNotification("❌ Error al enviar a Telegram", "normal"); } catch(e) { console.log("Telegram error:", e); showNotification("❌ Error de red", "normal"); } }
+    async function sendToTelegram() { playClickSound(); const stats = `🐱 BILLY THE CAT\n👤 ${currentUser.nickname}\n👆 ${t.totalTaps}: ${currentUser.clicker.totalTaps}\n🐭 ${t.totalMice}: ${currentUser.clicker.totalMice}\n🔥 ${t.bestCombo}: ${currentUser.clicker.bestCombo}\n⭐ ${t.level}: ${currentUser.clicker.level}`; try { const url = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`; const response = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ chat_id: TELEGRAM_USER_CHAT_ID, text: stats }) }); if(response.ok) showNotification(t.telegramSent, "achievement"); else showNotification("❌ Error al enviar a Telegram", "normal"); } catch(e) { showNotification("❌ Error de red", "normal"); } }
     
-    function updateLanguage() { t = translations[currentLang]; document.getElementById('registerTitle').textContent = t.registerTitle; document.getElementById('registerSubtitle').textContent = t.registerSubtitle; document.getElementById('registerBtn').textContent = t.registerBtn; document.getElementById('clickerModeTitle').textContent = t.clicker; document.getElementById('jumpModeTitle').textContent = t.jump; document.getElementById('coinsLabel').textContent = t.coins; document.getElementById('tokensLabel').textContent = t.tokens; document.getElementById('missionsTitle').textContent = `📅 ${t.missions}`; document.getElementById('userLevelLabel').textContent = t.level; document.getElementById('userStreakLabel').textContent = t.streak; const container = document.getElementById('menuButtonsContainer'); if(container) { container.innerHTML = `<button class="menu-btn btn-primary" id="shopBtn">🏪 ${t.shop}</button><button class="menu-btn" id="profileBtn">👤 ${t.profile}</button><button class="menu-btn" id="statsBtn">📊 ${t.stats}</button><button class="menu-btn" id="rankingBtn">🏆 ${t.ranking}</button><button class="menu-btn" id="codeBtn">🔑 ${t.secretCode}</button><button class="menu-btn" id="shareXBtn">🐦 ${t.shareX}</button><button class="menu-btn btn-solana" id="shareTelegramBtn">📨 ${t.shareTelegram}</button><button class="menu-btn" id="langEsBtn">🇪🇸 ES</button><button class="menu-btn" id="langEnBtn">🇺🇸 EN</button>`; document.getElementById('shopBtn').onclick = openShop; document.getElementById('profileBtn').onclick = openProfile; document.getElementById('statsBtn').onclick = openStats; document.getElementById('rankingBtn').onclick = openRanking; document.getElementById('codeBtn').onclick = openCodeModal; document.getElementById('shareXBtn').onclick = shareToX; document.getElementById('shareTelegramBtn').onclick = sendToTelegram; document.getElementById('langEsBtn').onclick = () => { currentLang = 'es'; updateLanguage(); updateClickerUITexts(); if(window.updateJumpUITexts) window.updateJumpUITexts(); }; document.getElementById('langEnBtn').onclick = () => { currentLang = 'en'; updateLanguage(); updateClickerUITexts(); if(window.updateJumpUITexts) window.updateJumpUITexts(); }; } updateDailyMissionsUI(); updateClickerUITexts(); }
+    function updateLanguage() { 
+        t = translations[currentLang]; 
+        document.getElementById('registerTitle').textContent = t.registerTitle; 
+        document.getElementById('registerSubtitle').textContent = t.registerSubtitle; 
+        document.getElementById('registerBtn').textContent = t.registerBtn; 
+        document.getElementById('clickerModeTitle').textContent = t.clicker; 
+        document.getElementById('jumpModeTitle').textContent = t.jump; 
+        document.getElementById('coinsLabel').textContent = t.coins; 
+        document.getElementById('tokensLabel').textContent = t.tokens; 
+        document.getElementById('missionsTitle').textContent = `📅 ${t.missions}`; 
+        document.getElementById('userLevelLabel').textContent = t.level; 
+        document.getElementById('userStreakLabel').textContent = t.streak; 
+        const container = document.getElementById('menuButtonsContainer'); 
+        if(container) { 
+            container.innerHTML = `<button class="menu-btn btn-primary" id="shopBtn">🛒 ${t.shop}</button><button class="menu-btn" id="profileBtn">👤 ${t.profile}</button><button class="menu-btn" id="statsBtn">📊 ${t.stats}</button><button class="menu-btn" id="rankingBtn">🏆 ${t.ranking}</button><button class="menu-btn" id="codeBtn">🔑 ${t.secretCode}</button><button class="menu-btn btn-x" id="shareXBtn" style="background:#000;color:#fff;">𝕏 ${t.shareX}</button><button class="menu-btn btn-telegram" id="shareTelegramBtn" style="background:#26A5E4;color:#fff;">📨 ${t.shareTelegram}</button><button class="menu-btn" id="langEsBtn">🇪🇸 ES</button><button class="menu-btn" id="langEnBtn">🇺🇸 EN</button>`; 
+            document.getElementById('shopBtn').onclick = openShop; 
+            document.getElementById('profileBtn').onclick = openProfile; 
+            document.getElementById('statsBtn').onclick = openStats; 
+            document.getElementById('rankingBtn').onclick = openRanking; 
+            document.getElementById('codeBtn').onclick = openCodeModal; 
+            document.getElementById('shareXBtn').onclick = shareToX; 
+            document.getElementById('shareTelegramBtn').onclick = shareToTelegramGroup; 
+            document.getElementById('langEsBtn').onclick = () => { currentLang = 'es'; updateLanguage(); updateClickerUITexts(); if(window.updateJumpUITexts) window.updateJumpUITexts(); }; 
+            document.getElementById('langEnBtn').onclick = () => { currentLang = 'en'; updateLanguage(); updateClickerUITexts(); if(window.updateJumpUITexts) window.updateJumpUITexts(); }; 
+        } 
+        updateDailyMissionsUI(); 
+        updateClickerUITexts(); 
+    }
     
     function updateBillyMood(combo, energy) { const billyImg = document.getElementById('billyMoodImg'); if(!billyImg) return; if(combo >= 15) { billyImg.src = 'billy_happy.png'; document.getElementById('billy').classList.add('billy-golden'); } else if(energy <= 20) { billyImg.src = 'billy_Triste.png'; document.getElementById('billy').classList.remove('billy-golden'); if(energy <= 20 && energy > 0 && Math.random() < 0.1) playLowEnergySound(); } else if(combo <= 2 && energy > 50) { billyImg.src = 'billy_Enfadado.png'; document.getElementById('billy').classList.remove('billy-golden'); } else { billyImg.src = 'billy_happy.png'; document.getElementById('billy').classList.remove('billy-golden'); } billyImg.onerror = function() { this.src = 'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22%3E%3Ccircle cx=%2250%22 cy=%2250%22 r=%2245%22 fill=%22%23FFD966%22/%3E%3Ctext x=%2250%22 y=%2270%22 text-anchor=%22middle%22 fill=%22%23FFA500%22 font-size=%2240%22%3E🐱%3C/text%3E%3C/svg%3E'; }; }
     
@@ -610,7 +697,26 @@
     
     function updateClickerStats() { const skills = getSkillBonus(); clickerMaxEnergy = 100 + Math.floor(clickerLevel / 2) * 5 + (skills.energy * 20); updateClickerUI(); }
     
-    function updateClickerUI() { document.getElementById('clickerCoins').textContent = Math.floor(clickerCoins); document.getElementById('clickerLevel').textContent = clickerLevel; document.getElementById('clickerTapPower').textContent = clickerTapPower; document.getElementById('clickerCombo').textContent = clickerCombo; document.getElementById('clickerEnergy').textContent = Math.floor(clickerEnergy); document.getElementById('clickerMaxEnergy').textContent = clickerMaxEnergy; document.getElementById('clickerEnergyFill').style.width = (clickerEnergy / clickerMaxEnergy * 100) + '%'; document.getElementById('clickerTokens').textContent = Math.floor(clickerTokens); document.getElementById('clickerBestCombo').textContent = clickerBestCombo; const comboPercent = Math.min(100, (clickerCombo / 20) * 100); document.getElementById('comboBarFill').style.width = comboPercent + '%'; const petPanel = document.getElementById('petPanel'); const activePet = getActivePet(); if(activePet) { const petNames = { dog: t.petDog, owl: t.petOwl, bee: t.petBee, dragon: t.petDragon }; petPanel.innerHTML = `<span>${petNames[activePet]}</span>`; } else { petPanel.innerHTML = `<span>🐾 ${t.pets}</span>`; } const challengesPanel = document.getElementById('clickerChallenges'); if(challengesPanel) { challengesPanel.innerHTML = `<div class="challenge-item">🐭 ${clickerChallenges.mice}/${weeklyRewards.mice}</div><div class="challenge-item">⚡ ${clickerChallenges.crits}/${weeklyRewards.crits}</div><div class="challenge-item">🔥 ${clickerChallenges.maxCombo}/${weeklyRewards.combo}</div>`; } updateBillyMood(clickerCombo, clickerEnergy); }
+    function updateClickerUI() { 
+        document.getElementById('clickerCoins').textContent = Math.floor(clickerCoins); 
+        document.getElementById('clickerLevel').textContent = clickerLevel; 
+        document.getElementById('clickerTapPower').textContent = clickerTapPower; 
+        document.getElementById('clickerCombo').textContent = clickerCombo; 
+        document.getElementById('clickerEnergy').textContent = Math.floor(clickerEnergy); 
+        document.getElementById('clickerMaxEnergy').textContent = clickerMaxEnergy; 
+        document.getElementById('clickerEnergyFill').style.width = (clickerEnergy / clickerMaxEnergy * 100) + '%'; 
+        document.getElementById('clickerTokens').textContent = Math.floor(clickerTokens); 
+        document.getElementById('clickerBestCombo').textContent = clickerBestCombo; 
+        const comboPercent = Math.min(100, (clickerCombo / 20) * 100); 
+        const comboBar = document.getElementById('comboBarFill');
+        if(comboBar) comboBar.style.width = comboPercent + '%'; 
+        const petPanel = document.getElementById('petPanel'); 
+        const activePet = getActivePet(); 
+        if(activePet) { const petNames = { dog: t.petDog, owl: t.petOwl, bee: t.petBee, dragon: t.petDragon }; petPanel.innerHTML = `<span>${petNames[activePet]}</span>`; } else { petPanel.innerHTML = `<span>🐾 ${t.pets}</span>`; } 
+        const challengesPanel = document.getElementById('clickerChallenges'); 
+        if(challengesPanel) { challengesPanel.innerHTML = `<div class="challenge-item">🐭 ${clickerChallenges.mice}/${weeklyRewards.mice}</div><div class="challenge-item">⚡ ${clickerChallenges.crits}/${weeklyRewards.crits}</div><div class="challenge-item">🔥 ${clickerChallenges.maxCombo}/${weeklyRewards.combo}</div>`; } 
+        updateBillyMood(clickerCombo, clickerEnergy); 
+    }
     
     function updateClickerUITexts() { const upgradeBtn = document.getElementById('clickerUpgradeBtn'); if(upgradeBtn) upgradeBtn.textContent = t.upgradeBtn; const chestBtn = document.getElementById('clickerLootBtn'); if(chestBtn) chestBtn.textContent = t.chestBtn; const energyLabel = document.querySelector('.energy-container > div:first-child span:first-child'); if(energyLabel) energyLabel.textContent = t.energy; const comboPanel = document.querySelector('.combo-panel'); if(comboPanel) comboPanel.innerHTML = `🔥 <span id="clickerCombo">0</span> ${t.combo}`; const recordsPanel = document.querySelector('.records-panel'); if(recordsPanel) recordsPanel.innerHTML = `🏆 ${t.bestComboLabel}: <span id="clickerBestCombo">0</span>`; }
     
@@ -618,7 +724,56 @@
     
     function updateChallenges() { if(clickerChallenges.mice >= weeklyRewards.mice) { clickerCoins += 250; clickerChallenges.mice = 0; showNotification("🏆 Desafío ratones completado! +250 monedas", "achievement"); playChestSound(); } if(clickerChallenges.crits >= weeklyRewards.crits) { clickerCoins += 200; clickerChallenges.crits = 0; showNotification("🏆 Desafío críticos completado! +200 monedas", "achievement"); playChestSound(); } if(clickerChallenges.maxCombo >= weeklyRewards.combo) { clickerCoins += 350; clickerChallenges.maxCombo = 0; showNotification("🏆 Desafío combo completado! +350 monedas", "achievement"); playChestSound(); } updateClickerUI(); }
     
-    function tapBillyClicker(event) { if(!clickerGameActive) return; if(clickerEnergy <= 0) { showNotification(t.noEnergy); return; } const now = Date.now(); if(window.lastTapTime && now - window.lastTapTime < 800) { window.quickTapStreak = (window.quickTapStreak || 0) + 1; if(window.quickTapStreak > 10) window.quickTapStreak = 10; } else { window.quickTapStreak = 1; } window.lastTapTime = now; const streakBonus = 1 + ((window.quickTapStreak || 1) * 0.05); if(window.quickTapStreak >= 5 && window.quickTapStreak % 5 === 0) { currentUser.resources.tokens += window.quickTapStreak * 5; showNotification(t.quickStreak.replace('{amount}', window.quickTapStreak * 5), "achievement"); } clickerCombo++; if(clickerCombo > clickerBestCombo) { clickerBestCombo = clickerCombo; if(clickerCombo > clickerChallenges.maxCombo) clickerChallenges.maxCombo = clickerCombo; } clickerTotalTaps++; const skills = getSkillBonus(); const activePet = getActivePet(); let critChance = 10 + skills.luck * 2 + Math.floor(clickerCombo / 3); if(activePet === 'owl') critChance += 10; if(noCritCounter >= 8) { critChance = 100; noCritCounter = 0; showNotification("💥 ¡CRÍTICO GARANTIZADO!", "crit"); } const isCrit = Math.random() * 100 < critChance; if(isCrit) { noCritCounter = 0; clickerTotalCrits++; clickerChallenges.crits++; } else { noCritCounter++; } let gain = clickerTapPower * (isCrit ? 3 : 1) * (1 + clickerCombo * 0.02) * streakBonus; gain *= (1 + skills.strength * 0.05); gain *= (1 + skills.economy * 0.1); if(activePet === 'dragon') gain *= 1.1; if(clickerSuperCombo) gain *= 1.5; if(clickerDoubleEvent) gain *= 2; gain = Math.floor(Math.max(1, gain)); clickerCoins += gain; clickerTokens += Math.floor(gain / 10); let energyCost = Math.max(1, Math.floor(clickerCombo / 10)); clickerEnergy = Math.max(0, clickerEnergy - energyCost); updateClickerUI(); updateMissionProgress('tap'); if(clickerComboTimer) clearTimeout(clickerComboTimer); clickerComboTimer = setTimeout(() => { if(clickerCombo >= 3) showNotification(t.comboLost.replace('{combo}', clickerCombo)); clickerCombo = 0; clickerSuperCombo = false; updateClickerUI(); }, 2000); if(clickerCombo >= 12 && !clickerSuperCombo) { clickerSuperCombo = true; showNotification(t.superCombo); playComboSound(); setTimeout(() => { clickerSuperCombo = false; showNotification(t.superComboEnd); }, 5000); } const billyDiv = document.getElementById('billy'); billyDiv.style.transform = 'scale(0.92)'; setTimeout(() => billyDiv.style.transform = 'scale(1)', 100); const clickX = event.clientX || (event.touches ? event.touches[0].clientX : clickerBillyX); const clickY = event.clientY || (event.touches ? event.touches[0].clientY : clickerBillyY); createRipple(clickX, clickY); createParticles(clickX, clickY, isCrit ? '#FFD966' : '#A5F0A0'); createFloatingNumber(gain, clickX, clickY, isCrit); playTapSound(isCrit); let neededCoins = 100 * Math.pow(1.28, clickerLevel - 1); if(clickerCoins >= neededCoins) { clickerLevel++; clickerMaxEnergy = 100 + Math.floor(clickerLevel / 2) * 5 + (skills.energy * 20); clickerEnergy = Math.min(clickerMaxEnergy, clickerEnergy + 40); showNotification(t.levelUp.replace('{level}', clickerLevel), "achievement"); playLevelUpSound(); createConfetti(); updateClickerUI(); checkAchievements(); } checkAchievements(); updateChallenges(); saveClickerData(); updateMenuResources(); }
+    function tapBillyClicker(event) { 
+        if(!clickerGameActive) return; 
+        if(clickerEnergy <= 0) { showNotification(t.noEnergy); return; } 
+        const now = Date.now(); 
+        if(window.lastTapTime && now - window.lastTapTime < 800) { window.quickTapStreak = (window.quickTapStreak || 0) + 1; if(window.quickTapStreak > 10) window.quickTapStreak = 10; } else { window.quickTapStreak = 1; } 
+        window.lastTapTime = now; 
+        const streakBonus = 1 + ((window.quickTapStreak || 1) * 0.05); 
+        if(window.quickTapStreak >= 5 && window.quickTapStreak % 5 === 0) { currentUser.resources.tokens += window.quickTapStreak * 5; showNotification(t.quickStreak.replace('{amount}', window.quickTapStreak * 5), "achievement"); } 
+        clickerCombo++; 
+        if(clickerCombo > clickerBestCombo) { clickerBestCombo = clickerCombo; if(clickerCombo > clickerChallenges.maxCombo) clickerChallenges.maxCombo = clickerCombo; } 
+        clickerTotalTaps++; 
+        const skills = getSkillBonus(); 
+        const activePet = getActivePet(); 
+        let critChance = 10 + skills.luck * 2 + Math.floor(clickerCombo / 3); 
+        if(activePet === 'owl') critChance += 10; 
+        if(noCritCounter >= 8) { critChance = 100; noCritCounter = 0; showNotification("💥 ¡CRÍTICO GARANTIZADO!", "crit"); } 
+        const isCrit = Math.random() * 100 < critChance; 
+        if(isCrit) { noCritCounter = 0; clickerTotalCrits++; clickerChallenges.crits++; } else { noCritCounter++; } 
+        let gain = clickerTapPower * (isCrit ? 3 : 1) * (1 + clickerCombo * 0.02) * streakBonus; 
+        gain *= (1 + skills.strength * 0.05); 
+        gain *= (1 + skills.economy * 0.1); 
+        if(activePet === 'dragon') gain *= 1.1; 
+        if(clickerSuperCombo) gain *= 1.5; 
+        if(clickerDoubleEvent) gain *= 2; 
+        gain = Math.floor(Math.max(1, gain)); 
+        clickerCoins += gain; 
+        clickerTokens += Math.floor(gain / 10); 
+        let energyCost = Math.max(1, Math.floor(clickerCombo / 10)); 
+        clickerEnergy = Math.max(0, clickerEnergy - energyCost); 
+        updateClickerUI(); 
+        updateMissionProgress('tap'); 
+        if(clickerComboTimer) clearTimeout(clickerComboTimer); 
+        clickerComboTimer = setTimeout(() => { if(clickerCombo >= 3) showNotification(t.comboLost.replace('{combo}', clickerCombo)); clickerCombo = 0; clickerSuperCombo = false; updateClickerUI(); }, 2000); 
+        if(clickerCombo >= 12 && !clickerSuperCombo) { clickerSuperCombo = true; showNotification(t.superCombo); playComboSound(); setTimeout(() => { clickerSuperCombo = false; showNotification(t.superComboEnd); }, 5000); } 
+        const billyDiv = document.getElementById('billy'); 
+        billyDiv.style.transform = 'scale(0.92)'; 
+        setTimeout(() => billyDiv.style.transform = 'scale(1)', 100); 
+        const clickX = event.clientX || (event.touches ? event.touches[0].clientX : clickerBillyX); 
+        const clickY = event.clientY || (event.touches ? event.touches[0].clientY : clickerBillyY); 
+        createRipple(clickX, clickY); 
+        createParticles(clickX, clickY, isCrit ? '#FFD966' : '#A5F0A0'); 
+        createFloatingNumber(gain, clickX, clickY, isCrit); 
+        playTapSound(isCrit); 
+        let neededCoins = 100 * Math.pow(1.28, clickerLevel - 1); 
+        if(clickerCoins >= neededCoins) { clickerLevel++; clickerMaxEnergy = 100 + Math.floor(clickerLevel / 2) * 5 + (skills.energy * 20); clickerEnergy = Math.min(clickerMaxEnergy, clickerEnergy + 40); showNotification(t.levelUp.replace('{level}', clickerLevel), "achievement"); playLevelUpSound(); createConfetti(); updateClickerUI(); checkAchievements(); } 
+        checkAchievements(); 
+        updateChallenges(); 
+        saveClickerData(); 
+        updateMenuResources(); 
+    }
     
     function createRipple(x, y) { const ripple = document.createElement('div'); ripple.className = 'ripple'; ripple.style.left = (x - 35) + 'px'; ripple.style.top = (y - 35) + 'px'; ripple.style.width = '70px'; ripple.style.height = '70px'; document.body.appendChild(ripple); setTimeout(() => ripple.remove(), 500); }
     
@@ -638,21 +793,67 @@
     
     function catchBubble(index, x, y) { if(index >= clickerBubbles.length) return; const b = clickerBubbles[index]; clickerCoins += b.value; createStarParticles(x, y, true); createFloatingNumber(b.value, x, y, true); clickerTokens += Math.floor(b.value / 10); playChestSound(); updateClickerUI(); clickerBubbles.splice(index, 1); renderClickerEntities(); saveClickerData(); updateMenuResources(); }
     
-    function renderClickerEntities() { const container = document.getElementById('gameArea'); const existing = container.querySelectorAll('.game-entity'); existing.forEach(el => el.remove()); clickerMice.forEach((m, idx) => { const div = document.createElement('div'); div.className = `game-entity ${m.isBoss ? 'mouse-boss' : (m.isGolden ? 'mouse-golden' : 'mouse-normal')}`; div.style.cssText = `left:${m.x - m.size/2}px;top:${m.y - m.size/2}px;width:${m.size}px;height:${m.size}px;font-size:${m.size/2.2}px;cursor:pointer;pointer-events:auto;`; div.textContent = m.isBoss ? '🐀👑' : (m.isGolden ? '🐭✨' : '🐭'); div.dataset.type = 'mouse'; div.dataset.idx = idx; div.onclick = (e) => { e.stopPropagation(); catchMouse(idx, e.clientX, e.clientY); }; container.appendChild(div); }); clickerBubbles.forEach((b, idx) => { const div = document.createElement('div'); div.className = 'game-entity bubble'; div.style.cssText = `left:${b.x - b.size/2}px;top:${b.y - b.size/2}px;width:${b.size}px;height:${b.size}px;font-size:${b.size/2}px;cursor:pointer;pointer-events:auto;`; div.textContent = '🎁'; div.dataset.type = 'bubble'; div.dataset.idx = idx; div.onclick = (e) => { e.stopPropagation(); catchBubble(idx, e.clientX, e.clientY); }; container.appendChild(div); }); }
+    function renderClickerEntities() { 
+        const container = document.getElementById('gameArea'); 
+        const existing = container.querySelectorAll('.game-entity'); 
+        existing.forEach(el => el.remove()); 
+        clickerMice.forEach((m, idx) => { 
+            const div = document.createElement('div'); 
+            div.className = `game-entity ${m.isBoss ? 'mouse-boss' : (m.isGolden ? 'mouse-golden' : 'mouse-normal')}`; 
+            div.style.cssText = `left:${m.x - m.size/2}px;top:${m.y - m.size/2}px;width:${m.size}px;height:${m.size}px;font-size:${m.size/2.2}px;cursor:pointer;pointer-events:auto;`; 
+            div.textContent = m.isBoss ? '🐀👑' : (m.isGolden ? '🐭✨' : '🐭'); 
+            div.dataset.type = 'mouse'; 
+            div.dataset.idx = idx; 
+            div.onclick = (e) => { e.stopPropagation(); catchMouse(idx, e.clientX, e.clientY); }; 
+            container.appendChild(div); 
+        }); 
+        clickerBubbles.forEach((b, idx) => { 
+            const div = document.createElement('div'); 
+            div.className = 'game-entity bubble'; 
+            div.style.cssText = `left:${b.x - b.size/2}px;top:${b.y - b.size/2}px;width:${b.size}px;height:${b.size}px;font-size:${b.size/2}px;cursor:pointer;pointer-events:auto;`; 
+            div.textContent = '🎁'; 
+            div.dataset.type = 'bubble'; 
+            div.dataset.idx = idx; 
+            div.onclick = (e) => { e.stopPropagation(); catchBubble(idx, e.clientX, e.clientY); }; 
+            container.appendChild(div); 
+        }); 
+    }
     
     function updateBillyPosition() { if(!clickerGameActive) return; clickerBillyX += (clickerTargetX - clickerBillyX) * 0.12; clickerBillyY += (clickerTargetY - clickerBillyY) * 0.12; const billy = document.getElementById('billy'); billy.style.left = (clickerBillyX - billy.offsetWidth/2) + 'px'; billy.style.top = (clickerBillyY - billy.offsetHeight/2) + 'px'; const activePet = getActivePet(); if(activePet) { const follower = document.getElementById('petFollower'); const petEmojis = { dog: '🐕', owl: '🦉', bee: '🐝', dragon: '🐉' }; follower.textContent = petEmojis[activePet]; follower.style.left = (clickerBillyX - 45) + 'px'; follower.style.top = (clickerBillyY - 35) + 'px'; follower.style.display = 'block'; } else { document.getElementById('petFollower').style.display = 'none'; } requestAnimationFrame(updateBillyPosition); }
     
-    function startPetEffects() { clickerPetIntervals.forEach(clearInterval); clickerPetIntervals = []; const activePet = getActivePet(); if(!activePet) return; if(activePet === 'dog') { const interval = setInterval(() => { if(clickerGameActive && clickerMice.length > 0 && Math.random() < 0.5) { const randomMouse = clickerMice[Math.floor(Math.random() * clickerMice.length)]; if(randomMouse) { const gain = Math.floor(randomMouse.value); clickerCoins += gain; clickerTotalMice++; showNotification(t.petDogCatch.replace('{gain}', gain), "pet"); playMouseSound(false, false); clickerMice = clickerMice.filter(m => m !== randomMouse); renderClickerEntities(); updateClickerUI(); updateMissionProgress('mice'); } } }, 10000); clickerPetIntervals.push(interval); } if(activePet === 'bee') { const interval = setInterval(() => { if(clickerGameActive) { const skills = getSkillBonus(); const gain = Math.floor(15 * (1 + skills.economy * 0.1)); clickerCoins += gain; showNotification(t.petBeeGenerate.replace('{gain}', gain), "pet"); updateClickerUI(); } }, 30000); clickerPetIntervals.push(interval); } if(activePet === 'owl') { const interval = setInterval(() => { if(clickerGameActive) showNotification(t.petOwlBoost, "pet"); }, 45000); clickerPetIntervals.push(interval); } if(activePet === 'dragon') { const interval = setInterval(() => { if(clickerGameActive) showNotification(t.petDragonBoost, "pet"); }, 60000); clickerPetIntervals.push(interval); } }
+    function startPetEffects() { clickerPetIntervals.forEach(clearInterval); clickerPetIntervals = []; const activePet = getActivePet(); if(!activePet) return; if(activePet === 'dog') { const interval = setInterval(() => { if(clickerGameActive && clickerMice.length > 0 && Math.random() < 0.5) { const randomMouse = clickerMice[Math.floor(Math.random() * clickerMice.length)]; if(randomMouse) { const gain = Math.floor(randomMouse.value); clickerCoins += gain; clickerTotalMice++; showNotification(`🐕 ¡Perrito atrapó un ratón! +${gain}`, "pet"); playMouseSound(false, false); clickerMice = clickerMice.filter(m => m !== randomMouse); renderClickerEntities(); updateClickerUI(); updateMissionProgress('mice'); } } }, 10000); clickerPetIntervals.push(interval); } if(activePet === 'bee') { const interval = setInterval(() => { if(clickerGameActive) { const skills = getSkillBonus(); const gain = Math.floor(15 * (1 + skills.economy * 0.1)); clickerCoins += gain; showNotification(`🐝 ¡Abeja generó ${gain} monedas!`, "pet"); updateClickerUI(); } }, 30000); clickerPetIntervals.push(interval); } if(activePet === 'owl') { const interval = setInterval(() => { if(clickerGameActive) showNotification(`🦉 Búho aumenta crítico en +10%`, "pet"); }, 45000); clickerPetIntervals.push(interval); } if(activePet === 'dragon') { const interval = setInterval(() => { if(clickerGameActive) showNotification(`🐉 Dragón mejora todas las estadísticas x1.1`, "pet"); }, 60000); clickerPetIntervals.push(interval); } }
     
     function updatePetFollower() { const activePet = getActivePet(); const follower = document.getElementById('petFollower'); if(activePet) { const petEmojis = { dog: '🐕', owl: '🦉', bee: '🐝', dragon: '🐉' }; follower.textContent = petEmojis[activePet]; follower.style.display = 'block'; } else { follower.style.display = 'none'; } }
     
-    function startClickerGame() { clickerGameActive = true; loadClickerData(); updateClickerUI(); updateClickerUITexts(); startPetEffects(); updatePetFollower(); document.getElementById('gameArea').innerHTML = ''; const billy = document.getElementById('billy'); billy.onclick = tapBillyClicker; billy.ontouchstart = (e) => { e.preventDefault(); tapBillyClicker(e); }; document.onmousemove = (e) => { clickerTargetX = e.clientX; clickerTargetY = e.clientY; }; document.ontouchmove = (e) => { e.preventDefault(); const t = e.touches[0]; clickerTargetX = t.clientX; clickerTargetY = t.clientY; }; updateBillyPosition(); setInterval(() => spawnMouse(), 3800); setInterval(() => spawnBubble(), 6000); setInterval(() => { updateMice(); renderClickerEntities(); }, 50); setInterval(() => { if(clickerGameActive) { let regen = Math.max(1, Math.floor(clickerCombo / 8)); clickerEnergy = Math.min(clickerMaxEnergy, clickerEnergy + regen); updateClickerUI(); } }, 2000); setInterval(() => { if(clickerGameActive && Math.random() < 0.15 && !clickerGoldenHour) { clickerGoldenHour = true; showNotification(t.goldenHour); playEventSound(); setTimeout(() => { clickerGoldenHour = false; showNotification(t.goldenHourEnd); }, 10000); } }, 35000); setInterval(() => { if(clickerGameActive && Math.random() < 0.1 && !clickerDoubleEvent) { clickerDoubleEvent = true; showNotification(t.doubleEvent); playEventSound(); setTimeout(() => { clickerDoubleEvent = false; showNotification(t.doubleEventEnd); updateClickerUI(); }, 15000); updateClickerUI(); } }, 50000); setInterval(() => saveClickerData(), 10000); showNotification("🐱 ¡Toca a Billy para comenzar!"); }
+    function startClickerGame() { 
+        clickerGameActive = true; 
+        loadClickerData(); 
+        updateClickerUI(); 
+        updateClickerUITexts(); 
+        startPetEffects(); 
+        updatePetFollower(); 
+        document.getElementById('gameArea').innerHTML = ''; 
+        const billy = document.getElementById('billy'); 
+        billy.onclick = tapBillyClicker; 
+        billy.ontouchstart = (e) => { e.preventDefault(); tapBillyClicker(e); }; 
+        document.onmousemove = (e) => { clickerTargetX = e.clientX; clickerTargetY = e.clientY; }; 
+        document.ontouchmove = (e) => { e.preventDefault(); const t = e.touches[0]; clickerTargetX = t.clientX; clickerTargetY = t.clientY; }; 
+        updateBillyPosition(); 
+        setInterval(() => spawnMouse(), 3800); 
+        setInterval(() => spawnBubble(), 6000); 
+        setInterval(() => { updateMice(); renderClickerEntities(); }, 50); 
+        setInterval(() => { if(clickerGameActive) { let regen = Math.max(1, Math.floor(clickerCombo / 8)); clickerEnergy = Math.min(clickerMaxEnergy, clickerEnergy + regen); updateClickerUI(); } }, 2000); 
+        setInterval(() => { if(clickerGameActive && Math.random() < 0.15 && !clickerGoldenHour) { clickerGoldenHour = true; showNotification(t.goldenHour); playEventSound(); setTimeout(() => { clickerGoldenHour = false; showNotification(t.goldenHourEnd); }, 10000); } }, 35000); 
+        setInterval(() => { if(clickerGameActive && Math.random() < 0.1 && !clickerDoubleEvent) { clickerDoubleEvent = true; showNotification(t.doubleEvent); playEventSound(); setTimeout(() => { clickerDoubleEvent = false; showNotification(t.doubleEventEnd); updateClickerUI(); }, 15000); updateClickerUI(); } }, 50000); 
+        setInterval(() => saveClickerData(), 10000); 
+        showNotification("🐱 ¡Toca a Billy para comenzar!"); 
+    }
     
     const clickerContainerDiv = document.getElementById('clickerContainer');
     clickerContainerDiv.insertAdjacentHTML('beforeend', `<div class="top-panel"><div class="stat-card">😺 Nv <span id="clickerLevel">1</span></div><div class="stat-card">💰 <span id="clickerCoins">0</span></div><div class="stat-card">💪 <span id="clickerTapPower">1</span></div></div><div class="token-bar" id="clickerTokenBar">⭐ <span id="clickerTokens">0</span> BILLY</div><div class="combo-panel">🔥 <span id="clickerCombo">0</span> COMBO</div><div class="combo-bar-container"><div class="combo-bar-fill" id="comboBarFill"></div></div><div class="pet-panel" id="petPanel"><span>🐾 Mascota</span></div><div class="records-panel">🏆 Mejor combo: <span id="clickerBestCombo">0</span></div><div class="energy-container"><div style="display:flex; justify-content:space-between;"><span>⚡ Energía</span><span><span id="clickerEnergy">100</span>/<span id="clickerMaxEnergy">100</span></span></div><div class="energy-bg"><div class="energy-fill" id="clickerEnergyFill"></div></div></div><div class="challenges-panel" id="clickerChallenges"><div class="challenge-item">🐭 0/25</div><div class="challenge-item">⚡ 0/15</div><div class="challenge-item">🔥 0/12</div></div><div class="action-buttons"><button class="btn" id="clickerUpgradeBtn">💪 Mejorar</button><button class="btn btn-primary" id="clickerLootBtn">🎁 Cofre</button></div>`);
     
-    document.getElementById('clickerUpgradeBtn').onclick = () => { let cost = Math.floor(50 * Math.pow(1.4, clickerTapPower - 1)); if(clickerCoins >= cost) { clickerCoins -= cost; clickerTapPower++; updateClickerUI(); saveClickerData(); showNotification(t.upgradePower.replace('{power}', clickerTapPower), "achievement"); playClickSound(); } else { showNotification(t.needCoins.replace('{need}', Math.floor(cost - clickerCoins))); } };
-    document.getElementById('clickerLootBtn').onclick = () => { if(clickerCoins >= 50) { clickerCoins -= 50; let reward = 80 + Math.floor(Math.random() * 200); clickerCoins += reward; updateClickerUI(); showNotification(t.chestReward.replace('{reward}', reward), "achievement"); playChestSound(); saveClickerData(); updateMenuResources(); } else { showNotification(t.needCoinsShort.replace('{cost}', 50)); } };
+    document.getElementById('clickerUpgradeBtn').onclick = () => { let cost = Math.floor(50 * Math.pow(1.4, clickerTapPower - 1)); if(clickerCoins >= cost) { clickerCoins -= cost; clickerTapPower++; updateClickerUI(); saveClickerData(); showNotification(t.upgradePower.replace('{power}', clickerTapPower), "achievement"); playClickSound(); } else { showNotification(`💰 Faltan ${Math.floor(cost - clickerCoins)} monedas`); } };
+    document.getElementById('clickerLootBtn').onclick = () => { if(clickerCoins >= 50) { clickerCoins -= 50; let reward = 80 + Math.floor(Math.random() * 200); clickerCoins += reward; updateClickerUI(); showNotification(`🎁 +${reward} monedas!`, "achievement"); playChestSound(); saveClickerData(); updateMenuResources(); } else { showNotification(`💔 Necesitas 50 monedas`); } };
     document.getElementById('clickerTokenBar').onclick = () => showNotification(`⭐ ${Math.floor(clickerTokens)} BILLY tokens`);
     
     window.startClickerGame = startClickerGame;
@@ -663,7 +864,7 @@
     let jumpGameActive = false;
     let jumpState = { canvas: null, ctx: null, width: 0, height: 0, score: 0, bestScore: 0, gameOver: false, animationId: null, player: { x: 80, y: 0, width: 35, height: 35, vy: 0, gravity: 0.7, jumpPower: -10, grounded: true }, obstacles: [], coins: [], powerups: [], spawnCounter: 0, frameCount: 0, activePowerups: { shield: false, magnet: false, double: false }, clouds: [], speed: 4 };
     
-    function drawBillyCat(ctx, x, y, w, h, isJumping) { // Billy negro con ojos amarillos
+    function drawBillyCat(ctx, x, y, w, h, isJumping) { 
         ctx.save(); ctx.shadowBlur = 0;
         ctx.fillStyle = '#1a1a1a'; ctx.beginPath(); ctx.ellipse(x + w/2, y + h/2 - 5, w/2.2, h/2.5, 0, 0, Math.PI*2); ctx.fill();
         ctx.fillStyle = '#2a2a2a'; ctx.beginPath(); ctx.ellipse(x + w/2 - 8, y + h/2 - 12, 8, 10, 0, 0, Math.PI*2); ctx.fill(); ctx.beginPath(); ctx.ellipse(x + w/2 + 8, y + h/2 - 12, 8, 10, 0, 0, Math.PI*2); ctx.fill();
@@ -675,7 +876,36 @@
         ctx.restore();
     }
     
-    function startJumpGame() { if(jumpGameActive) return; jumpGameActive = true; jumpState.width = Math.min(window.innerWidth - 40, 400); jumpState.height = 500; jumpState.player.y = jumpState.height - 70; jumpState.score = 0; jumpState.bestScore = currentUser?.jump.bestScore || 0; jumpState.gameOver = false; jumpState.obstacles = []; jumpState.coins = []; jumpState.powerups = []; jumpState.spawnCounter = 0; jumpState.activePowerups = { shield: false, magnet: false, double: false }; jumpState.speed = 4; jumpState.clouds = []; for(let i = 0; i < 3; i++) jumpState.clouds.push({ x: Math.random() * jumpState.width, y: 30 + Math.random() * 100, size: 40 + Math.random() * 30 }); const container = document.getElementById('jumpContainer'); container.innerHTML = `<div class="game-header"><button class="back-btn" id="jumpBackBtnGame">← ${t.back}</button></div><div class="jump-container"><div class="jump-stats"><div class="jump-score-card">🏆 ${t.jumpBestLabel} ${jumpState.bestScore}</div><div class="jump-score-card">⭐ ${t.jumpScoreLabel} <span id="jumpScore">0</span></div></div><canvas id="jumpCanvas" class="jump-canvas" width="${jumpState.width}" height="${jumpState.height}"></canvas><div class="jump-powerups"><div class="powerup-btn" id="useShield">🛡️ ${t.jumpShield} (${currentUser?.inventory.powerups.shield || 0})</div><div class="powerup-btn" id="useMagnet">🧲 ${t.jumpMagnet} (${currentUser?.inventory.powerups.magnet || 0})</div><div class="powerup-btn" id="useDouble">✨ ${t.jumpDouble} (${currentUser?.inventory.powerups.double || 0})</div></div><div class="jump-instruction">${t.jumpInstruction}</div></div>`; jumpState.canvas = document.getElementById('jumpCanvas'); jumpState.ctx = jumpState.canvas.getContext('2d'); document.getElementById('jumpBackBtnGame').onclick = () => { cancelAnimationFrame(jumpState.animationId); jumpGameActive = false; document.getElementById('jumpContainer').classList.remove('active'); document.getElementById('mainMenu').style.display = 'flex'; updateMenuResources(); }; document.getElementById('useShield').onclick = () => useJumpPowerup('shield'); document.getElementById('useMagnet').onclick = () => useJumpPowerup('magnet'); document.getElementById('useDouble').onclick = () => useJumpPowerup('double'); jumpState.canvas.onclick = () => jumpActionJump(); jumpState.canvas.ontouchstart = (e) => { e.preventDefault(); jumpActionJump(); }; jumpState.animationId = requestAnimationFrame(updateJumpGame); if(window.updateJumpUITexts) window.updateJumpUITexts(); }
+    function startJumpGame() { 
+        if(jumpGameActive) return; 
+        jumpGameActive = true; 
+        jumpState.width = Math.min(window.innerWidth - 40, 400); 
+        jumpState.height = 500; 
+        jumpState.player.y = jumpState.height - 70; 
+        jumpState.score = 0; 
+        jumpState.bestScore = currentUser?.jump.bestScore || 0; 
+        jumpState.gameOver = false; 
+        jumpState.obstacles = []; 
+        jumpState.coins = []; 
+        jumpState.powerups = []; 
+        jumpState.spawnCounter = 0; 
+        jumpState.activePowerups = { shield: false, magnet: false, double: false }; 
+        jumpState.speed = 4; 
+        jumpState.clouds = []; 
+        for(let i = 0; i < 3; i++) jumpState.clouds.push({ x: Math.random() * jumpState.width, y: 30 + Math.random() * 100, size: 40 + Math.random() * 30 }); 
+        const container = document.getElementById('jumpContainer'); 
+        container.innerHTML = `<div class="game-header"><button class="back-btn" id="jumpBackBtnGame">← ${t.back}</button></div><div class="jump-container"><div class="jump-stats"><div class="jump-score-card">🏆 ${t.jumpBestLabel} ${jumpState.bestScore}</div><div class="jump-score-card">⭐ ${t.jumpScoreLabel} <span id="jumpScore">0</span></div></div><canvas id="jumpCanvas" class="jump-canvas" width="${jumpState.width}" height="${jumpState.height}"></canvas><div class="jump-powerups"><div class="powerup-btn" id="useShield">🛡️ ${t.jumpShield} (${currentUser?.inventory.powerups.shield || 0})</div><div class="powerup-btn" id="useMagnet">🧲 ${t.jumpMagnet} (${currentUser?.inventory.powerups.magnet || 0})</div><div class="powerup-btn" id="useDouble">✨ ${t.jumpDouble} (${currentUser?.inventory.powerups.double || 0})</div></div><div class="jump-instruction">${t.jumpInstruction}</div></div>`; 
+        jumpState.canvas = document.getElementById('jumpCanvas'); 
+        jumpState.ctx = jumpState.canvas.getContext('2d'); 
+        document.getElementById('jumpBackBtnGame').onclick = () => { cancelAnimationFrame(jumpState.animationId); jumpGameActive = false; document.getElementById('jumpContainer').classList.remove('active'); document.getElementById('mainMenu').style.display = 'flex'; updateMenuResources(); }; 
+        document.getElementById('useShield').onclick = () => useJumpPowerup('shield'); 
+        document.getElementById('useMagnet').onclick = () => useJumpPowerup('magnet'); 
+        document.getElementById('useDouble').onclick = () => useJumpPowerup('double'); 
+        jumpState.canvas.onclick = () => jumpActionJump(); 
+        jumpState.canvas.ontouchstart = (e) => { e.preventDefault(); jumpActionJump(); }; 
+        jumpState.animationId = requestAnimationFrame(updateJumpGame); 
+        if(window.updateJumpUITexts) window.updateJumpUITexts(); 
+    }
     
     function useJumpPowerup(type) { if(currentUser?.inventory.powerups[type] > 0 && !jumpState.activePowerups[type] && !jumpState.gameOver) { currentUser.inventory.powerups[type]--; jumpState.activePowerups[type] = true; saveUser(); showNotification(t.powerupActivated.replace('{type}', type), "achievement"); updateJumpUITexts(); setTimeout(() => { jumpState.activePowerups[type] = false; }, 10000); } else if(!jumpState.gameOver) { showNotification(t.powerupNoStock.replace('{type}', type)); } }
     
@@ -683,7 +913,64 @@
     
     function restartJump() { jumpState.player.y = jumpState.height - 70; jumpState.player.vy = 0; jumpState.player.grounded = true; jumpState.obstacles = []; jumpState.coins = []; jumpState.powerups = []; jumpState.score = 0; jumpState.gameOver = false; jumpState.spawnCounter = 0; jumpState.speed = 4; document.getElementById('jumpScore').textContent = 0; jumpState.activePowerups = { shield: false, magnet: false, double: false }; updateJumpUITexts(); }
     
-    function updateJumpGame() { if(!jumpState.canvas) return; const ctx = jumpState.ctx, w = jumpState.width, h = jumpState.height; ctx.clearRect(0, 0, w, h); const grad = ctx.createLinearGradient(0,0,0,h); grad.addColorStop(0, '#87CEEB'); grad.addColorStop(1, '#4A90D9'); ctx.fillStyle = grad; ctx.fillRect(0,0,w,h); for(const cloud of jumpState.clouds) { ctx.fillStyle = 'rgba(255,255,255,0.8)'; ctx.beginPath(); ctx.ellipse(cloud.x, cloud.y, cloud.size/2, cloud.size/3, 0, 0, Math.PI*2); ctx.fill(); cloud.x -= 0.5; if(cloud.x + cloud.size < 0) cloud.x = w + cloud.size; } ctx.fillStyle = '#5D8A3C'; ctx.fillRect(0, h-45, w, 45); ctx.fillStyle = '#7CB342'; ctx.fillRect(0, h-48, w, 3); for(let i = 0; i < 20; i++) { ctx.fillStyle = `rgba(0,0,0,${0.1 + Math.sin(Date.now()/500 + i)*0.05})`; ctx.fillRect(i*30, h-47, 5, 2); } if(!jumpState.gameOver) { jumpState.player.vy += jumpState.player.gravity; jumpState.player.y += jumpState.player.vy; if(jumpState.player.y >= h-45-jumpState.player.height) { jumpState.player.y = h-45-jumpState.player.height; jumpState.player.vy = 0; jumpState.player.grounded = true; } if(jumpState.player.y < 0) { jumpState.player.y = 0; if(jumpState.player.vy<0) jumpState.player.vy=0; } jumpState.spawnCounter++; let spawnRate = Math.max(35, 60 - Math.floor(jumpState.score/40)); if(jumpState.spawnCounter > spawnRate) { jumpState.spawnCounter = 0; const type = Math.random(); if(type < 0.6) jumpState.obstacles.push({ x: w, y: h-45-40, width: 28, height: 40, type: 'rock' }); else if(type < 0.85) jumpState.obstacles.push({ x: w, y: h-45-35, width: 25, height: 35, type: 'mouse', color: '#8B5A2B' }); else jumpState.obstacles.push({ x: w, y: h-45-50, width: 20, height: 50, type: 'box' }); if(Math.random() < 0.3) jumpState.coins.push({ x: w + 20, y: h-45-50 + Math.random() * 40, width: 12, height: 12, collected: false }); if(Math.random() < 0.15) jumpState.powerups.push({ x: w + 20, y: h-45-60, width: 20, height: 20, type: ['shield','magnet','double'][Math.floor(Math.random()*3)] }); } jumpState.speed = 4 + Math.floor(jumpState.score / 100); for(let i=0; i<jumpState.obstacles.length; i++) { const obs = jumpState.obstacles[i]; obs.x -= jumpState.speed; if(obs.x + obs.width < 0) { jumpState.obstacles.splice(i,1); let addScore = jumpState.activePowerups.double ? 2 : 1; jumpState.score += addScore; document.getElementById('jumpScore').textContent = jumpState.score; i--; } if(obs.x < jumpState.player.x + jumpState.player.width && obs.x + obs.width > jumpState.player.x && obs.y < jumpState.player.y + jumpState.player.height && obs.y + obs.height > jumpState.player.y) { if(jumpState.activePowerups.shield) { jumpState.activePowerups.shield = false; jumpState.obstacles.splice(i,1); showNotification("🛡️ Escudo usado!"); } else { jumpState.gameOver = true; if(jumpState.score > jumpState.bestScore) { jumpState.bestScore = jumpState.score; if(currentUser) currentUser.jump.bestScore = jumpState.score; saveUser(); } const reward = Math.floor(jumpState.score * 5); clickerCoins += reward; updateClickerUI(); saveClickerData(); updateMenuResources(); showNotification(`🎉 +${reward} ${t.coins}!`, "achievement"); playGameOverSound(); } } } for(let i=0; i<jumpState.coins.length; i++) { const coin = jumpState.coins[i]; coin.x -= jumpState.speed; ctx.fillStyle = '#FFD700'; ctx.beginPath(); ctx.ellipse(coin.x + coin.width/2, coin.y + coin.height/2, coin.width/2, coin.height/2, 0, 0, Math.PI*2); ctx.fill(); ctx.fillStyle = '#FFA500'; ctx.beginPath(); ctx.ellipse(coin.x + coin.width/2, coin.y + coin.height/2, coin.width/3, coin.height/3, 0, 0, Math.PI*2); ctx.fill(); if(!coin.collected && coin.x < jumpState.player.x + jumpState.player.width && coin.x + coin.width > jumpState.player.x && coin.y < jumpState.player.y + jumpState.player.height && coin.y + coin.height > jumpState.player.y) { coin.collected = true; const coinValue = 5; clickerCoins += coinValue; updateClickerUI(); saveClickerData(); showNotification(`🪙 +${coinValue} monedas!`, "normal"); playChestSound(); } if(coin.x + coin.width < 0 || coin.collected) { jumpState.coins.splice(i,1); i--; } } for(let i=0; i<jumpState.powerups.length; i++) { const p = jumpState.powerups[i]; p.x -= jumpState.speed; ctx.fillStyle = p.type === 'shield' ? '#4CAF50' : (p.type === 'magnet' ? '#9C27B0' : '#FF9800'); ctx.fillRect(p.x, p.y, p.width, p.height); ctx.fillStyle = 'white'; ctx.font = `${p.width-4}px "Segoe UI"`; ctx.fillText(p.type === 'shield' ? '🛡️' : (p.type === 'magnet' ? '🧲' : '✨'), p.x+2, p.y+p.height-5); if(p.x < jumpState.player.x + jumpState.player.width && p.x + p.width > jumpState.player.x && p.y < jumpState.player.y + jumpState.player.height && p.y + p.height > jumpState.player.y) { if(!jumpState.activePowerups[p.type]) { jumpState.activePowerups[p.type] = true; showNotification(t.powerupActivated.replace('{type}', p.type), "achievement"); setTimeout(() => { if(jumpState.activePowerups[p.type]) jumpState.activePowerups[p.type] = false; }, 10000); } jumpState.powerups.splice(i,1); i--; } else if(p.x + p.width < 0) { jumpState.powerups.splice(i,1); i--; } } } for(const obs of jumpState.obstacles) { if(obs.type === 'rock') { ctx.fillStyle = '#6B4E2E'; ctx.fillRect(obs.x, obs.y, obs.width, obs.height); ctx.fillStyle = '#4A2A1A'; ctx.fillRect(obs.x+8, obs.y+10, 6, 12); ctx.fillRect(obs.x+16, obs.y+6, 6, 16); } else if(obs.type === 'mouse') { ctx.fillStyle = obs.color; ctx.beginPath(); ctx.ellipse(obs.x + obs.width/2, obs.y + obs.height/2, obs.width/2, obs.height/2, 0, 0, Math.PI*2); ctx.fill(); ctx.fillStyle = '#000'; ctx.beginPath(); ctx.arc(obs.x + obs.width-8, obs.y + obs.height/2-3, 2, 0, Math.PI*2); ctx.fill(); ctx.beginPath(); ctx.arc(obs.x + 8, obs.y + obs.height/2-3, 2, 0, Math.PI*2); ctx.fill(); } else { ctx.fillStyle = '#8B4513'; ctx.fillRect(obs.x, obs.y, obs.width, obs.height); ctx.fillStyle = '#A0522D'; ctx.fillRect(obs.x+4, obs.y-3, obs.width-8, 5); } } drawBillyCat(ctx, jumpState.player.x, jumpState.player.y, jumpState.player.width, jumpState.player.height, !jumpState.player.grounded); if(jumpState.gameOver) { ctx.fillStyle = 'rgba(0,0,0,0.7)'; ctx.fillRect(0,0,w,h); ctx.fillStyle = 'white'; ctx.font = 'bold 24px "Segoe UI"'; ctx.textAlign = 'center'; ctx.fillText(t.jumpGameOver, w/2, h/2-30); ctx.font = '16px "Segoe UI"'; ctx.fillText(t.jumpTapRestart, w/2, h/2+30); ctx.fillStyle = '#FFD966'; ctx.fillText(t.jumpPoints.replace('{score}', jumpState.score), w/2, h/2+80); } jumpState.animationId = requestAnimationFrame(updateJumpGame); }
+    function updateJumpGame() { 
+        if(!jumpState.canvas) return; 
+        const ctx = jumpState.ctx, w = jumpState.width, h = jumpState.height; 
+        ctx.clearRect(0, 0, w, h); 
+        const grad = ctx.createLinearGradient(0,0,0,h); grad.addColorStop(0, '#87CEEB'); grad.addColorStop(1, '#4A90D9'); ctx.fillStyle = grad; ctx.fillRect(0,0,w,h); 
+        for(const cloud of jumpState.clouds) { ctx.fillStyle = 'rgba(255,255,255,0.8)'; ctx.beginPath(); ctx.ellipse(cloud.x, cloud.y, cloud.size/2, cloud.size/3, 0, 0, Math.PI*2); ctx.fill(); cloud.x -= 0.5; if(cloud.x + cloud.size < 0) cloud.x = w + cloud.size; } 
+        ctx.fillStyle = '#5D8A3C'; ctx.fillRect(0, h-45, w, 45); ctx.fillStyle = '#7CB342'; ctx.fillRect(0, h-48, w, 3); 
+        for(let i = 0; i < 20; i++) { ctx.fillStyle = `rgba(0,0,0,${0.1 + Math.sin(Date.now()/500 + i)*0.05})`; ctx.fillRect(i*30, h-47, 5, 2); } 
+        if(!jumpState.gameOver) { 
+            jumpState.player.vy += jumpState.player.gravity; jumpState.player.y += jumpState.player.vy; 
+            if(jumpState.player.y >= h-45-jumpState.player.height) { jumpState.player.y = h-45-jumpState.player.height; jumpState.player.vy = 0; jumpState.player.grounded = true; } 
+            if(jumpState.player.y < 0) { jumpState.player.y = 0; if(jumpState.player.vy<0) jumpState.player.vy=0; } 
+            jumpState.spawnCounter++; 
+            let spawnRate = Math.max(35, 60 - Math.floor(jumpState.score/40)); 
+            if(jumpState.spawnCounter > spawnRate) { 
+                jumpState.spawnCounter = 0; 
+                const type = Math.random(); 
+                if(type < 0.6) jumpState.obstacles.push({ x: w, y: h-45-40, width: 28, height: 40, type: 'rock' }); 
+                else if(type < 0.85) jumpState.obstacles.push({ x: w, y: h-45-35, width: 25, height: 35, type: 'mouse', color: '#8B5A2B' }); 
+                else jumpState.obstacles.push({ x: w, y: h-45-50, width: 20, height: 50, type: 'box' }); 
+                if(Math.random() < 0.3) jumpState.coins.push({ x: w + 20, y: h-45-50 + Math.random() * 40, width: 12, height: 12, collected: false }); 
+                if(Math.random() < 0.15) jumpState.powerups.push({ x: w + 20, y: h-45-60, width: 20, height: 20, type: ['shield','magnet','double'][Math.floor(Math.random()*3)] }); 
+            } 
+            jumpState.speed = 4 + Math.floor(jumpState.score / 100); 
+            for(let i=0; i<jumpState.obstacles.length; i++) { 
+                const obs = jumpState.obstacles[i]; obs.x -= jumpState.speed; 
+                if(obs.x + obs.width < 0) { jumpState.obstacles.splice(i,1); let addScore = jumpState.activePowerups.double ? 2 : 1; jumpState.score += addScore; document.getElementById('jumpScore').textContent = jumpState.score; i--; } 
+                if(obs.x < jumpState.player.x + jumpState.player.width && obs.x + obs.width > jumpState.player.x && obs.y < jumpState.player.y + jumpState.player.height && obs.y + obs.height > jumpState.player.y) { 
+                    if(jumpState.activePowerups.shield) { jumpState.activePowerups.shield = false; jumpState.obstacles.splice(i,1); showNotification("🛡️ Escudo usado!"); } 
+                    else { 
+                        jumpState.gameOver = true; 
+                        if(jumpState.score > jumpState.bestScore) { jumpState.bestScore = jumpState.score; if(currentUser) currentUser.jump.bestScore = jumpState.score; saveUser(); } 
+                        const reward = Math.floor(jumpState.score * 5); clickerCoins += reward; updateClickerUI(); saveClickerData(); updateMenuResources(); showNotification(`🎉 +${reward} ${t.coins}!`, "achievement"); playGameOverSound(); 
+                    } 
+                } 
+            } 
+            for(let i=0; i<jumpState.coins.length; i++) { 
+                const coin = jumpState.coins[i]; coin.x -= jumpState.speed; ctx.fillStyle = '#FFD700'; ctx.beginPath(); ctx.ellipse(coin.x + coin.width/2, coin.y + coin.height/2, coin.width/2, coin.height/2, 0, 0, Math.PI*2); ctx.fill(); ctx.fillStyle = '#FFA500'; ctx.beginPath(); ctx.ellipse(coin.x + coin.width/2, coin.y + coin.height/2, coin.width/3, coin.height/3, 0, 0, Math.PI*2); ctx.fill(); 
+                if(!coin.collected && coin.x < jumpState.player.x + jumpState.player.width && coin.x + coin.width > jumpState.player.x && coin.y < jumpState.player.y + jumpState.player.height && coin.y + coin.height > jumpState.player.y) { coin.collected = true; const coinValue = 5; clickerCoins += coinValue; updateClickerUI(); saveClickerData(); showNotification(`🪙 +${coinValue} monedas!`, "normal"); playChestSound(); } 
+                if(coin.x + coin.width < 0 || coin.collected) { jumpState.coins.splice(i,1); i--; } 
+            } 
+            for(let i=0; i<jumpState.powerups.length; i++) { 
+                const p = jumpState.powerups[i]; p.x -= jumpState.speed; ctx.fillStyle = p.type === 'shield' ? '#4CAF50' : (p.type === 'magnet' ? '#9C27B0' : '#FF9800'); ctx.fillRect(p.x, p.y, p.width, p.height); ctx.fillStyle = 'white'; ctx.font = `${p.width-4}px "Segoe UI"`; ctx.fillText(p.type === 'shield' ? '🛡️' : (p.type === 'magnet' ? '🧲' : '✨'), p.x+2, p.y+p.height-5); 
+                if(p.x < jumpState.player.x + jumpState.player.width && p.x + p.width > jumpState.player.x && p.y < jumpState.player.y + jumpState.player.height && p.y + p.height > jumpState.player.y) { 
+                    if(!jumpState.activePowerups[p.type]) { jumpState.activePowerups[p.type] = true; showNotification(t.powerupActivated.replace('{type}', p.type), "achievement"); setTimeout(() => { if(jumpState.activePowerups[p.type]) jumpState.activePowerups[p.type] = false; }, 10000); } 
+                    jumpState.powerups.splice(i,1); i--; 
+                } else if(p.x + p.width < 0) { jumpState.powerups.splice(i,1); i--; } 
+            } 
+        } 
+        for(const obs of jumpState.obstacles) { 
+            if(obs.type === 'rock') { ctx.fillStyle = '#6B4E2E'; ctx.fillRect(obs.x, obs.y, obs.width, obs.height); ctx.fillStyle = '#4A2A1A'; ctx.fillRect(obs.x+8, obs.y+10, 6, 12); ctx.fillRect(obs.x+16, obs.y+6, 6, 16); } 
+            else if(obs.type === 'mouse') { ctx.fillStyle = obs.color; ctx.beginPath(); ctx.ellipse(obs.x + obs.width/2, obs.y + obs.height/2, obs.width/2, obs.height/2, 0, 0, Math.PI*2); ctx.fill(); ctx.fillStyle = '#000'; ctx.beginPath(); ctx.arc(obs.x + obs.width-8, obs.y + obs.height/2-3, 2, 0, Math.PI*2); ctx.fill(); ctx.beginPath(); ctx.arc(obs.x + 8, obs.y + obs.height/2-3, 2, 0, Math.PI*2); ctx.fill(); } 
+            else { ctx.fillStyle = '#8B4513'; ctx.fillRect(obs.x, obs.y, obs.width, obs.height); ctx.fillStyle = '#A0522D'; ctx.fillRect(obs.x+4, obs.y-3, obs.width-8, 5); } 
+        } 
+        drawBillyCat(ctx, jumpState.player.x, jumpState.player.y, jumpState.player.width, jumpState.player.height, !jumpState.player.grounded); 
+        if(jumpState.gameOver) { ctx.fillStyle = 'rgba(0,0,0,0.7)'; ctx.fillRect(0,0,w,h); ctx.fillStyle = 'white'; ctx.font = 'bold 24px "Segoe UI"'; ctx.textAlign = 'center'; ctx.fillText(t.jumpGameOver, w/2, h/2-30); ctx.font = '16px "Segoe UI"'; ctx.fillText(t.jumpTapRestart, w/2, h/2+30); ctx.fillStyle = '#FFD966'; ctx.fillText(t.jumpPoints.replace('{score}', jumpState.score), w/2, h/2+80); } 
+        jumpState.animationId = requestAnimationFrame(updateJumpGame); 
+    }
     
     function updateJumpUITexts() { const jumpScoreLabel = document.querySelector('.jump-stats .jump-score-card:last-child'); if(jumpScoreLabel) jumpScoreLabel.innerHTML = `⭐ ${t.jumpScoreLabel} <span id="jumpScore">${jumpState.score}</span>`; const jumpBestLabel = document.querySelector('.jump-stats .jump-score-card:first-child'); if(jumpBestLabel) jumpBestLabel.innerHTML = `🏆 ${t.jumpBestLabel} ${jumpState.bestScore}`; const powerupBtns = document.querySelectorAll('.powerup-btn'); if(powerupBtns.length >= 3 && currentUser) { powerupBtns[0].innerHTML = `🛡️ ${t.jumpShield} (${currentUser.inventory.powerups.shield || 0})`; powerupBtns[1].innerHTML = `🧲 ${t.jumpMagnet} (${currentUser.inventory.powerups.magnet || 0})`; powerupBtns[2].innerHTML = `✨ ${t.jumpDouble} (${currentUser.inventory.powerups.double || 0})`; } const instruction = document.querySelector('.jump-instruction'); if(instruction) instruction.textContent = t.jumpInstruction; }
     
