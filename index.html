@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
-    <title>🐈‍⬛ BILLY JUMP - La venganza del gato negro</title>
+    <title>🐈‍⬛ BYLLI - 2 JUEGOS EN 1</title>
     <style>
         * {
             margin: 0;
@@ -17,50 +17,37 @@
             font-family: 'Segoe UI', 'Comic Neue', system-ui, sans-serif;
             min-height: 100vh;
             overflow: hidden;
-            background: linear-gradient(180deg, #0a0a2a 0%, #1a1a3e 50%, #0a0a1a 100%);
+            background: #0a0a2a;
         }
 
         @keyframes float {
             0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-8px); }
-        }
-
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); opacity: 0.7; }
-            50% { transform: scale(1.1); opacity: 1; }
-        }
-
-        @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-4px); }
-            75% { transform: translateX(4px); }
+            50% { transform: translateY(-12px); }
         }
 
         @keyframes bounceIn {
-            from { transform: scale(0); opacity: 0; }
+            from { transform: scale(0.8); opacity: 0; }
             to { transform: scale(1); opacity: 1; }
         }
 
         @keyframes floatUp {
-            to { transform: translateY(-60px); opacity: 0; }
+            to { transform: translateY(-70px); opacity: 0; }
         }
 
         @keyframes fadeOutUp {
-            to { opacity: 0; transform: translate(-50%, -70%); }
+            to { opacity: 0; transform: translate(-50%, -80%); }
         }
 
-        @keyframes squash {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.2, 0.8); }
-            100% { transform: scale(1); }
+        @keyframes slideUp {
+            from { transform: translateY(30px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
         }
 
-        @keyframes blinkPlatform {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.3; }
+        @keyframes pulse {
+            0%, 100% { opacity: 0.6; }
+            50% { opacity: 1; }
         }
 
-        /* Pantalla de inicio */
         .start-screen {
             position: fixed;
             top: 0;
@@ -77,76 +64,61 @@
 
         .start-logo {
             text-align: center;
-            margin-bottom: 20px;
+            margin-bottom: 30px;
             animation: float 3s infinite;
         }
 
         .start-logo img {
-            width: 260px;
+            width: 280px;
             max-width: 80%;
-            filter: drop-shadow(0 10px 30px rgba(0,0,0,0.5));
-        }
-
-        .start-title {
-            font-size: 36px;
-            background: linear-gradient(135deg, #FFD966, #FF6B6B);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            letter-spacing: 2px;
+            border-radius: 30px;
+            filter: drop-shadow(0 10px 25px rgba(0,0,0,0.5));
         }
 
         .start-card {
-            background: rgba(0,0,0,0.7);
+            background: rgba(0,0,0,0.75);
             backdrop-filter: blur(20px);
-            border-radius: 50px;
-            padding: 25px;
+            border-radius: 60px;
+            padding: 30px 35px;
             text-align: center;
-            width: 90%;
-            max-width: 350px;
+            width: 85%;
+            max-width: 380px;
             border: 2px solid rgba(255,200,100,0.5);
-            margin-top: 20px;
+            animation: slideUp 0.5s ease;
         }
 
         .register-input {
             width: 100%;
-            padding: 14px 18px;
+            padding: 15px 20px;
             border-radius: 50px;
             border: none;
-            background: rgba(255,255,255,0.1);
+            background: rgba(255,255,255,0.12);
             color: white;
             font-size: 16px;
             text-align: center;
-            margin-bottom: 12px;
+            margin-bottom: 18px;
         }
 
         .register-input:focus {
             outline: none;
-            border: 1px solid #ffaa44;
+            background: rgba(255,255,255,0.2);
+            box-shadow: 0 0 15px rgba(255,200,100,0.4);
         }
 
         .register-btn {
-            background: linear-gradient(135deg, #14f195, #9945ff);
+            background: linear-gradient(135deg, #fbbf24, #e67e22);
             border: none;
-            padding: 14px 35px;
+            padding: 15px 25px;
             border-radius: 50px;
-            font-size: 16px;
+            font-size: 18px;
             font-weight: bold;
-            color: white;
+            color: #1e1a2f;
             cursor: pointer;
             width: 100%;
-            transition: transform 0.1s;
         }
 
-        .register-btn:active {
-            transform: scale(0.97);
-        }
-
-        .error-msg {
-            color: #ff6b6b;
-            font-size: 12px;
-            margin-top: 10px;
-        }
+        .register-btn:active { transform: scale(0.97); }
+        .error-msg { color: #ff6b6b; font-size: 12px; margin-top: 12px; }
 
         /* Menú principal */
         .main-menu {
@@ -165,10 +137,8 @@
         }
 
         .menu-container {
-            position: relative;
-            z-index: 10;
             width: 100%;
-            max-width: 450px;
+            max-width: 480px;
             padding: 20px;
         }
 
@@ -177,168 +147,78 @@
             justify-content: space-between;
             align-items: center;
             background: rgba(0,0,0,0.6);
-            backdrop-filter: blur(10px);
-            border-radius: 50px;
-            padding: 10px 18px;
-            margin-bottom: 20px;
-            border: 1px solid rgba(255,200,100,0.3);
+            backdrop-filter: blur(12px);
+            border-radius: 70px;
+            padding: 12px 22px;
+            margin-bottom: 25px;
+            border: 1px solid rgba(255,200,100,0.4);
         }
 
-        .user-info {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
+        .user-info { display: flex; align-items: center; gap: 14px; }
         .user-avatar {
-            width: 45px;
-            height: 45px;
+            width: 52px; height: 52px;
             background: linear-gradient(135deg, #fbbf24, #e67e22);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 24px;
+            font-size: 30px;
         }
+        .user-details h3 { color: #FFD966; font-size: 16px; }
+        .user-details p { color: rgba(255,255,255,0.5); font-size: 11px; }
+        .user-stats { display: flex; gap: 18px; }
+        .user-stat { text-align: center; }
+        .user-stat-value { color: #FFD966; font-weight: bold; font-size: 18px; }
+        .user-stat-label { color: rgba(255,255,255,0.5); font-size: 10px; }
 
-        .user-details h3 {
-            color: #FFD966;
-            font-size: 14px;
-        }
-
-        .user-details p {
-            color: rgba(255,255,255,0.5);
-            font-size: 10px;
-        }
-
-        .user-stats {
-            display: flex;
-            gap: 12px;
-        }
-
-        .user-stat {
-            text-align: center;
-        }
-
-        .user-stat-value {
-            color: #FFD966;
-            font-weight: bold;
-            font-size: 16px;
-        }
-
-        .user-stat-label {
-            color: rgba(255,255,255,0.5);
-            font-size: 9px;
-        }
-
-        .game-modes {
-            display: flex;
-            gap: 15px;
-            margin: 20px 0;
-        }
-
+        .game-modes { display: flex; gap: 18px; margin: 25px 0; }
         .mode-card {
             flex: 1;
             background: rgba(0,0,0,0.7);
-            backdrop-filter: blur(10px);
-            border-radius: 35px;
-            padding: 18px;
+            backdrop-filter: blur(12px);
+            border-radius: 45px;
+            padding: 20px 12px;
             text-align: center;
             cursor: pointer;
-            transition: all 0.3s;
             border: 1px solid rgba(255,200,100,0.3);
+            transition: transform 0.1s;
         }
-
-        .mode-card:hover {
-            transform: translateY(-3px);
-            border-color: #ffaa44;
-        }
-
-        .mode-card:active {
-            transform: scale(0.98);
-        }
-
-        .mode-icon {
-            font-size: 40px;
-            margin-bottom: 8px;
-        }
-
-        .mode-card h3 {
-            color: #FFD966;
-            font-size: 18px;
-        }
-
-        .mode-card p {
-            color: rgba(255,255,255,0.5);
-            font-size: 10px;
-            margin-top: 5px;
-        }
+        .mode-card:active { transform: scale(0.97); }
+        .mode-icon { font-size: 48px; margin-bottom: 10px; }
+        .mode-card h3 { color: #FFD966; font-size: 18px; }
+        .mode-card p { color: rgba(255,255,255,0.5); font-size: 10px; margin-top: 6px; }
 
         .resources-bar {
             background: rgba(0,0,0,0.7);
-            backdrop-filter: blur(10px);
-            border-radius: 50px;
-            padding: 12px 18px;
+            backdrop-filter: blur(12px);
+            border-radius: 60px;
+            padding: 12px 22px;
             display: flex;
             justify-content: space-between;
-            margin: 15px 0;
+            margin: 18px 0;
         }
+        .resource { display: flex; align-items: center; gap: 12px; }
+        .resource-icon { font-size: 30px; }
+        .resource-value { font-size: 18px; font-weight: bold; color: #FFD966; }
+        .resource-label { font-size: 10px; color: rgba(255,255,255,0.5); }
 
-        .resource {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .resource-icon {
-            font-size: 28px;
-        }
-
-        .resource-info {
-            text-align: left;
-        }
-
-        .resource-value {
-            font-size: 18px;
-            font-weight: bold;
-            color: #FFD966;
-        }
-
-        .resource-label {
-            font-size: 9px;
-            color: rgba(255,255,255,0.5);
-        }
-
-        .menu-buttons {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-            margin-top: 15px;
-        }
-
+        .menu-buttons { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 18px; }
         .menu-btn {
             flex: 1;
             background: rgba(30,41,59,0.9);
-            backdrop-filter: blur(5px);
+            backdrop-filter: blur(8px);
             border: none;
-            padding: 10px;
-            border-radius: 40px;
+            padding: 12px;
+            border-radius: 45px;
             color: white;
             font-weight: bold;
             cursor: pointer;
             font-size: 12px;
         }
+        .menu-btn:active { transform: scale(0.97); }
+        .btn-primary { background: linear-gradient(135deg, #fbbf24, #e67e22); color: #1e1a2f; }
 
-        .menu-btn:active {
-            transform: scale(0.97);
-        }
-
-        .btn-primary {
-            background: linear-gradient(135deg, #fbbf24, #e67e22);
-            color: #1e1a2f;
-        }
-
-        /* Contenedor del juego */
+        /* Contenedores de juego */
         .game-container {
             position: fixed;
             top: 0;
@@ -349,39 +229,29 @@
             display: none;
             background: linear-gradient(180deg, #0a0a2a 0%, #1a1a3e 100%);
         }
-
-        .game-container.active {
-            display: block;
-        }
-
+        .game-container.active { display: block; }
         .game-header {
             position: fixed;
-            top: 10px;
-            left: 10px;
-            right: 10px;
+            top: 12px;
+            left: 12px;
+            right: 12px;
             display: flex;
             justify-content: space-between;
-            z-index: 50;
+            z-index: 60;
         }
-
         .back-btn {
             background: rgba(0,0,0,0.7);
-            backdrop-filter: blur(5px);
-            padding: 8px 18px;
-            border-radius: 35px;
+            backdrop-filter: blur(8px);
+            padding: 10px 20px;
+            border-radius: 40px;
             color: white;
             cursor: pointer;
-            font-weight: bold;
             border: none;
-            font-size: 12px;
+            font-size: 13px;
         }
 
-        .back-btn:active {
-            transform: scale(0.95);
-        }
-
-        /* JUEGO JUMP - VERSIÓN ÉPICA */
-        .jump-container {
+        /* JUEGO JUMP */
+        .jump-wrapper {
             position: fixed;
             top: 0;
             left: 0;
@@ -391,18 +261,16 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            overflow: hidden;
         }
-
         .jump-canvas {
             display: block;
-            border-radius: 20px;
-            box-shadow: 0 0 30px rgba(0,0,0,0.5);
+            border-radius: 25px;
+            box-shadow: 0 0 35px rgba(0,0,0,0.5);
+            cursor: pointer;
         }
-
         .jump-ui {
             position: fixed;
-            top: 60px;
+            top: 65px;
             left: 0;
             right: 0;
             display: flex;
@@ -411,116 +279,129 @@
             z-index: 60;
             pointer-events: none;
         }
-
         .jump-score-card {
-            background: rgba(0,0,0,0.7);
-            backdrop-filter: blur(10px);
-            padding: 8px 16px;
-            border-radius: 30px;
+            background: rgba(0,0,0,0.75);
+            backdrop-filter: blur(12px);
+            padding: 8px 18px;
+            border-radius: 35px;
             color: #FFD966;
             font-weight: bold;
             font-size: 14px;
             border: 1px solid rgba(255,200,100,0.5);
         }
-
         .jump-lives {
             display: flex;
             gap: 8px;
-            background: rgba(0,0,0,0.7);
-            backdrop-filter: blur(10px);
-            padding: 8px 16px;
-            border-radius: 30px;
+            background: rgba(0,0,0,0.75);
+            backdrop-filter: blur(12px);
+            padding: 6px 18px;
+            border-radius: 35px;
         }
-
-        .life-heart {
-            font-size: 20px;
-        }
-
+        .life-heart { font-size: 20px; }
         .jump-combo {
             position: fixed;
-            top: 120px;
+            top: 125px;
             right: 15px;
-            background: rgba(0,0,0,0.8);
-            padding: 8px 16px;
-            border-radius: 30px;
+            background: rgba(0,0,0,0.85);
+            padding: 8px 18px;
+            border-radius: 35px;
             color: #FF6B6B;
             font-weight: bold;
             font-size: 18px;
             z-index: 60;
             border: 1px solid #FF6B6B;
-            pointer-events: none;
         }
-
         .powerup-indicator {
             position: fixed;
-            top: 120px;
+            top: 125px;
             left: 15px;
-            background: rgba(0,0,0,0.8);
-            padding: 6px 12px;
-            border-radius: 30px;
+            background: rgba(0,0,0,0.85);
+            padding: 6px 14px;
+            border-radius: 35px;
             color: white;
             font-size: 12px;
             z-index: 60;
-            pointer-events: none;
         }
-
-        .game-over-screen {
+        .mobile-controls {
             position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: rgba(0,0,0,0.9);
-            backdrop-filter: blur(15px);
-            border-radius: 40px;
-            padding: 25px;
-            text-align: center;
-            z-index: 200;
-            min-width: 280px;
-            border: 2px solid #ffaa44;
+            bottom: 25px;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: center;
+            gap: 50px;
+            z-index: 70;
         }
-
-        .game-over-screen h2 {
-            color: #FF6B6B;
-            margin-bottom: 15px;
-        }
-
-        .game-over-screen p {
-            color: white;
-            margin-bottom: 20px;
-        }
-
-        .restart-btn {
-            background: linear-gradient(135deg, #fbbf24, #e67e22);
-            border: none;
-            padding: 12px 25px;
-            border-radius: 40px;
-            font-weight: bold;
+        .control-btn {
+            background: rgba(0,0,0,0.65);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255,200,100,0.5);
+            border-radius: 50%;
+            width: 65px;
+            height: 65px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 36px;
             cursor: pointer;
-            margin: 5px;
         }
+        .control-btn:active { transform: scale(0.88); }
 
-        .menu-restart-btn {
-            background: rgba(255,255,255,0.2);
-            border: none;
-            padding: 12px 25px;
-            border-radius: 40px;
-            font-weight: bold;
+        /* JUEGO CLICKER */
+        #clickerBilly {
+            position: fixed;
+            width: 130px;
+            height: 130px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             cursor: pointer;
-            margin: 5px;
-            color: white;
+            z-index: 20;
+            transition: transform 0.05s linear;
+        }
+        #clickerBilly img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            filter: drop-shadow(0 8px 15px rgba(0,0,0,0.4));
+        }
+        .clicker-mouse {
+            position: fixed;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 25;
+            transition: transform 0.05s;
+        }
+        .clicker-mouse:active { transform: scale(0.95); }
+        .energy-bar {
+            position: fixed;
+            bottom: 20px;
+            left: 10px;
+            right: 10px;
+            background: rgba(0,0,0,0.7);
+            border-radius: 20px;
+            padding: 8px 12px;
+            z-index: 30;
+        }
+        .energy-fill {
+            height: 12px;
+            background: linear-gradient(90deg, #22c55e, #facc15);
+            border-radius: 20px;
+            transition: width 0.2s;
         }
 
         .floating-number {
             position: fixed;
             font-weight: bold;
-            font-size: 20px;
+            font-size: 22px;
             text-shadow: 0 0 5px black;
             pointer-events: none;
             z-index: 150;
             animation: floatUp 0.8s forwards;
             color: #FFD966;
         }
-
         .notification {
             position: fixed;
             top: 45%;
@@ -528,42 +409,138 @@
             transform: translate(-50%, -50%);
             background: linear-gradient(135deg, #facc15, #f59e0b);
             color: #0c0a1a;
-            padding: 10px 20px;
-            border-radius: 40px;
+            padding: 12px 24px;
+            border-radius: 50px;
             font-weight: bold;
             z-index: 200;
             animation: fadeOutUp 1s forwards;
             white-space: nowrap;
             font-size: 14px;
         }
-
+        .notification.achievement {
+            background: linear-gradient(135deg, #14f195, #9945ff);
+            color: white;
+        }
+        .game-over-screen {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0,0,0,0.95);
+            backdrop-filter: blur(18px);
+            border-radius: 50px;
+            padding: 30px;
+            text-align: center;
+            z-index: 200;
+            min-width: 300px;
+            border: 2px solid #ffaa44;
+            animation: bounceIn 0.3s ease;
+        }
+        .restart-btn {
+            background: linear-gradient(135deg, #fbbf24, #e67e22);
+            border: none;
+            padding: 12px 28px;
+            border-radius: 45px;
+            font-weight: bold;
+            cursor: pointer;
+            margin: 6px;
+        }
         .sound-toggle {
             position: fixed;
             bottom: 20px;
             right: 20px;
             background: rgba(0,0,0,0.7);
             border-radius: 50%;
-            width: 45px;
-            height: 45px;
+            width: 48px;
+            height: 48px;
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
             z-index: 1000;
-            font-size: 22px;
+            font-size: 24px;
             border: 1px solid #ffaa44;
         }
 
+        /* Modal tienda */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.95);
+            z-index: 2000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(12px);
+        }
+        .modal-content {
+            background: linear-gradient(135deg, #1e293b, #0f172a);
+            border-radius: 50px;
+            padding: 25px;
+            width: 90%;
+            max-width: 480px;
+            max-height: 85vh;
+            overflow-y: auto;
+            border: 2px solid #ffaa44;
+        }
+        .modal-content h2 { color: #FFD966; margin-bottom: 20px; text-align: center; }
+        .shop-tabs { display: flex; gap: 8px; margin-bottom: 20px; flex-wrap: wrap; }
+        .shop-tab {
+            flex: 1;
+            padding: 10px;
+            background: rgba(0,0,0,0.5);
+            border-radius: 35px;
+            text-align: center;
+            cursor: pointer;
+            color: white;
+            font-size: 12px;
+        }
+        .shop-tab.active { background: linear-gradient(135deg, #fbbf24, #e67e22); color: #1e1a2f; }
+        .shop-section { display: none; }
+        .shop-section.active { display: block; }
+        .shop-item {
+            background: rgba(0,0,0,0.5);
+            border-radius: 25px;
+            padding: 12px;
+            margin-bottom: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 1px solid rgba(255,200,100,0.3);
+            cursor: pointer;
+        }
+        .shop-item:active { transform: scale(0.98); }
+        .item-info { flex: 1; }
+        .item-name { font-weight: bold; color: white; }
+        .item-desc { font-size: 10px; color: #FFD966; }
+        .shop-btn {
+            background: linear-gradient(135deg, #fbbf24, #e67e22);
+            border: none;
+            padding: 8px 18px;
+            border-radius: 35px;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 11px;
+        }
+        .close-modal {
+            margin-top: 20px;
+            background: #334155;
+            padding: 12px 30px;
+            border-radius: 35px;
+            cursor: pointer;
+            width: 100%;
+            border: none;
+            color: white;
+        }
+
         @media (max-width: 600px) {
-            .mode-card { padding: 12px; }
-            .mode-icon { font-size: 32px; }
-            .mode-card h3 { font-size: 14px; }
-            .resource-icon { font-size: 22px; }
-            .resource-value { font-size: 14px; }
-            .menu-btn { font-size: 10px; padding: 8px; }
-            .jump-score-card { font-size: 11px; padding: 6px 12px; }
-            .jump-combo { font-size: 14px; top: 110px; }
-            .powerup-indicator { font-size: 10px; top: 110px; }
+            .mode-card { padding: 14px 10px; }
+            .mode-icon { font-size: 36px; }
+            .control-btn { width: 55px; height: 55px; font-size: 30px; }
+            #clickerBilly { width: 100px; height: 100px; }
         }
     </style>
 </head>
@@ -574,9 +551,7 @@
 <!-- Pantalla de inicio -->
 <div class="start-screen" id="startScreen">
     <div class="start-logo">
-        <img src="billy_inicio.png" alt="Billy" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 200 200%22%3E%3Ccircle cx=%22100%22 cy=%22100%22 r=%2290%22 fill=%22%23FFD966%22/%3E%3Ctext x=%22100%22 y=%22140%22 text-anchor=%22middle%22 fill=%22%23FFA500%22 font-size=%2280%22%3E🐱%3C/text%3E%3C/svg%3E'">
-        <h1 class="start-title">BILLY JUMP</h1>
-        <p class="start-subtitle">🐈‍⬛ La venganza del gato negro 🐈‍⬛</p>
+        <img id="startLogoImg" src="https://raw.githubusercontent.com/billyzatanas/billy-run/main/billy_inicio.png" alt="BYLLI" onerror="this.outerHTML='<div style=\'font-size:48px;color:#FFD966;\'>🐈‍⬛ BYLLI<br><span style=\'font-size:20px;\'>2 JUEGOS EN 1</span></div>'">
     </div>
     <div class="start-card">
         <input type="text" class="register-input" id="nicknameInput" placeholder="Tu nombre" maxlength="15">
@@ -593,7 +568,7 @@
                 <div class="user-avatar" id="userAvatar">🐱</div>
                 <div class="user-details">
                     <h3 id="userNickname">Jugador</h3>
-                    <p>🐈‍⬛ BILLY JUMP</p>
+                    <p>🐈‍⬛ BYLLI</p>
                 </div>
             </div>
             <div class="user-stats">
@@ -605,60 +580,96 @@
             <div class="mode-card" id="playJumpBtn">
                 <div class="mode-icon">🐈‍⬛</div>
                 <h3>BILLY JUMP</h3>
-                <p>Salta, aplasta monstruos, sube</p>
+                <p>Salta, aplasta, sube</p>
             </div>
-            <div class="mode-card" id="clickerBtn" style="opacity:0.7">
+            <div class="mode-card" id="playClickerBtn">
                 <div class="mode-icon">💰</div>
                 <h3>BILLY CLICKER</h3>
-                <p>Próximamente...</p>
+                <p>Toca, atrapa, mejora</p>
             </div>
         </div>
         <div class="resources-bar">
+            <div class="resource"><div class="resource-icon">🪙</div><div class="resource-info"><div class="resource-value" id="menuCoins">0</div><div class="resource-label">Monedas</div></div></div>
             <div class="resource"><div class="resource-icon">⭐</div><div class="resource-info"><div class="resource-value" id="menuTokens">0</div><div class="resource-label">BILLY Tokens</div></div></div>
-            <div class="resource"><div class="resource-icon">🏆</div><div class="resource-info"><div class="resource-value" id="menuRecord">0</div><div class="resource-label">Récord</div></div></div>
+            <div class="resource"><div class="resource-icon">🏆</div><div class="resource-info"><div class="resource-value" id="menuRecord">0</div><div class="resource-label">Récord Jump</div></div></div>
         </div>
         <div class="menu-buttons">
             <button class="menu-btn" id="statsBtn">📊 Estadísticas</button>
             <button class="menu-btn btn-primary" id="shopBtn">🛒 Tienda</button>
+            <button class="menu-btn" id="rankingBtn">🏆 Ranking</button>
+            <button class="menu-btn" id="missionsBtn">📅 Misiones</button>
+            <button class="menu-btn" id="codeBtn">🔑 Código</button>
         </div>
     </div>
 </div>
 
-<!-- Contenedor del juego Jump -->
+<!-- Contenedor Jump -->
 <div class="game-container" id="jumpContainer">
-    <div class="game-header">
-        <button class="back-btn" id="jumpBackBtn">← MENÚ</button>
-    </div>
+    <div class="game-header"><button class="back-btn" id="jumpBackBtn">← MENÚ</button></div>
     <div class="jump-ui">
         <div class="jump-score-card">⭐ SCORE: <span id="jumpScore">0</span></div>
         <div class="jump-lives" id="jumpLivesContainer"></div>
     </div>
     <div class="jump-combo" id="jumpComboDisplay" style="display: none;">🔥 x<span id="comboMultiplier">1</span></div>
     <div class="powerup-indicator" id="powerupIndicator" style="display: none;"></div>
-    <div class="jump-container" id="jumpGameArea"></div>
+    <div class="jump-wrapper" id="jumpGameArea"></div>
+    <div class="mobile-controls">
+        <div class="control-btn" id="leftBtn">◀</div>
+        <div class="control-btn" id="rightBtn">▶</div>
+    </div>
     <div id="gameOverModal" style="display: none;"></div>
+</div>
+
+<!-- Contenedor Clicker -->
+<div class="game-container" id="clickerContainer">
+    <div class="game-header"><button class="back-btn" id="clickerBackBtn">← MENÚ</button></div>
+    <div style="position: fixed; top: 80px; left: 0; right: 0; text-align: center; z-index: 30;">
+        <div style="display: flex; justify-content: center; gap: 20px; flex-wrap: wrap;">
+            <div class="jump-score-card">💰 <span id="clickerCoins">0</span> monedas</div>
+            <div class="jump-score-card">⭐ <span id="clickerTokens">0</span> BILLY</div>
+            <div class="jump-score-card">💪 Poder: <span id="clickerPower">1</span></div>
+            <div class="jump-score-card">⚡ Crítico: <span id="clickerCrit">5</span>%</div>
+        </div>
+    </div>
+    <div id="clickerGameArea" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 15;"></div>
+    <div id="clickerBilly"><img id="clickerBillyImg" src="https://raw.githubusercontent.com/billyzatanas/billy-run/main/billy-normal.png" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22%3E%3Ccircle cx=%2250%22 cy=%2250%22 r=%2245%22 fill=%22%23FFD966%22/%3E%3Ctext x=%2250%22 y=%2270%22 text-anchor=%22middle%22 fill=%22%23FFA500%22 font-size=%2240%22%3E🐱%3C/text%3E%3C/svg%3E'"></div>
+    <div class="energy-bar">
+        <div style="display: flex; justify-content: space-between; color: white; font-size: 12px;"><span>⚡ Energía</span><span id="clickerEnergyText">100/100</span></div>
+        <div style="background: #2d2a3e; border-radius: 20px; overflow: hidden; margin-top: 4px;"><div class="energy-fill" id="clickerEnergyFill" style="width: 100%;"></div></div>
+    </div>
+    <div style="position: fixed; bottom: 90px; left: 10px; right: 10px; display: flex; gap: 10px; z-index: 30;">
+        <button class="menu-btn" id="clickerUpgradeBtn" style="flex:1; background:#fbbf24; color:#1e1a2f;">💪 Mejorar</button>
+        <button class="menu-btn" id="clickerAutoBtn" style="flex:1;">🤖 Auto-click</button>
+    </div>
 </div>
 
 <script>
     // ==================== CONFIGURACIÓN ====================
     let soundEnabled = true;
     let currentUser = null;
-    
-    // Sistema de sonidos (Web Audio)
     let audioCtx = null;
     
-    function initAudio() {
-        if(!audioCtx && soundEnabled) {
-            audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-        }
-    }
+    // URLs de imágenes
+    const IMG = {
+        normal: 'https://raw.githubusercontent.com/billyzatanas/billy-run/main/billy-normal.png',
+        jump: 'https://raw.githubusercontent.com/billyzatanas/billy-run/main/bylli-jumpin.png',
+        fall: 'https://raw.githubusercontent.com/billyzatanas/billy-run/main/billy-abajo.png',
+        happy: 'https://raw.githubusercontent.com/billyzatanas/billy-run/main/bylli-alegre.png',
+        angry: 'https://raw.githubusercontent.com/billyzatanas/billy-run/main/bylli-enojado.png',
+        run: 'https://raw.githubusercontent.com/billyzatanas/billy-run/main/bylli-hacia-delante.png',
+        sad: 'https://raw.githubusercontent.com/billyzatanas/billy-run/main/bylli-llorando.png',
+        relax: 'https://raw.githubusercontent.com/billyzatanas/billy-run/main/bylli-relax.png',
+        surprised: 'https://raw.githubusercontent.com/billyzatanas/billy-run/main/bylli-sorprendido.png',
+        star: 'https://raw.githubusercontent.com/billyzatanas/billy-run/main/estrella.png'
+    };
     
+    // Sonidos
+    function initAudio() { if(!audioCtx && soundEnabled) audioCtx = new (window.AudioContext || window.webkitAudioContext)(); }
     function playSound(freq, duration = 0.12, type = 'sine') {
         if(!soundEnabled) return;
         try {
             initAudio();
             if(!audioCtx) return;
-            const now = audioCtx.currentTime;
             const osc = audioCtx.createOscillator();
             const gain = audioCtx.createGain();
             osc.connect(gain);
@@ -667,11 +678,10 @@
             osc.type = type;
             gain.gain.value = 0.12;
             osc.start();
-            gain.gain.exponentialRampToValueAtTime(0.00001, now + duration);
-            osc.stop(now + duration);
+            gain.gain.exponentialRampToValueAtTime(0.00001, audioCtx.currentTime + duration);
+            osc.stop(audioCtx.currentTime + duration);
         } catch(e) {}
     }
-    
     function playJumpSound() { playSound(523, 0.1, 'sine'); }
     function playLandSound() { playSound(330, 0.08, 'triangle'); }
     function playStompSound() { playSound(220, 0.15, 'sawtooth'); }
@@ -679,6 +689,8 @@
     function playPowerUpSound() { playSound(880, 0.15, 'sine'); playSound(1046, 0.15, 'sine'); }
     function playGameOverSound() { playSound(220, 0.3, 'sawtooth'); playSound(164, 0.3, 'sawtooth'); }
     function playClickSound() { playSound(440, 0.05, 'sine'); }
+    function playCoinSound() { playSound(660, 0.08, 'sine'); }
+    function playCritSound() { playSound(1046, 0.1, 'sine'); }
     
     document.getElementById('soundToggle').onclick = () => {
         soundEnabled = !soundEnabled;
@@ -690,26 +702,22 @@
     // ==================== USUARIO ====================
     function createDefaultUser(nickname) {
         return {
-            userId: Date.now().toString(),
-            nickname: nickname,
-            createdAt: Date.now(),
-            resources: { tokens: 100 },
-            jump: {
-                bestScore: 0,
-                totalJumps: 0,
-                totalStomps: 0,
-                totalPowerups: 0,
-                lives: 3
+            userId: Date.now().toString(), nickname: nickname, createdAt: Date.now(),
+            resources: { coins: 500, tokens: 100 },
+            clicker: {
+                level: 1, tapPower: 1, autoPower: 0, totalTaps: 0, totalMice: 0, totalCrits: 0,
+                energy: 100, maxEnergy: 100, bestCombo: 0
             },
-            shop: {
-                extraLives: 0,
-                jumpPower: 0,
-                magnetRange: 0
+            jump: { bestScore: 0, totalJumps: 0, totalStomps: 0, totalPowerups: 0, lives: 3 },
+            inventory: {
+                skins: [{ id: 'original', name: 'Original', unlocked: true, equipped: true }],
+                pets: [], activePet: null,
+                skills: { strength: 0, energy: 0, luck: 0, economy: 0 },
+                powerups: { shield: 0, magnet: 0, double: 0 }
             },
-            stats: {
-                gamesPlayed: 0,
-                totalScore: 0
-            }
+            stats: { gamesPlayed: 0, totalScore: 0 },
+            dailyMissions: { date: null, taps: 0, mice: 0, jumpScore: 0, completed: [] },
+            usedCodes: []
         };
     }
     
@@ -722,47 +730,35 @@
     
     function loadUser(userId) {
         const saved = localStorage.getItem('billyUser_' + userId);
-        if(saved) {
-            currentUser = JSON.parse(saved);
-            return true;
-        }
+        if(saved) { currentUser = JSON.parse(saved); return true; }
         return false;
     }
     
     function getAllNicknames() {
-        const nicknames = [];
+        let nicknames = [];
         for(let i = 0; i < localStorage.length; i++) {
             const key = localStorage.key(i);
             if(key && key.startsWith('billyUser_')) {
-                try {
-                    const user = JSON.parse(localStorage.getItem(key));
-                    nicknames.push(user.nickname);
-                } catch(e) {}
+                try { nicknames.push(JSON.parse(localStorage.getItem(key)).nickname); } catch(e) {}
             }
         }
         return nicknames;
     }
     
     function registerUser(nickname) {
-        if(nickname.length < 3) {
-            document.getElementById('startError').textContent = "El nombre debe tener al menos 3 caracteres";
-            return false;
-        }
-        if(getAllNicknames().includes(nickname)) {
-            document.getElementById('startError').textContent = "Este nombre ya existe";
-            return false;
-        }
+        if(nickname.length < 3) { document.getElementById('startError').textContent = "Mínimo 3 caracteres"; return false; }
+        if(getAllNicknames().includes(nickname)) { document.getElementById('startError').textContent = "Nombre ya existe"; return false; }
         currentUser = createDefaultUser(nickname);
         saveUser();
-        document.getElementById('startError').textContent = '';
         return true;
     }
     
     function updateMenuUI() {
         if(currentUser) {
             document.getElementById('userNickname').textContent = currentUser.nickname;
-            document.getElementById('userLevel').textContent = Math.floor(currentUser.jump.bestScore / 100) + 1;
+            document.getElementById('userLevel').textContent = Math.floor(currentUser.clicker.totalTaps / 100) + 1;
             document.getElementById('userLives').textContent = currentUser.jump.lives;
+            document.getElementById('menuCoins').textContent = Math.floor(currentUser.resources.coins);
             document.getElementById('menuTokens').textContent = Math.floor(currentUser.resources.tokens);
             document.getElementById('menuRecord').textContent = currentUser.jump.bestScore;
         }
@@ -770,328 +766,661 @@
     
     function showNotification(msg, type = "normal") {
         const div = document.createElement('div');
-        div.className = 'notification';
+        div.className = `notification ${type}`;
         div.textContent = msg;
         document.body.appendChild(div);
-        setTimeout(() => div.remove(), 1500);
+        setTimeout(() => div.remove(), 1800);
     }
     
-    function createFloatingNumber(value, x, y, isCrit = true) {
+    function createFloatingNumber(value, x, y, isGold = true) {
         const div = document.createElement('div');
         div.className = 'floating-number';
-        div.textContent = `+${value}`;
-        div.style.left = x + 'px';
-        div.style.top = y + 'px';
-        div.style.color = isCrit ? '#FFD966' : 'white';
+        div.textContent = `+${Math.floor(value)}`;
+        div.style.left = (x - 20) + 'px';
+        div.style.top = (y - 20) + 'px';
+        div.style.color = isGold ? '#FFD966' : 'white';
         document.body.appendChild(div);
         setTimeout(() => div.remove(), 700);
     }
     
-    // ==================== BILLY JUMP - VERSIÓN ÉPICA ====================
-    let jumpGameActive = false;
-    let jumpAnimationId = null;
-    let jumpCanvas = null;
-    let jumpCtx = null;
-    let jumpWidth = 380;
-    let jumpHeight = 600;
+    function addTokens(amount) {
+        if(currentUser) {
+            currentUser.resources.tokens += amount;
+            updateMenuUI();
+            saveUser();
+            showNotification(`+${amount} BILLY Tokens!`, "achievement");
+        }
+    }
     
-    // Estado del juego
-    let score = 0;
-    let lives = 3;
-    let gameOver = false;
-    let gamePaused = false;
+    // ==================== SISTEMA DE MISIONES ====================
+    function checkDailyMissions() {
+        const today = new Date().toDateString();
+        if(!currentUser.dailyMissions || currentUser.dailyMissions.date !== today) {
+            currentUser.dailyMissions = {
+                date: today, taps: 0, mice: 0, jumpScore: 0,
+                completed: []
+            };
+            saveUser();
+        }
+    }
     
-    // Jugador
-    let player = {
-        x: jumpWidth / 2 - 20,
-        y: jumpHeight - 120,
-        width: 40,
-        height: 40,
-        vx: 0,
-        vy: 0,
-        gravity: 0.6,
-        jumpPower: -10,
-        grounded: true,
-        lastGroundY: 0,
-        state: 'idle' // idle, jump, fall, hit, stomp
-    };
-    
-    // Plataformas
-    let platforms = [];
-    let monsters = [];
-    let powerups = [];
-    let particles = [];
-    
-    // Sistema de combo
-    let combo = 1;
-    let comboCounter = 0;
-    let lastPlatformY = 0;
-    
-    // Power-ups activos
-    let activePowerups = {
-        jetpack: 0,
-        shield: 0,
-        magnet: 0,
-        slowmo: 0
-    };
-    
-    // Scroll de cámara
-    let cameraY = 0;
-    let scrollSpeed = 0;
-    
-    // Imágenes de Billy
-    let billyImages = {
-        normal: null, jump: null, fall: null, happy: null, angry: null, run: null, sad: null, relax: null, surprised: null
-    };
-    let starImage = null;
-    let imagesLoaded = false;
-    let imagesToLoad = 10;
-    let imagesLoadedCount = 0;
-    
-    function loadBillyImages() {
-        billyImages.normal = new Image(); billyImages.normal.src = 'billy-normal.png';
-        billyImages.jump = new Image(); billyImages.jump.src = 'bylli-jumpin.png';
-        billyImages.fall = new Image(); billyImages.fall.src = 'billy-abajo.png';
-        billyImages.happy = new Image(); billyImages.happy.src = 'bylli-alegre.png';
-        billyImages.angry = new Image(); billyImages.angry.src = 'bylli-enojado.png';
-        billyImages.run = new Image(); billyImages.run.src = 'bylli-hacia-delante.png';
-        billyImages.sad = new Image(); billyImages.sad.src = 'bylli-llorando.png';
-        billyImages.relax = new Image(); billyImages.relax.src = 'bylli-relax.png';
-        billyImages.surprised = new Image(); billyImages.surprised.src = 'bylli-sorprendido.png';
-        starImage = new Image(); starImage.src = 'estrella.png';
+    function updateMissionProgress(type, amount = 1) {
+        if(!currentUser) return;
+        checkDailyMissions();
+        const mission = currentUser.dailyMissions;
+        if(type === 'tap') mission.taps += amount;
+        if(type === 'mice') mission.mice += amount;
+        if(type === 'jump') mission.jumpScore += amount;
         
-        const checkLoad = () => {
-            imagesLoadedCount++;
-            if(imagesLoadedCount >= imagesToLoad) imagesLoaded = true;
+        let rewards = 0;
+        if(mission.taps >= 50 && !mission.completed.includes('tap')) {
+            mission.completed.push('tap');
+            rewards = 100;
+            showNotification("🎉 Misión: 50 taps completada! +100 monedas", "achievement");
+        }
+        if(mission.mice >= 20 && !mission.completed.includes('mice')) {
+            mission.completed.push('mice');
+            rewards += 150;
+            showNotification("🎉 Misión: 20 ratones completada! +150 monedas", "achievement");
+        }
+        if(mission.jumpScore >= 500 && !mission.completed.includes('jump')) {
+            mission.completed.push('jump');
+            rewards += 200;
+            showNotification("🎉 Misión: 500 puntos en Jump completada! +200 monedas", "achievement");
+        }
+        if(rewards > 0) {
+            currentUser.resources.coins += rewards;
+            saveUser();
+            updateMenuUI();
+        }
+    }
+    
+    // ==================== CÓDIGOS SECRETOS ====================
+    const SECRET_CODES = {
+        'BILLY100': { coins: 100, tokens: 0 },
+        'GOLDENMOUSE': { coins: 0, tokens: 50 },
+        'SECRETCAT': { coins: 200, tokens: 0 },
+        'MAGICBOX': { coins: 150, tokens: 25 }
+    };
+    
+    function redeemCode(code) {
+        const upperCode = code.toUpperCase();
+        if(!SECRET_CODES[upperCode]) { showNotification("Código inválido", "normal"); return false; }
+        if(currentUser.usedCodes.includes(upperCode)) { showNotification("Código ya usado", "normal"); return false; }
+        const reward = SECRET_CODES[upperCode];
+        currentUser.resources.coins += reward.coins;
+        currentUser.resources.tokens += reward.tokens;
+        currentUser.usedCodes.push(upperCode);
+        saveUser();
+        updateMenuUI();
+        showNotification(`🎉 Código canjeado! +${reward.coins}🪙 +${reward.tokens}⭐`, "achievement");
+        return true;
+    }
+    
+    function openCodeModal() {
+        const modal = document.createElement('div');
+        modal.className = 'modal';
+        modal.innerHTML = `
+            <div class="modal-content">
+                <h2>🔑 CÓDIGO SECRETO</h2>
+                <input type="text" id="codeInput" placeholder="Ej: BILLY100" style="width:100%;padding:12px;border-radius:30px;margin-bottom:15px;text-align:center;">
+                <button class="shop-btn" id="redeemBtn" style="width:100%;padding:12px;">CANJEAR</button>
+                <button class="close-modal" onclick="this.closest('.modal').remove()">CERRAR</button>
+            </div>
+        `;
+        document.body.appendChild(modal);
+        document.getElementById('redeemBtn').onclick = () => {
+            const code = document.getElementById('codeInput').value.trim();
+            redeemCode(code);
+            modal.remove();
+        };
+    }
+    
+    // ==================== RANKING GLOBAL ====================
+    let globalRanking = [];
+    function updateGlobalRanking() {
+        if(!currentUser) return;
+        const score = currentUser.jump.bestScore;
+        const existing = globalRanking.find(r => r.userId === currentUser.userId);
+        if(existing) { existing.score = score; existing.nickname = currentUser.nickname; }
+        else globalRanking.push({ userId: currentUser.userId, nickname: currentUser.nickname, score: score });
+        globalRanking.sort((a,b) => b.score - a.score);
+        globalRanking = globalRanking.slice(0, 20);
+        localStorage.setItem('billyGlobalRanking', JSON.stringify(globalRanking));
+    }
+    
+    function openRanking() {
+        const modal = document.createElement('div');
+        modal.className = 'modal';
+        modal.innerHTML = `
+            <div class="modal-content">
+                <h2>🏆 RANKING GLOBAL</h2>
+                ${globalRanking.slice(0, 10).map((r, i) => `<div style="display:flex;justify-content:space-between;padding:8px;border-bottom:1px solid rgba(255,255,255,0.1);color:white;"><span>${i+1}. ${r.nickname}</span><span>⭐ ${r.score} pts</span></div>`).join('')}
+                ${globalRanking.length === 0 ? '<div style="color:white;text-align:center;padding:20px;">Aún no hay datos</div>' : ''}
+                <div style="margin-top:10px;padding:8px;background:rgba(255,200,100,0.2);border-radius:20px;color:#FFD966;">Tu récord: ${currentUser?.jump.bestScore || 0}</div>
+                <button class="close-modal" onclick="this.closest('.modal').remove()">CERRAR</button>
+            </div>
+        `;
+        document.body.appendChild(modal);
+    }
+    
+    // ==================== TIENDA COMPLETA ====================
+    function openShop() {
+        const modal = document.createElement('div');
+        modal.className = 'modal';
+        modal.innerHTML = `
+            <div class="modal-content">
+                <h2>🛒 TIENDA BYLLI</h2>
+                <div class="shop-tabs">
+                    <div class="shop-tab active" data-tab="upgrades">📈 Mejoras</div>
+                    <div class="shop-tab" data-tab="skins">🎨 Skins</div>
+                    <div class="shop-tab" data-tab="pets">🐾 Mascotas</div>
+                    <div class="shop-tab" data-tab="skills">🌳 Habilidades</div>
+                </div>
+                <div id="upgradesSection" class="shop-section active">
+                    <div class="shop-item" onclick="buyUpgrade()"><div class="item-info"><div class="item-name">💪 MEJORAR PODER</div><div class="item-desc">+1 poder de clic</div></div><button class="shop-btn">${50 + (currentUser.clicker.tapPower * 10)} 🪙</button></div>
+                    <div class="shop-item" onclick="buyAutoClick()"><div class="item-info"><div class="item-name">🤖 AUTO-CLICK</div><div class="item-desc">+1 moneda/segundo</div></div><button class="shop-btn">${200 + (currentUser.clicker.autoPower * 50)} 🪙</button></div>
+                    <div class="shop-item" onclick="buyExtraLife()"><div class="item-info"><div class="item-name">❤️ VIDA EXTRA</div><div class="item-desc">+1 vida en Jump</div></div><button class="shop-btn">300 ⭐</button></div>
+                </div>
+                <div id="skinsSection" class="shop-section">
+                    <div class="shop-item" onclick="buySkin('original')"><div class="item-info"><div class="item-name">🐱 Original</div><div class="item-desc">El clásico Billy</div></div><button class="shop-btn">${currentUser.inventory.skins.find(s => s.id === 'original')?.unlocked ? 'EQUIPADA' : 'GRATIS'}</button></div>
+                    <div class="shop-item" onclick="buySkin('golden')"><div class="item-info"><div class="item-name">✨ Golden</div><div class="item-desc">Billy dorado</div><div class="item-price">500 ⭐</div></div><button class="shop-btn">${currentUser.inventory.skins.find(s => s.id === 'golden')?.unlocked ? (currentUser.inventory.skins.find(s => s.id === 'golden')?.equipped ? 'EQUIPADA' : 'EQUIPAR') : 'COMPRAR'}</button></div>
+                    <div class="shop-item" onclick="buySkin('elite')"><div class="item-info"><div class="item-name">🔥 Elite</div><div class="item-desc">Billy élite</div><div class="item-price">1500 ⭐</div></div><button class="shop-btn">${currentUser.inventory.skins.find(s => s.id === 'elite')?.unlocked ? (currentUser.inventory.skins.find(s => s.id === 'elite')?.equipped ? 'EQUIPADA' : 'EQUIPAR') : 'COMPRAR'}</button></div>
+                </div>
+                <div id="petsSection" class="shop-section">
+                    <div class="shop-item" onclick="buyPet('dog')"><div class="item-info"><div class="item-name">🐕 Perro</div><div class="item-desc">Recolecta ratones auto</div><div class="item-price">300 ⭐</div></div><button class="shop-btn">${currentUser.inventory.pets.includes('dog') ? (currentUser.inventory.activePet === 'dog' ? 'ACTIVA' : 'ACTIVAR') : 'COMPRAR'}</button></div>
+                    <div class="shop-item" onclick="buyPet('owl')"><div class="item-info"><div class="item-name">🦉 Búho</div><div class="item-desc">+10% crítico</div><div class="item-price">400 ⭐</div></div><button class="shop-btn">${currentUser.inventory.pets.includes('owl') ? (currentUser.inventory.activePet === 'owl' ? 'ACTIVA' : 'ACTIVAR') : 'COMPRAR'}</button></div>
+                    <div class="shop-item" onclick="buyPet('bee')"><div class="item-info"><div class="item-name">🐝 Abeja</div><div class="item-desc">Genera monedas pasivas</div><div class="item-price">250 ⭐</div></div><button class="shop-btn">${currentUser.inventory.pets.includes('bee') ? (currentUser.inventory.activePet === 'bee' ? 'ACTIVA' : 'ACTIVAR') : 'COMPRAR'}</button></div>
+                    <div class="shop-item" onclick="buyPet('dragon')"><div class="item-info"><div class="item-name">🐉 Dragón</div><div class="item-desc">+10% todas las stats</div><div class="item-price">1000 ⭐</div></div><button class="shop-btn">${currentUser.inventory.pets.includes('dragon') ? (currentUser.inventory.activePet === 'dragon' ? 'ACTIVA' : 'ACTIVAR') : 'COMPRAR'}</button></div>
+                </div>
+                <div id="skillsSection" class="shop-section">
+                    <div class="shop-item" onclick="upgradeSkill('strength')"><div class="item-info"><div class="item-name">💪 FUERZA</div><div class="item-desc">+5% poder de clic</div><div class="item-price">${[40,80,150,300,500][currentUser.inventory.skills.strength] || 500} ⭐</div></div><button class="shop-btn">${currentUser.inventory.skills.strength >= 5 ? 'MAX' : 'MEJORAR'}</button></div>
+                    <div class="shop-item" onclick="upgradeSkill('energy')"><div class="item-info"><div class="item-name">⚡ ENERGÍA</div><div class="item-desc">+20 energía máxima</div><div class="item-price">${[30,60,120,250,400][currentUser.inventory.skills.energy] || 400} ⭐</div></div><button class="shop-btn">${currentUser.inventory.skills.energy >= 5 ? 'MAX' : 'MEJORAR'}</button></div>
+                    <div class="shop-item" onclick="upgradeSkill('luck')"><div class="item-info"><div class="item-name">🍀 SUERTE</div><div class="item-desc">+3% crítico</div><div class="item-price">${[50,100,200,400,600][currentUser.inventory.skills.luck] || 600} ⭐</div></div><button class="shop-btn">${currentUser.inventory.skills.luck >= 5 ? 'MAX' : 'MEJORAR'}</button></div>
+                    <div class="shop-item" onclick="upgradeSkill('economy')"><div class="item-info"><div class="item-name">💰 ECONOMÍA</div><div class="item-desc">+10% monedas</div><div class="item-price">${[40,80,150,300,500][currentUser.inventory.skills.economy] || 500} ⭐</div></div><button class="shop-btn">${currentUser.inventory.skills.economy >= 5 ? 'MAX' : 'MEJORAR'}</button></div>
+                </div>
+                <button class="close-modal" onclick="this.closest('.modal').remove()">CERRAR</button>
+            </div>
+        `;
+        document.body.appendChild(modal);
+        
+        const tabs = modal.querySelectorAll('.shop-tab');
+        const sections = { upgrades: modal.querySelector('#upgradesSection'), skins: modal.querySelector('#skinsSection'), pets: modal.querySelector('#petsSection'), skills: modal.querySelector('#skillsSection') };
+        tabs.forEach(tab => {
+            tab.onclick = () => {
+                tabs.forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                Object.values(sections).forEach(s => s.classList.remove('active'));
+                sections[tab.dataset.tab].classList.add('active');
+            };
+        });
+    }
+    
+    window.buyUpgrade = () => {
+        const cost = 50 + currentUser.clicker.tapPower * 10;
+        if(currentUser.resources.coins >= cost) {
+            currentUser.resources.coins -= cost;
+            currentUser.clicker.tapPower++;
+            saveUser();
+            updateMenuUI();
+            showNotification(`💪 Poder aumentado a ${currentUser.clicker.tapPower}!`, "achievement");
+            document.querySelector('.modal')?.remove();
+        } else showNotification(`💰 Necesitas ${cost} monedas`, "normal");
+    };
+    
+    window.buyAutoClick = () => {
+        const cost = 200 + currentUser.clicker.autoPower * 50;
+        if(currentUser.resources.coins >= cost) {
+            currentUser.resources.coins -= cost;
+            currentUser.clicker.autoPower++;
+            saveUser();
+            updateMenuUI();
+            if(window.clickerAutoInterval) clearInterval(window.clickerAutoInterval);
+            window.clickerAutoInterval = setInterval(() => {
+                if(window.clickerActive) {
+                    currentUser.resources.coins += currentUser.clicker.autoPower;
+                    saveUser();
+                    updateMenuUI();
+                }
+            }, 1000);
+            showNotification(`🤖 Auto-click nivel ${currentUser.clicker.autoPower}!`, "achievement");
+            document.querySelector('.modal')?.remove();
+        } else showNotification(`💰 Necesitas ${cost} monedas`, "normal");
+    };
+    
+    window.buyExtraLife = () => {
+        if(currentUser.resources.tokens >= 300) {
+            currentUser.resources.tokens -= 300;
+            currentUser.jump.lives++;
+            saveUser();
+            updateMenuUI();
+            showNotification(`❤️ +1 vida extra! Ahora tienes ${currentUser.jump.lives} vidas`, "achievement");
+            document.querySelector('.modal')?.remove();
+        } else showNotification(`⭐ Necesitas 300 BILLY tokens`, "normal");
+    };
+    
+    window.buySkin = (skinId) => {
+        const prices = { golden: 500, elite: 1500 };
+        const existing = currentUser.inventory.skins.find(s => s.id === skinId);
+        if(existing) {
+            if(!existing.equipped) {
+                currentUser.inventory.skins.forEach(s => s.equipped = false);
+                existing.equipped = true;
+                showNotification(`${skinId} equipada!`, "achievement");
+                saveUser();
+                document.querySelector('.modal')?.remove();
+                openShop();
+            }
+        } else {
+            if(currentUser.resources.tokens >= prices[skinId]) {
+                currentUser.resources.tokens -= prices[skinId];
+                currentUser.inventory.skins.forEach(s => s.equipped = false);
+                currentUser.inventory.skins.push({ id: skinId, name: skinId, unlocked: true, equipped: true });
+                showNotification(`${skinId} comprada!`, "achievement");
+                saveUser();
+                updateMenuUI();
+                document.querySelector('.modal')?.remove();
+                openShop();
+            } else showNotification(`⭐ Necesitas ${prices[skinId]} BILLY tokens`, "normal");
+        }
+    };
+    
+    window.buyPet = (petId) => {
+        const prices = { dog: 300, owl: 400, bee: 250, dragon: 1000 };
+        if(currentUser.inventory.pets.includes(petId)) {
+            currentUser.inventory.activePet = petId;
+            showNotification(`${petId} activada!`, "achievement");
+            saveUser();
+            document.querySelector('.modal')?.remove();
+            openShop();
+        } else {
+            if(currentUser.resources.tokens >= prices[petId]) {
+                currentUser.resources.tokens -= prices[petId];
+                currentUser.inventory.pets.push(petId);
+                currentUser.inventory.activePet = petId;
+                showNotification(`${petId} comprada y activada!`, "achievement");
+                saveUser();
+                updateMenuUI();
+                document.querySelector('.modal')?.remove();
+                openShop();
+            } else showNotification(`⭐ Necesitas ${prices[petId]} BILLY tokens`, "normal");
+        }
+    };
+    
+    window.upgradeSkill = (skillId) => {
+        const costs = { strength: [40,80,150,300,500], energy: [30,60,120,250,400], luck: [50,100,200,400,600], economy: [40,80,150,300,500] };
+        const currentLevel = currentUser.inventory.skills[skillId];
+        if(currentLevel < 5) {
+            const cost = costs[skillId][currentLevel];
+            if(currentUser.resources.tokens >= cost) {
+                currentUser.resources.tokens -= cost;
+                currentUser.inventory.skills[skillId]++;
+                showNotification(`${skillId} nivel ${currentUser.inventory.skills[skillId]}!`, "achievement");
+                saveUser();
+                updateMenuUI();
+                document.querySelector('.modal')?.remove();
+                openShop();
+            } else showNotification(`⭐ Necesitas ${cost} BILLY tokens`, "normal");
+        } else showNotification("Nivel máximo alcanzado", "normal");
+    };
+    
+    // ==================== BILLY CLICKER COMPLETO ====================
+    let clickerActive = false;
+    let clickerCoins = 0, clickerTokens = 0, clickerPower = 1, clickerAutoPower = 0;
+    let clickerEnergy = 100, clickerMaxEnergy = 100;
+    let clickerMice = [];
+    let clickerCombo = 0, clickerComboTimer = null;
+    
+    function updateClickerUI() {
+        document.getElementById('clickerCoins').textContent = Math.floor(currentUser?.resources.coins || 0);
+        document.getElementById('clickerTokens').textContent = Math.floor(currentUser?.resources.tokens || 0);
+        document.getElementById('clickerPower').textContent = currentUser?.clicker.tapPower || 1;
+        const critRate = 5 + (currentUser?.inventory.skills.luck * 3 || 0);
+        document.getElementById('clickerCrit').textContent = critRate;
+        document.getElementById('clickerEnergyText').textContent = `${Math.floor(clickerEnergy)}/${clickerMaxEnergy}`;
+        document.getElementById('clickerEnergyFill').style.width = (clickerEnergy / clickerMaxEnergy * 100) + '%';
+    }
+    
+    function regenerateEnergy() {
+        if(clickerActive && clickerEnergy < clickerMaxEnergy) {
+            clickerEnergy = Math.min(clickerMaxEnergy, clickerEnergy + 3);
+            updateClickerUI();
+        }
+    }
+    
+    function spawnClickerMouse() {
+        if(!clickerActive) return;
+        const size = 45;
+        const y = 150 + Math.random() * (window.innerHeight - 250);
+        const fromLeft = Math.random() < 0.5;
+        const xStart = fromLeft ? -60 : window.innerWidth + 60;
+        const dir = fromLeft ? 1 : -1;
+        const value = Math.floor((clickerPower || 1) * (2 + Math.random() * 3));
+        clickerMice.push({ x: xStart, y: y, size: size, dir: dir, speed: 1.2 + Math.random() * 0.8, value: value });
+        renderClickerMice();
+    }
+    
+    function renderClickerMice() {
+        const container = document.getElementById('clickerGameArea');
+        const existing = container.querySelectorAll('.clicker-mouse');
+        existing.forEach(el => el.remove());
+        
+        clickerMice.forEach((m, idx) => {
+            const div = document.createElement('div');
+            div.className = 'clicker-mouse';
+            div.style.cssText = `left:${m.x - m.size/2}px;top:${m.y - m.size/2}px;width:${m.size}px;height:${m.size}px;background:radial-gradient(circle,#8B5A2B,#5D3A1A);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:28px;border:2px solid #b97f44;`;
+            div.textContent = '🐭';
+            div.onclick = (e) => {
+                e.stopPropagation();
+                if(clickerEnergy >= 5) {
+                    clickerEnergy -= 5;
+                    currentUser.resources.coins += m.value;
+                    currentUser.resources.tokens += Math.floor(m.value / 10);
+                    currentUser.clicker.totalMice++;
+                    createFloatingNumber(m.value, e.clientX, e.clientY, true);
+                    playCoinSound();
+                    clickerMice.splice(idx, 1);
+                    updateClickerUI();
+                    saveUser();
+                    updateMenuUI();
+                    renderClickerMice();
+                    updateMissionProgress('mice');
+                } else {
+                    showNotification("💤 Sin energía! Espera un momento", "normal");
+                }
+            };
+            container.appendChild(div);
+        });
+    }
+    
+    function updateClickerMice() {
+        for(let i = 0; i < clickerMice.length; i++) {
+            clickerMice[i].x += clickerMice[i].speed * clickerMice[i].dir;
+            if((clickerMice[i].dir === 1 && clickerMice[i].x > window.innerWidth + 100) ||
+               (clickerMice[i].dir === -1 && clickerMice[i].x < -100)) {
+                clickerMice.splice(i, 1);
+                i--;
+            }
+        }
+        renderClickerMice();
+    }
+    
+    function startClickerGame() {
+        if(clickerActive) return;
+        clickerActive = true;
+        if(currentUser) {
+            clickerPower = currentUser.clicker.tapPower;
+            clickerAutoPower = currentUser.clicker.autoPower;
+            clickerEnergy = currentUser.clicker.energy;
+            clickerMaxEnergy = 100 + (currentUser.inventory.skills.energy * 20);
+            if(clickerEnergy > clickerMaxEnergy) clickerEnergy = clickerMaxEnergy;
+        }
+        updateClickerUI();
+        
+        const billyDiv = document.getElementById('clickerBilly');
+        const billyImg = document.getElementById('clickerBillyImg');
+        
+        const handleTap = (e) => {
+            e.stopPropagation();
+            if(clickerEnergy < 10) {
+                showNotification("💤 Sin energía! Espera un momento", "normal");
+                return;
+            }
+            
+            clickerEnergy -= 10;
+            let gain = clickerPower;
+            
+            // Sistema de combo
+            clickerCombo++;
+            if(clickerComboTimer) clearTimeout(clickerComboTimer);
+            clickerComboTimer = setTimeout(() => {
+                if(clickerCombo >= 5) showNotification(`🔥 Combo de ${clickerCombo} perdido!`, "normal");
+                clickerCombo = 0;
+            }, 2000);
+            
+            // Multiplicador por combo
+            let comboMulti = 1 + Math.min(clickerCombo / 20, 0.5);
+            gain *= comboMulti;
+            
+            // Crítico
+            let critChance = 5 + (currentUser?.inventory.skills.luck * 3 || 0);
+            if(currentUser?.inventory.activePet === 'owl') critChance += 10;
+            const isCrit = Math.random() * 100 < critChance;
+            if(isCrit) {
+                gain *= 3;
+                currentUser.clicker.totalCrits++;
+                playCritSound();
+                createFloatingNumber(gain, e.clientX || window.innerWidth/2, e.clientY || window.innerHeight/2, true);
+            } else {
+                createFloatingNumber(gain, e.clientX || window.innerWidth/2, e.clientY || window.innerHeight/2, false);
+            }
+            
+            // Bono por mascota dragón
+            if(currentUser?.inventory.activePet === 'dragon') gain *= 1.1;
+            
+            // Bono por habilidad economía
+            gain *= (1 + (currentUser?.inventory.skills.economy * 0.1 || 0));
+            
+            currentUser.resources.coins += Math.floor(gain);
+            currentUser.resources.tokens += Math.floor(gain / 15);
+            currentUser.clicker.totalTaps++;
+            
+            updateClickerUI();
+            saveUser();
+            updateMenuUI();
+            
+            // Efecto visual
+            billyDiv.style.transform = 'scale(0.92)';
+            setTimeout(() => billyDiv.style.transform = 'scale(1)', 100);
+            billyImg.src = currentUser?.inventory.skins.find(s => s.equipped)?.id === 'golden' ? IMG.happy : IMG.happy;
+            setTimeout(() => billyImg.src = currentUser?.inventory.skins.find(s => s.equipped)?.id === 'golden' ? IMG.happy : IMG.normal, 150);
+            
+            playClickSound();
+            updateMissionProgress('tap');
         };
         
-        Object.values(billyImages).forEach(img => { if(img) img.onload = checkLoad; });
-        if(starImage) starImage.onload = checkLoad;
+        billyDiv.onclick = handleTap;
+        billyDiv.ontouchstart = (e) => { e.preventDefault(); handleTap(e); };
+        
+        // Auto-click
+        if(window.clickerAutoInterval) clearInterval(window.clickerAutoInterval);
+        if(clickerAutoPower > 0) {
+            window.clickerAutoInterval = setInterval(() => {
+                if(clickerActive && clickerEnergy >= 10) {
+                    clickerEnergy -= 10;
+                    let gain = clickerAutoPower;
+                    currentUser.resources.coins += gain;
+                    saveUser();
+                    updateClickerUI();
+                    updateMenuUI();
+                }
+            }, 1000);
+        }
+        
+        // Regeneración de energía
+        if(window.energyInterval) clearInterval(window.energyInterval);
+        window.energyInterval = setInterval(regenerateEnergy, 2000);
+        
+        // Spawn de ratones
+        if(window.mouseInterval) clearInterval(window.mouseInterval);
+        window.mouseInterval = setInterval(() => spawnClickerMouse(), 3500);
+        if(window.mouseMoveInterval) clearInterval(window.mouseMoveInterval);
+        window.mouseMoveInterval = setInterval(() => updateClickerMice(), 50);
+        
+        showNotification("🐱 ¡Toca a Billy para ganar monedas!", "achievement");
+    }
+    
+    function stopClickerGame() {
+        clickerActive = false;
+        if(window.clickerAutoInterval) clearInterval(window.clickerAutoInterval);
+        if(window.energyInterval) clearInterval(window.energyInterval);
+        if(window.mouseInterval) clearInterval(window.mouseInterval);
+        if(window.mouseMoveInterval) clearInterval(window.mouseMoveInterval);
+        if(currentUser) currentUser.clicker.energy = clickerEnergy;
+        clickerMice = [];
+        renderClickerMice();
+    }
+    
+    // ==================== BILLY JUMP BALANCEADO ====================
+    let jumpGameActive = false;
+    let jumpAnimationId = null;
+    let jumpCanvas = null, jumpCtx = null;
+    let jumpWidth = 380, jumpHeight = 600;
+    let score = 0, lives = 3, gameOver = false;
+    let leftPressed = false, rightPressed = false;
+    let moveSpeed = 3.5;
+    let cameraY = 0;
+    let combo = 1, comboCounter = 0, lastPlatformY = 0;
+    let difficulty = 1;
+    
+    let player = {
+        x: 0, y: 0, width: 42, height: 42,
+        vx: 0, vy: 0, gravity: 0.62, jumpPower: -10.2,
+        grounded: true, state: 'idle', facingRight: true
+    };
+    
+    let platforms = [], monsters = [], powerups = [], particles = [];
+    let activePowerups = { jetpack: 0, shield: 0, magnet: 0, slowmo: 0 };
+    let billyImages = {}, starImage = null, imagesLoaded = false;
+    let imagesToLoad = Object.keys(IMG).length;
+    let imagesLoadedCount = 0;
+    
+    function loadAllImages() {
+        for(const [key, url] of Object.entries(IMG)) {
+            const img = new Image();
+            img.src = url;
+            img.onload = () => { imagesLoadedCount++; if(imagesLoadedCount >= imagesToLoad) imagesLoaded = true; };
+            img.onerror = () => { imagesLoadedCount++; if(imagesLoadedCount >= imagesToLoad) imagesLoaded = true; };
+            if(key === 'star') starImage = img;
+            else billyImages[key] = img;
+        }
     }
     
     function getBillySprite() {
         if(!imagesLoaded) return null;
+        const skin = currentUser?.inventory.skins.find(s => s.equipped)?.id;
         if(activePowerups.shield > 0) return billyImages.surprised;
         if(player.state === 'hit') return billyImages.angry;
-        if(!player.grounded) {
-            if(player.vy < 0) return billyImages.jump;
-            return billyImages.fall;
-        }
-        if(Math.abs(player.vx) > 1) return billyImages.run;
+        if(!player.grounded) return player.vy < -2 ? billyImages.jump : billyImages.fall;
+        if(Math.abs(player.vx) > 0.5) return billyImages.run;
         if(combo >= 3) return billyImages.happy;
-        if(combo === 0 && score > 0) return billyImages.relax;
         return billyImages.normal;
     }
     
-    // Tipos de plataformas
-    // 0: normal (verde), 1: rompible (roja), 2: rebote (azul), 3: aceleradora (amarilla), 4: desaparece (naranja)
-    function generatePlatforms() {
+    function generateJumpPlatforms() {
         platforms = [];
-        // Plataforma base
-        platforms.push({
-            x: jumpWidth/2 - 40,
-            y: jumpHeight - 30,
-            width: 80,
-            height: 15,
-            type: 0,
-            originalY: jumpHeight - 30,
-            blinkCounter: 0
-        });
-        
-        // Generar plataformas hacia arriba
+        platforms.push({ x: jumpWidth/2 - 45, y: jumpHeight - 30, width: 90, height: 14, type: 0 });
         let lastY = jumpHeight - 80;
-        for(let i = 0; i < 18; i++) {
-            let type = Math.random();
-            let platformType = 0;
-            if(type < 0.6) platformType = 0;
-            else if(type < 0.75) platformType = 1;
-            else if(type < 0.85) platformType = 2;
-            else if(type < 0.93) platformType = 3;
-            else platformType = 4;
-            
-            let x = 20 + Math.random() * (jumpWidth - 100);
-            let y = lastY - (40 + Math.random() * 50);
+        let platformCount = 18 + Math.floor(difficulty * 2);
+        for(let i = 0; i < platformCount; i++) {
+            let typeRand = Math.random();
+            let platformType = typeRand < 0.55 ? 0 : (typeRand < 0.7 ? 1 : (typeRand < 0.82 ? 2 : (typeRand < 0.92 ? 3 : 4)));
+            let x = 15 + Math.random() * (jumpWidth - 90);
+            let y = lastY - (38 + Math.random() * 48);
             lastY = y;
-            
-            platforms.push({
-                x: x,
-                y: y,
-                width: 65,
-                height: 12,
-                type: platformType,
-                originalY: y,
-                blinkCounter: 0,
-                breaking: false
-            });
+            platforms.push({ x, y, width: 70, height: 12, type: platformType, breaking: false, blinkCounter: 0 });
         }
-    }
-    
-    function generateMonster(platform) {
-        if(monsters.length > 8) return;
-        if(Math.random() < 0.35) {
-            monsters.push({
-                x: platform.x + platform.width/2 - 15,
-                y: platform.y - 25,
-                width: 30,
-                height: 25,
-                type: 'monster',
-                platformIndex: platforms.indexOf(platform),
-                patrolDirection: Math.random() > 0.5 ? 1 : -1,
-                patrolX: platform.x + platform.width/2 - 15
-            });
-        }
-    }
-    
-    function generatePowerup(platform) {
-        if(powerups.length > 3) return;
-        if(Math.random() < 0.2) {
-            const types = ['jetpack', 'shield', 'magnet', 'slowmo'];
-            powerups.push({
-                x: platform.x + platform.width/2 - 12,
-                y: platform.y - 28,
-                width: 24,
-                height: 24,
-                type: types[Math.floor(Math.random() * types.length)],
-                floatOffset: 0
-            });
-        }
+        
+        monsters = []; powerups = [];
+        platforms.forEach((platform, idx) => {
+            if(idx > 0 && idx < platforms.length - 2) {
+                let monsterChance = 0.25 + (difficulty * 0.05);
+                if(Math.random() < monsterChance) {
+                    monsters.push({
+                        x: platform.x + platform.width/2 - 16, y: platform.y - 28,
+                        width: 32, height: 28, patrolDirection: Math.random() > 0.5 ? 1 : -1,
+                        patrolX: platform.x + platform.width/2 - 16
+                    });
+                }
+                if(Math.random() < 0.18) {
+                    const types = ['jetpack', 'shield', 'magnet', 'slowmo'];
+                    powerups.push({
+                        x: platform.x + platform.width/2 - 14, y: platform.y - 32,
+                        width: 28, height: 28, type: types[Math.floor(Math.random() * types.length)],
+                        floatOffset: Math.random() * Math.PI * 2
+                    });
+                }
+            }
+        });
     }
     
     function resetJumpGame() {
         score = 0;
+        difficulty = 1;
         lives = currentUser?.jump.lives || 3;
         gameOver = false;
-        gamePaused = false;
         combo = 1;
         comboCounter = 0;
         activePowerups = { jetpack: 0, shield: 0, magnet: 0, slowmo: 0 };
-        
+        moveSpeed = 3.5;
         player = {
-            x: jumpWidth / 2 - 20,
-            y: jumpHeight - 120,
-            width: 40,
-            height: 40,
-            vx: 0,
-            vy: 0,
-            gravity: 0.6,
-            jumpPower: -10,
-            grounded: true,
-            lastGroundY: 0,
-            state: 'idle'
+            x: jumpWidth/2 - 21, y: jumpHeight - 120, width: 42, height: 42,
+            vx: 0, vy: 0, gravity: 0.62, jumpPower: -10.2,
+            grounded: true, state: 'idle', facingRight: true
         };
-        
-        scrollSpeed = 0;
         cameraY = 0;
-        monsters = [];
-        powerups = [];
-        particles = [];
-        
-        generatePlatforms();
-        
-        // Añadir monstruos y power-ups a plataformas
-        platforms.forEach((platform, idx) => {
-            if(idx > 0) {
-                generateMonster(platform);
-                generatePowerup(platform);
-            }
-        });
-        
+        generateJumpPlatforms();
         updateJumpUI();
     }
     
     function updateJumpUI() {
         document.getElementById('jumpScore').textContent = score;
-        const livesContainer = document.getElementById('jumpLivesContainer');
-        livesContainer.innerHTML = '';
-        for(let i = 0; i < lives; i++) {
-            const heart = document.createElement('span');
-            heart.className = 'life-heart';
-            heart.textContent = '❤️';
-            livesContainer.appendChild(heart);
-        }
+        const container = document.getElementById('jumpLivesContainer');
+        container.innerHTML = '';
+        for(let i = 0; i < lives; i++) container.innerHTML += '<span class="life-heart">❤️</span>';
         
-        const comboDisplay = document.getElementById('jumpComboDisplay');
+        const comboDiv = document.getElementById('jumpComboDisplay');
         if(combo > 1) {
-            comboDisplay.style.display = 'block';
+            comboDiv.style.display = 'block';
             document.getElementById('comboMultiplier').textContent = combo;
-        } else {
-            comboDisplay.style.display = 'none';
-        }
+        } else comboDiv.style.display = 'none';
         
-        const powerIndicator = document.getElementById('powerupIndicator');
-        if(activePowerups.jetpack > 0) powerIndicator.innerHTML = '🚀 JETPACK';
-        else if(activePowerups.shield > 0) powerIndicator.innerHTML = '🛡️ ESCUDO';
-        else if(activePowerups.magnet > 0) powerIndicator.innerHTML = '🧲 IMÁN';
-        else if(activePowerups.slowmo > 0) powerIndicator.innerHTML = '⏱️ CÁMARA LENTA';
-        else powerIndicator.style.display = 'none';
-        
-        if(activePowerups.jetpack > 0 || activePowerups.shield > 0 || activePowerups.magnet > 0 || activePowerups.slowmo > 0) {
-            powerIndicator.style.display = 'block';
-        }
+        const powerDiv = document.getElementById('powerupIndicator');
+        if(activePowerups.jetpack > 0) powerDiv.innerHTML = '🚀 JETPACK';
+        else if(activePowerups.shield > 0) powerDiv.innerHTML = '🛡️ ESCUDO';
+        else if(activePowerups.magnet > 0) powerDiv.innerHTML = '🧲 IMÁN';
+        else if(activePowerups.slowmo > 0) powerDiv.innerHTML = '⏱️ CÁMARA LENTA';
+        powerDiv.style.display = (activePowerups.jetpack > 0 || activePowerups.shield > 0 || activePowerups.magnet > 0 || activePowerups.slowmo > 0) ? 'block' : 'none';
     }
     
     function applyDamage() {
         if(activePowerups.shield > 0) {
             activePowerups.shield = 0;
             showNotification("🛡️ Escudo roto!", "normal");
+            updateJumpUI();
             return;
         }
-        
         lives--;
         updateJumpUI();
         player.state = 'hit';
         playHitSound();
-        
-        // Vibrar si soporta
         if(navigator.vibrate) navigator.vibrate(50);
-        
-        // Efecto de partículas de daño
-        for(let i = 0; i < 8; i++) {
-            particles.push({
-                x: player.x + player.width/2,
-                y: player.y + player.height/2,
-                vx: (Math.random() - 0.5) * 5,
-                vy: (Math.random() - 0.5) * 5 - 2,
-                life: 30,
-                color: '#ff4444'
-            });
-        }
         
         if(lives <= 0) {
             gameOver = true;
             playGameOverSound();
             if(score > (currentUser?.jump.bestScore || 0)) {
                 currentUser.jump.bestScore = score;
-                currentUser.resources.tokens += Math.floor(score / 10);
-                showNotification(`🏆 NUEVO RÉCORD! +${Math.floor(score/10)} BILLY`, "achievement");
+                let tokenReward = Math.floor(score / 8);
+                currentUser.resources.tokens += tokenReward;
+                showNotification(`🏆 NUEVO RÉCORD! +${tokenReward} BILLY`, "achievement");
                 saveUser();
                 updateMenuUI();
+                updateGlobalRanking();
             }
             currentUser.stats.gamesPlayed++;
             currentUser.stats.totalScore += score;
             saveUser();
             showGameOverModal();
         } else {
-            // Respawnear al jugador
-            player.x = jumpWidth / 2 - 20;
+            player.x = jumpWidth/2 - 21;
             player.y = jumpHeight - 120;
             player.vy = 0;
             player.vx = 0;
             player.grounded = true;
             cameraY = 0;
             combo = 1;
-            comboCounter = 0;
-            
-            // Regenerar plataformas
-            generatePlatforms();
-            monsters = [];
-            powerups = [];
-            platforms.forEach((platform, idx) => {
-                if(idx > 0) {
-                    generateMonster(platform);
-                    generatePowerup(platform);
-                }
-            });
+            generateJumpPlatforms();
         }
         setTimeout(() => { if(player.state === 'hit') player.state = 'idle'; }, 300);
     }
@@ -1108,10 +1437,7 @@
             </div>
         `;
         modal.style.display = 'flex';
-        document.getElementById('restartGameBtn').onclick = () => {
-            modal.style.display = 'none';
-            resetJumpGame();
-        };
+        document.getElementById('restartGameBtn').onclick = () => { modal.style.display = 'none'; resetJumpGame(); };
         document.getElementById('menuAfterGameBtn').onclick = () => {
             modal.style.display = 'none';
             jumpGameActive = false;
@@ -1123,386 +1449,184 @@
     }
     
     function updateJumpGame() {
-        if(!jumpCanvas || !jumpCtx || gameOver || gamePaused) {
+        if(!jumpCanvas || !jumpCtx || gameOver || !jumpGameActive) {
             if(jumpAnimationId) requestAnimationFrame(updateJumpGame);
             return;
         }
         
-        const ctx = jumpCtx;
-        const w = jumpWidth;
-        const h = jumpHeight;
+        const ctx = jumpCtx, w = jumpWidth, h = jumpHeight;
+        let deltaSpeed = activePowerups.slowmo > 0 ? 0.55 : 1;
         
-        // Limpiar canvas
-        ctx.clearRect(0, 0, w, h);
+        // Actualizar dificultad basada en puntuación
+        difficulty = 1 + Math.floor(score / 400);
+        let currentMoveSpeed = 3.5 + (difficulty * 0.2);
         
-        // Fondo con gradiente y estrellas
+        // Fondo
         const grad = ctx.createLinearGradient(0, 0, 0, h);
         grad.addColorStop(0, '#0a0a2a');
-        grad.addColorStop(1, '#1a1a3e');
+        grad.addColorStop(0.6, '#1a1a3e');
+        grad.addColorStop(1, '#0a0a1a');
         ctx.fillStyle = grad;
         ctx.fillRect(0, 0, w, h);
         
-        // Estrellas de fondo
-        for(let i = 0; i < 50; i++) {
-            ctx.fillStyle = `rgba(255,255,200,${0.2 + Math.sin(Date.now()/1000 + i)*0.1})`;
-            ctx.beginPath();
-            ctx.arc((i * 37) % w, 30 + (i * 13) % 80, 1.5, 0, Math.PI*2);
-            ctx.fill();
-        }
+        // Movimiento
+        if(leftPressed) player.vx = -currentMoveSpeed;
+        else if(rightPressed) player.vx = currentMoveSpeed;
+        else player.vx *= 0.95;
+        if(player.vx > 0) player.facingRight = true;
+        if(player.vx < 0) player.facingRight = false;
         
-        // === ACTUALIZAR FÍSICA ===
-        let deltaSpeed = 1;
-        if(activePowerups.slowmo > 0) deltaSpeed = 0.5;
-        
-        // Aplicar gravedad
         player.vy += player.gravity * deltaSpeed;
         if(activePowerups.jetpack > 0) {
-            player.vy = -5 * deltaSpeed;
+            player.vy = -5.2 * deltaSpeed;
             activePowerups.jetpack -= deltaSpeed;
-            if(activePowerups.jetpack <= 0) showNotification("⌛ Jetpack terminado", "normal");
         }
         
         player.y += player.vy * deltaSpeed;
+        player.x += player.vx * deltaSpeed;
+        player.x = Math.max(5, Math.min(w - player.width - 5, player.x));
         
-        // Movimiento horizontal
-        if(player.vx !== 0) {
-            player.x += player.vx * deltaSpeed;
-            player.vx *= 0.98;
-        }
+        let targetCameraY = player.y < h * 0.4 ? Math.min(0, player.y - h * 0.4) : 0;
+        cameraY += (targetCameraY - cameraY) * 0.12;
         
-        // Colisión con bordes
-        if(player.x < 0) player.x = 0;
-        if(player.x + player.width > w) player.x = w - player.width;
-        
-        // Scroll de cámara
-        let targetCameraY = 0;
-        if(player.y < h * 0.4) {
-            targetCameraY = Math.min(0, player.y - h * 0.4);
-        }
-        cameraY += (targetCameraY - cameraY) * 0.1;
-        
-        // Colisiones con plataformas
+        // Colisiones plataformas
         player.grounded = false;
-        let landedOnPlatform = false;
-        
         for(let i = 0; i < platforms.length; i++) {
             const p = platforms[i];
             const platformY = p.y + cameraY;
+            if(p.type === 4 && p.breaking) { p.blinkCounter++; if(p.blinkCounter > 35) { platforms.splice(i,1); i--; continue; } }
             
-            // Actualizar plataformas que desaparecen
-            if(p.type === 4 && p.breaking) {
-                p.blinkCounter++;
-                if(p.blinkCounter > 30) {
-                    platforms.splice(i, 1);
-                    i--;
-                    continue;
-                }
-            }
-            
-            if(player.vy >= 0 && 
-               player.x + player.width > p.x && 
-               player.x < p.x + p.width &&
-               player.y + player.height > platformY &&
-               player.y + player.height < platformY + p.height + 10 &&
-               player.y + player.height - player.vy <= platformY + p.height) {
-                
+            if(player.vy >= 0 && player.x + player.width - 5 > p.x && player.x + 5 < p.x + p.width &&
+               player.y + player.height > platformY && player.y + player.height < platformY + p.height + 8) {
                 player.y = platformY - player.height;
                 player.vy = 0;
                 player.grounded = true;
-                player.lastGroundY = player.y;
-                landedOnPlatform = true;
                 
-                // Efecto squash al aterrizar
-                if(player.vy > 5) {
-                    playLandSound();
-                    for(let s = 0; s < 5; s++) {
-                        particles.push({
-                            x: player.x + player.width/2,
-                            y: player.y + player.height,
-                            vx: (Math.random() - 0.5) * 3,
-                            vy: -Math.random() * 3,
-                            life: 20,
-                            color: '#aaa'
-                        });
-                    }
-                }
+                if(player.vy > 4) playLandSound();
                 
-                // Combo por saltos seguidos
-                if(p.y < lastPlatformY - 30) {
+                if(p.y < lastPlatformY - 35) {
                     comboCounter++;
-                    if(comboCounter >= 3) {
-                        combo = Math.min(5, Math.floor(comboCounter / 3) + 1);
-                        showNotification(`🔥 COMBO x${combo}! 🔥`, "normal");
-                    }
-                } else {
-                    comboCounter = Math.max(0, comboCounter - 1);
-                }
+                    combo = Math.min(3, Math.floor(comboCounter / 4) + 1);
+                } else comboCounter = Math.max(0, comboCounter - 0.8);
                 lastPlatformY = p.y;
                 
-                // Efectos según tipo de plataforma
                 switch(p.type) {
-                    case 1: // Rompible
-                        platforms.splice(i, 1);
-                        i--;
-                        break;
-                    case 2: // Rebote
-                        player.vy = -14;
-                        playJumpSound();
-                        break;
-                    case 3: // Aceleradora
-                        player.vx = Math.sign(player.vx || 1) * 4;
-                        break;
-                    case 4: // Desaparece
-                        p.breaking = true;
-                        break;
+                    case 1: platforms.splice(i,1); i--; break;
+                    case 2: player.vy = -13.5; playJumpSound(); break;
+                    case 3: player.vx = (player.vx || (player.facingRight ? 1 : -1)) * 1.6; break;
+                    case 4: p.breaking = true; break;
                 }
                 
-                // Añadir puntuación
-                let points = 10 * combo;
-                if(activePowerups.double) points *= 2;
+                // PUNTOS BALANCEADOS
+                let basePoints = 3 + Math.floor(score / 800);
+                let points = basePoints * combo;
                 score += points;
                 createFloatingNumber(points, player.x + player.width/2, player.y, true);
                 updateJumpUI();
+                updateMissionProgress('jump', points);
                 break;
             }
         }
         
-        if(player.grounded) {
-            player.state = 'idle';
-        } else {
-            player.state = 'fall';
-        }
+        player.state = player.grounded ? 'idle' : 'fall';
+        if(player.y > h + 80) applyDamage();
         
-        // Caída al vacío
-        if(player.y > h + 100) {
-            applyDamage();
-            if(lives > 0) {
-                player.y = jumpHeight - 120;
-                player.vy = 0;
-            }
-        }
-        
-        // Actualizar monstruos
+        // Monstruos
         for(let i = 0; i < monsters.length; i++) {
             const m = monsters[i];
-            m.x += (m.patrolDirection * 1.5) * deltaSpeed;
-            // Patrullaje
-            if(m.x < m.patrolX - 25) m.patrolDirection = 1;
-            if(m.x > m.patrolX + 25) m.patrolDirection = -1;
+            m.x += m.patrolDirection * 1.2 * deltaSpeed;
+            if(m.x < m.patrolX - 30) m.patrolDirection = 1;
+            if(m.x > m.patrolX + 30) m.patrolDirection = -1;
             
-            // Colisión con jugador
-            if(player.x + player.width > m.x && 
-               player.x < m.x + m.width &&
-               player.y + player.height > m.y + cameraY &&
-               player.y < m.y + m.height + cameraY) {
-                
-                // Aplastar si viene de arriba
-                if(player.vy > 0 && player.y + player.height < m.y + cameraY + m.height/2) {
-                    // APLASTAR MONSTRUO (como Mario)
-                    monsters.splice(i, 1);
-                    i--;
-                    player.vy = -8;
-                    score += 50 * combo;
+            const monsterY = m.y + cameraY;
+            if(player.x + player.width - 5 > m.x && player.x + 5 < m.x + m.width &&
+               player.y + player.height > monsterY && player.y < monsterY + m.height) {
+                if(player.vy > 0 && player.y + player.height < monsterY + m.height/2 + 5) {
+                    monsters.splice(i,1); i--;
+                    player.vy = -7.5;
+                    // PUNTOS POR APLASTAR BALANCEADOS
+                    let stompPoints = 8 + Math.floor(score / 600);
+                    score += stompPoints * combo;
                     updateJumpUI();
                     playStompSound();
-                    createFloatingNumber(50 * combo, m.x + m.width/2, m.y + cameraY, true);
-                    
-                    // Partículas de muerte
-                    for(let s = 0; s < 8; s++) {
-                        particles.push({
-                            x: m.x + m.width/2,
-                            y: m.y + cameraY + m.height/2,
-                            vx: (Math.random() - 0.5) * 4,
-                            vy: (Math.random() - 0.5) * 4,
-                            life: 25,
-                            color: '#ff6666'
-                        });
-                    }
-                } else {
-                    // Daño por contacto lateral
-                    applyDamage();
-                }
+                    createFloatingNumber(stompPoints * combo, m.x + m.width/2, monsterY, true);
+                    if(currentUser) currentUser.jump.totalStomps++;
+                } else applyDamage();
             }
         }
         
-        // Actualizar power-ups flotantes
+        // Power-ups
         for(let i = 0; i < powerups.length; i++) {
             const p = powerups[i];
-            p.floatOffset = (p.floatOffset || 0) + 0.05;
-            const floatY = Math.sin(p.floatOffset) * 3;
-            
-            if(player.x + player.width > p.x && 
-               player.x < p.x + p.width &&
-               player.y + player.height > p.y + cameraY + floatY &&
-               player.y < p.y + p.height + cameraY + floatY) {
-                
-                // Activar power-up
-                switch(p.type) {
-                    case 'jetpack':
-                        activePowerups.jetpack = 180;
-                        break;
-                    case 'shield':
-                        activePowerups.shield = 300;
-                        break;
-                    case 'magnet':
-                        activePowerups.magnet = 360;
-                        break;
-                    case 'slowmo':
-                        activePowerups.slowmo = 240;
-                        break;
-                }
-                powerups.splice(i, 1);
-                i--;
+            p.floatOffset += 0.06;
+            const powerY = p.y + cameraY + Math.sin(p.floatOffset) * 4;
+            if(player.x + player.width - 5 > p.x && player.x + 5 < p.x + p.width &&
+               player.y + player.height > powerY && player.y < powerY + p.height) {
+                activePowerups[p.type] = p.type === 'jetpack' ? 160 : (p.type === 'shield' ? 280 : (p.type === 'magnet' ? 340 : 220));
+                powerups.splice(i,1); i--;
                 playPowerUpSound();
-                showNotification(`🎁 POWER-UP: ${p.type.toUpperCase()}!`, "achievement");
-                
+                showNotification(`✨ POWER-UP: ${p.type.toUpperCase()}!`, "achievement");
                 if(currentUser) currentUser.jump.totalPowerups++;
                 updateJumpUI();
             }
         }
         
-        // Actualizar power-ups activos (temporizadores)
+        // Actualizar duración de power-ups
+        if(activePowerups.magnet > 0) activePowerups.magnet -= deltaSpeed;
         if(activePowerups.jetpack > 0) activePowerups.jetpack -= deltaSpeed;
         if(activePowerups.shield > 0) activePowerups.shield -= deltaSpeed;
-        if(activePowerups.magnet > 0) activePowerups.magnet -= deltaSpeed;
         if(activePowerups.slowmo > 0) activePowerups.slowmo -= deltaSpeed;
-        updateJumpUI();
         
-        // Imán atrae power-ups
-        if(activePowerups.magnet > 0) {
-            for(let p of powerups) {
-                const dx = (player.x + player.width/2) - (p.x + p.width/2);
-                const dy = (player.y + player.height/2) - (p.y + cameraY + p.height/2);
-                const dist = Math.sqrt(dx*dx + dy*dy);
-                if(dist < 80) {
-                    p.x += dx * 0.1;
-                    p.y += dy * 0.1;
-                }
-            }
-        }
-        
-        // Actualizar partículas
-        for(let i = 0; i < particles.length; i++) {
-            particles[i].x += particles[i].vx;
-            particles[i].y += particles[i].vy;
-            particles[i].life--;
-            if(particles[i].life <= 0) {
-                particles.splice(i, 1);
-                i--;
-            }
-        }
-        
-        // === DIBUJAR ===
-        // Plataformas
+        // Dibujado
         for(const p of platforms) {
             const y = p.y + cameraY;
-            if(y > h + 100 || y < -100) continue;
-            
-            // Color según tipo
-            switch(p.type) {
-                case 0: ctx.fillStyle = '#4CAF50'; break;
-                case 1: ctx.fillStyle = '#f44336'; break;
-                case 2: ctx.fillStyle = '#2196F3'; break;
-                case 3: ctx.fillStyle = '#FFC107'; break;
-                case 4: ctx.fillStyle = '#FF9800'; break;
-                default: ctx.fillStyle = '#4CAF50';
-            }
-            
-            if(p.type === 4 && p.breaking) {
-                ctx.globalAlpha = 0.5 + Math.sin(Date.now() * 0.01) * 0.3;
-            }
-            
-            // Sombra de plataforma
-            ctx.shadowBlur = 5;
-            ctx.shadowColor = 'rgba(0,0,0,0.3)';
+            if(y > h + 100 || y < -80) continue;
+            ctx.fillStyle = p.type === 0 ? '#4CAF50' : (p.type === 1 ? '#f44336' : (p.type === 2 ? '#2196F3' : (p.type === 3 ? '#FFC107' : '#FF9800')));
+            if(p.type === 4 && p.breaking) ctx.globalAlpha = 0.5;
             ctx.fillRect(p.x, y, p.width, p.height);
-            ctx.fillStyle = 'rgba(255,255,255,0.3)';
+            ctx.fillStyle = 'rgba(255,255,255,0.25)';
             ctx.fillRect(p.x, y, p.width, 3);
-            ctx.shadowBlur = 0;
             ctx.globalAlpha = 1;
         }
         
-        // Power-ups flotantes
         for(const p of powerups) {
-            const floatY = Math.sin(p.floatOffset || 0) * 3;
-            const y = p.y + cameraY + floatY;
-            
-            if(starImage && starImage.complete && starImage.naturalWidth > 0) {
-                ctx.drawImage(starImage, p.x, y, p.width, p.height);
-            } else {
-                ctx.fillStyle = '#FFD700';
-                ctx.beginPath();
-                ctx.ellipse(p.x + p.width/2, y + p.height/2, p.width/2, p.height/2, 0, 0, Math.PI*2);
-                ctx.fill();
-            }
-            
+            const y = p.y + cameraY + Math.sin(p.floatOffset) * 4;
+            if(starImage && starImage.complete) ctx.drawImage(starImage, p.x, y, p.width, p.height);
             ctx.fillStyle = 'white';
             ctx.font = `${p.width-6}px "Segoe UI"`;
-            ctx.fillText(p.type === 'jetpack' ? '🚀' : (p.type === 'shield' ? '🛡️' : (p.type === 'magnet' ? '🧲' : '⏱️')), p.x + 4, y + p.height - 4);
+            ctx.fillText(p.type === 'jetpack' ? '🚀' : (p.type === 'shield' ? '🛡️' : (p.type === 'magnet' ? '🧲' : '⏱️')), p.x + 6, y + p.height - 6);
         }
         
-        // Monstruos
         for(const m of monsters) {
             const y = m.y + cameraY;
-            ctx.fillStyle = '#6B2E2E';
+            ctx.fillStyle = '#5D2E2E';
             ctx.beginPath();
             ctx.ellipse(m.x + m.width/2, y + m.height/2, m.width/2, m.height/2, 0, 0, Math.PI*2);
             ctx.fill();
-            ctx.fillStyle = '#4A1A1A';
+            ctx.fillStyle = '#FF6666';
             ctx.beginPath();
-            ctx.ellipse(m.x + m.width - 8, y + m.height/2 - 4, 4, 5, 0, 0, Math.PI*2);
+            ctx.arc(m.x + m.width - 10, y + m.height/2 - 6, 2.5, 0, Math.PI*2);
             ctx.fill();
             ctx.beginPath();
-            ctx.ellipse(m.x + 8, y + m.height/2 - 4, 4, 5, 0, 0, Math.PI*2);
-            ctx.fill();
-            ctx.fillStyle = '#FF4444';
-            ctx.beginPath();
-            ctx.ellipse(m.x + m.width - 9, y + m.height/2 - 5, 2, 2, 0, 0, Math.PI*2);
-            ctx.fill();
-            ctx.beginPath();
-            ctx.ellipse(m.x + 7, y + m.height/2 - 5, 2, 2, 0, 0, Math.PI*2);
-            ctx.fill();
-            // cejas enojadas
-            ctx.fillStyle = '#2A0A0A';
-            ctx.fillRect(m.x + m.width - 13, y + m.height/2 - 12, 8, 2);
-            ctx.fillRect(m.x + 5, y + m.height/2 - 12, 8, 2);
-        }
-        
-        // Partículas
-        for(const p of particles) {
-            ctx.fillStyle = p.color || '#FFD966';
-            ctx.fillRect(p.x, p.y, 3, 3);
-        }
-        
-        // DIBUJAR BILLY
-        const billySprite = getBillySprite();
-        if(billySprite && billySprite.complete && billySprite.naturalWidth > 0) {
-            ctx.drawImage(billySprite, player.x, player.y, player.width, player.height);
-        } else {
-            // Fallback
-            ctx.fillStyle = '#1a1a1a';
-            ctx.beginPath();
-            ctx.ellipse(player.x + player.width/2, player.y + player.height/2 - 5, player.width/2.2, player.height/2.5, 0, 0, Math.PI*2);
-            ctx.fill();
-            ctx.fillStyle = '#FFD966';
-            ctx.beginPath();
-            ctx.arc(player.x + player.width/2 - 8, player.y + player.height/2 - 12, 4, 0, Math.PI*2);
-            ctx.fill();
-            ctx.beginPath();
-            ctx.arc(player.x + player.width/2 + 8, player.y + player.height/2 - 12, 4, 0, Math.PI*2);
+            ctx.arc(m.x + 10, y + m.height/2 - 6, 2.5, 0, Math.PI*2);
             ctx.fill();
         }
         
-        // Escudo visual si está activo
+        const sprite = getBillySprite();
+        ctx.save();
+        if(!player.facingRight && sprite) {
+            ctx.translate(player.x + player.width/2, player.y + player.height/2);
+            ctx.scale(-1, 1);
+            ctx.translate(-(player.x + player.width/2), -(player.y + player.height/2));
+        }
+        if(sprite && sprite.complete) ctx.drawImage(sprite, player.x, player.y, player.width, player.height);
+        ctx.restore();
+        
         if(activePowerups.shield > 0) {
             ctx.beginPath();
-            ctx.arc(player.x + player.width/2, player.y + player.height/2, player.width/2 + 5, 0, Math.PI*2);
+            ctx.arc(player.x + player.width/2, player.y + player.height/2, player.width/2 + 6, 0, Math.PI*2);
             ctx.strokeStyle = '#4CAF50';
             ctx.lineWidth = 3;
-            ctx.stroke();
-            ctx.beginPath();
-            ctx.arc(player.x + player.width/2, player.y + player.height/2, player.width/2 + 8, 0, Math.PI*2);
-            ctx.strokeStyle = 'rgba(76,175,80,0.5)';
             ctx.stroke();
         }
         
@@ -1512,11 +1636,8 @@
     function startJumpGame() {
         if(jumpGameActive) return;
         jumpGameActive = true;
-        
-        loadBillyImages();
-        
-        jumpWidth = Math.min(window.innerWidth - 30, 400);
-        jumpHeight = Math.min(window.innerHeight - 100, 620);
+        jumpWidth = Math.min(window.innerWidth - 30, 420);
+        jumpHeight = Math.min(window.innerHeight - 100, 640);
         
         const container = document.getElementById('jumpGameArea');
         container.innerHTML = `<canvas id="jumpMainCanvas" width="${jumpWidth}" height="${jumpHeight}" class="jump-canvas"></canvas>`;
@@ -1524,39 +1645,54 @@
         jumpCtx = jumpCanvas.getContext('2d');
         
         resetJumpGame();
-        updateJumpUI();
         
-        // Eventos táctiles
-        jumpCanvas.onclick = () => {
-            if(!gameOver && player.grounded && !activePowerups.jetpack) {
-                player.vy = player.jumpPower;
-                player.grounded = false;
-                playJumpSound();
-                if(currentUser) currentUser.jump.totalJumps++;
-                player.state = 'jump';
-            }
-        };
-        jumpCanvas.ontouchstart = (e) => {
+        const handleJump = (e) => {
             e.preventDefault();
-            if(!gameOver && player.grounded && !activePowerups.jetpack) {
+            if(!gameOver && player.grounded && activePowerups.jetpack <= 0) {
                 player.vy = player.jumpPower;
                 player.grounded = false;
                 playJumpSound();
                 if(currentUser) currentUser.jump.totalJumps++;
-                player.state = 'jump';
             }
         };
         
-        // Movimiento horizontal con teclado (opcional)
+        jumpCanvas.onclick = handleJump;
+        jumpCanvas.ontouchstart = handleJump;
+        
         window.onkeydown = (e) => {
-            if(e.key === 'ArrowLeft') player.vx = -4;
-            if(e.key === 'ArrowRight') player.vx = 4;
+            if(e.key === 'ArrowLeft') leftPressed = true;
+            if(e.key === 'ArrowRight') rightPressed = true;
+            if(e.key === 'ArrowUp' || e.key === ' ') {
+                e.preventDefault();
+                if(!gameOver && player.grounded && activePowerups.jetpack <= 0) {
+                    player.vy = player.jumpPower;
+                    player.grounded = false;
+                    playJumpSound();
+                }
+            }
         };
+        window.onkeyup = (e) => {
+            if(e.key === 'ArrowLeft') leftPressed = false;
+            if(e.key === 'ArrowRight') rightPressed = false;
+        };
+        
+        const leftBtn = document.getElementById('leftBtn');
+        const rightBtn = document.getElementById('rightBtn');
+        leftBtn.onmousedown = () => leftPressed = true;
+        leftBtn.onmouseup = () => leftPressed = false;
+        leftBtn.ontouchstart = () => leftPressed = true;
+        leftBtn.ontouchend = () => leftPressed = false;
+        rightBtn.onmousedown = () => rightPressed = true;
+        rightBtn.onmouseup = () => rightPressed = false;
+        rightBtn.ontouchstart = () => rightPressed = true;
+        rightBtn.ontouchend = () => rightPressed = false;
         
         jumpAnimationId = requestAnimationFrame(updateJumpGame);
     }
     
     // ==================== INICIALIZACIÓN ====================
+    loadAllImages();
+    
     document.getElementById('startBtn').onclick = () => {
         const nickname = document.getElementById('nicknameInput').value.trim();
         if(registerUser(nickname)) {
@@ -1564,6 +1700,7 @@
             document.getElementById('startScreen').style.display = 'none';
             document.getElementById('mainMenu').style.display = 'flex';
             updateMenuUI();
+            updateGlobalRanking();
             playClickSound();
         }
     };
@@ -1572,6 +1709,13 @@
         document.getElementById('mainMenu').style.display = 'none';
         document.getElementById('jumpContainer').classList.add('active');
         startJumpGame();
+        playClickSound();
+    };
+    
+    document.getElementById('playClickerBtn').onclick = () => {
+        document.getElementById('mainMenu').style.display = 'none';
+        document.getElementById('clickerContainer').classList.add('active');
+        startClickerGame();
         playClickSound();
     };
     
@@ -1584,20 +1728,67 @@
         playClickSound();
     };
     
-    document.getElementById('statsBtn').onclick = () => {
-        if(!currentUser) return;
-        showNotification(`📊 Partidas: ${currentUser.stats.gamesPlayed} | 🏆 Total: ${currentUser.stats.totalScore} | 💀 Aplastados: ${currentUser.jump.totalStomps}`, "normal");
+    document.getElementById('clickerBackBtn').onclick = () => {
+        stopClickerGame();
+        document.getElementById('clickerContainer').classList.remove('active');
+        document.getElementById('mainMenu').style.display = 'flex';
+        updateMenuUI();
+        playClickSound();
     };
     
-    document.getElementById('shopBtn').onclick = () => {
-        showNotification("🛒 Tienda próximamente! Por ahora gana tokens jugando", "normal");
+    document.getElementById('clickerUpgradeBtn').onclick = () => {
+        const cost = 50 + (currentUser.clicker.tapPower * 10);
+        if(currentUser.resources.coins >= cost) {
+            currentUser.resources.coins -= cost;
+            currentUser.clicker.tapPower++;
+            saveUser();
+            updateClickerUI();
+            updateMenuUI();
+            showNotification(`💪 Poder aumentado a ${currentUser.clicker.tapPower}!`, "achievement");
+        } else showNotification(`💰 Necesitas ${cost} monedas`, "normal");
     };
+    
+    document.getElementById('clickerAutoBtn').onclick = () => {
+        const cost = 200 + (currentUser.clicker.autoPower * 50);
+        if(currentUser.resources.coins >= cost) {
+            currentUser.resources.coins -= cost;
+            currentUser.clicker.autoPower++;
+            saveUser();
+            updateClickerUI();
+            updateMenuUI();
+            if(window.clickerAutoInterval) clearInterval(window.clickerAutoInterval);
+            window.clickerAutoInterval = setInterval(() => {
+                if(clickerActive) {
+                    currentUser.resources.coins += currentUser.clicker.autoPower;
+                    saveUser();
+                    updateClickerUI();
+                    updateMenuUI();
+                }
+            }, 1000);
+            showNotification(`🤖 Auto-click nivel ${currentUser.clicker.autoPower}!`, "achievement");
+        } else showNotification(`💰 Necesitas ${cost} monedas`, "normal");
+    };
+    
+    document.getElementById('statsBtn').onclick = () => {
+        if(!currentUser) return;
+        showNotification(`📊 ${currentUser.nickname} | 🗡️ Aplastados: ${currentUser.jump.totalStomps} | 🦘 Saltos: ${currentUser.jump.totalJumps} | ⚡ Power-ups: ${currentUser.jump.totalPowerups} | 🎮 Partidas: ${currentUser.stats.gamesPlayed} | ✨ Críticos: ${currentUser.clicker.totalCrits}`, "normal");
+    };
+    
+    document.getElementById('shopBtn').onclick = openShop;
+    document.getElementById('rankingBtn').onclick = openRanking;
+    document.getElementById('missionsBtn').onclick = () => {
+        checkDailyMissions();
+        showNotification(`📅 Misiones hoy: Taps: ${currentUser.dailyMissions.taps}/50 | Ratones: ${currentUser.dailyMissions.mice}/20 | Jump: ${currentUser.dailyMissions.jumpScore}/500`, "normal");
+    };
+    document.getElementById('codeBtn').onclick = openCodeModal;
     
     const savedUserId = localStorage.getItem('billyCurrentUser');
     if(savedUserId && loadUser(savedUserId)) {
         document.getElementById('startScreen').style.display = 'none';
         document.getElementById('mainMenu').style.display = 'flex';
         updateMenuUI();
+        updateGlobalRanking();
+        checkDailyMissions();
     }
 </script>
 </body>
