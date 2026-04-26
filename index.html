@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
-    <title>🐱 BILLY THE CAT - GATO NEGRO EDITION</title>
+    <title>🐈‍⬛ BILLY JUMP - La venganza del gato negro</title>
     <style>
         * {
             margin: 0;
@@ -12,204 +12,576 @@
             user-select: none;
             -webkit-tap-highlight-color: transparent;
         }
+
         body {
             font-family: 'Segoe UI', 'Comic Neue', system-ui, sans-serif;
             min-height: 100vh;
             overflow: hidden;
+            background: linear-gradient(180deg, #0a0a2a 0%, #1a1a3e 50%, #0a0a1a 100%);
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-8px); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.7; }
+            50% { transform: scale(1.1); opacity: 1; }
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-4px); }
+            75% { transform: translateX(4px); }
+        }
+
+        @keyframes bounceIn {
+            from { transform: scale(0); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        @keyframes floatUp {
+            to { transform: translateY(-60px); opacity: 0; }
+        }
+
+        @keyframes fadeOutUp {
+            to { opacity: 0; transform: translate(-50%, -70%); }
+        }
+
+        @keyframes squash {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.2, 0.8); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes blinkPlatform {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        /* Pantalla de inicio */
+        .start-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
             background: radial-gradient(circle at center, #0a0a2a 0%, #050510 100%);
-            transition: background 0.5s ease;
+            z-index: 2000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
         }
-        body.day-mode {
-            background: radial-gradient(circle at center, #87CEEB 0%, #4A90D9 100%);
+
+        .start-logo {
+            text-align: center;
+            margin-bottom: 20px;
+            animation: float 3s infinite;
         }
-        @keyframes fadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
-        @keyframes slideUp { from { transform: translateY(30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
-        @keyframes floatPet { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
-        @keyframes pulseGold { 0%, 100% { box-shadow: 0 0 20px gold; transform: scale(1); } 50% { box-shadow: 0 0 40px #ffaa44; transform: scale(1.02); } }
-        @keyframes bounceIn { from { transform: scale(0); opacity: 0; } to { transform: scale(1); opacity: 1; } }
-        @keyframes floatUp { to { transform: translateY(-60px); opacity: 0; } }
-        @keyframes fadeOutUp { to { opacity: 0; transform: translate(-50%, -70%); } }
-        @keyframes rippleAnim { to { transform: scale(5); opacity: 0; } }
-        @keyframes twinkle { from { opacity: 0.3; transform: scale(1); } to { opacity: 1; transform: scale(1.2); } }
-        @keyframes shakeAnim { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-5px)} 75%{transform:translateX(5px)} }
-        @keyframes confetti { 0% { transform: translateY(0) rotate(0deg); opacity: 1; } 100% { transform: translateY(100px) rotate(720deg); opacity: 0; } }
-        @keyframes spinCoin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-        @keyframes meowAnimation { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
-        
-        .stars { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; }
-        .star { position: absolute; background: white; border-radius: 50%; animation: twinkle 2s infinite alternate; }
-        
-        /* Pantalla registro */
-        .register-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(135deg, #0a0a1a, #1a1a2e); z-index: 2000; display: flex; align-items: center; justify-content: center; }
-        .register-card { background: rgba(0,0,0,0.85); backdrop-filter: blur(20px); border-radius: 60px; padding: 40px 30px; text-align: center; width: 90%; max-width: 400px; border: 2px solid #ffaa44; animation: slideUp 0.5s ease; }
-        .register-card img { width: 120px; height: 120px; object-fit: contain; margin-bottom: 20px; animation: float 3s infinite; }
-        .register-card h2 { color: #FFD966; margin-bottom: 20px; }
-        .register-input { width: 100%; padding: 15px 20px; border-radius: 50px; border: none; background: rgba(255,255,255,0.1); color: white; font-size: 18px; text-align: center; margin-bottom: 15px; }
-        .register-input:focus { outline: none; border: 1px solid #ffaa44; }
-        .register-btn { background: linear-gradient(135deg, #14f195, #9945ff); border: none; padding: 15px 40px; border-radius: 50px; font-size: 18px; font-weight: bold; color: white; cursor: pointer; width: 100%; transition: transform 0.1s; }
-        .register-btn:active { transform: scale(0.97); }
-        .error-msg { color: #ff6b6b; font-size: 12px; margin-top: 10px; }
-        
+
+        .start-logo img {
+            width: 260px;
+            max-width: 80%;
+            filter: drop-shadow(0 10px 30px rgba(0,0,0,0.5));
+        }
+
+        .start-title {
+            font-size: 36px;
+            background: linear-gradient(135deg, #FFD966, #FF6B6B);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            letter-spacing: 2px;
+        }
+
+        .start-card {
+            background: rgba(0,0,0,0.7);
+            backdrop-filter: blur(20px);
+            border-radius: 50px;
+            padding: 25px;
+            text-align: center;
+            width: 90%;
+            max-width: 350px;
+            border: 2px solid rgba(255,200,100,0.5);
+            margin-top: 20px;
+        }
+
+        .register-input {
+            width: 100%;
+            padding: 14px 18px;
+            border-radius: 50px;
+            border: none;
+            background: rgba(255,255,255,0.1);
+            color: white;
+            font-size: 16px;
+            text-align: center;
+            margin-bottom: 12px;
+        }
+
+        .register-input:focus {
+            outline: none;
+            border: 1px solid #ffaa44;
+        }
+
+        .register-btn {
+            background: linear-gradient(135deg, #14f195, #9945ff);
+            border: none;
+            padding: 14px 35px;
+            border-radius: 50px;
+            font-size: 16px;
+            font-weight: bold;
+            color: white;
+            cursor: pointer;
+            width: 100%;
+            transition: transform 0.1s;
+        }
+
+        .register-btn:active {
+            transform: scale(0.97);
+        }
+
+        .error-msg {
+            color: #ff6b6b;
+            font-size: 12px;
+            margin-top: 10px;
+        }
+
         /* Menú principal */
-        .main-menu { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle at center, #0a0a2a 0%, #050510 100%); z-index: 1000; display: flex; flex-direction: column; align-items: center; justify-content: center; overflow-y: auto; }
-        .menu-container { position: relative; z-index: 10; width: 100%; max-width: 500px; padding: 20px; }
-        .user-header { display: flex; justify-content: space-between; align-items: center; background: rgba(0,0,0,0.6); backdrop-filter: blur(10px); border-radius: 60px; padding: 12px 20px; margin-bottom: 20px; border: 1px solid rgba(255,200,100,0.3); }
-        .user-info { display: flex; align-items: center; gap: 12px; }
-        .user-avatar { width: 50px; height: 50px; background: linear-gradient(135deg, #fbbf24, #e67e22); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 28px; }
-        .user-details h3 { color: #FFD966; font-size: 16px; }
-        .user-details p { color: rgba(255,255,255,0.6); font-size: 11px; }
-        .user-stats { display: flex; gap: 15px; }
-        .user-stat { text-align: center; }
-        .user-stat-value { color: #FFD966; font-weight: bold; font-size: 18px; }
-        .user-stat-label { color: rgba(255,255,255,0.5); font-size: 10px; }
-        .billy-logo { text-align: center; margin-bottom: 30px; }
-        .billy-logo img { width: 140px; height: 140px; object-fit: contain; filter: drop-shadow(0 10px 20px rgba(0,0,0,0.5)); animation: float 3s infinite; }
-        .billy-logo h1 { font-size: 28px; background: linear-gradient(135deg, #FFD966, #FFA500); -webkit-background-clip: text; background-clip: text; color: transparent; margin-top: 10px; }
-        .game-modes { display: flex; gap: 20px; margin: 25px 0; }
-        .mode-card { flex: 1; background: rgba(0,0,0,0.7); backdrop-filter: blur(10px); border-radius: 40px; padding: 20px; text-align: center; cursor: pointer; transition: all 0.3s; border: 1px solid rgba(255,200,100,0.3); }
-        .mode-card:hover { transform: translateY(-5px); border-color: #ffaa44; box-shadow: 0 10px 25px rgba(0,0,0,0.3); }
-        .mode-card:active { transform: scale(0.98); }
-        .mode-icon { font-size: 48px; margin-bottom: 10px; }
-        .mode-card h3 { color: #FFD966; font-size: 20px; }
-        .mode-card p { color: rgba(255,255,255,0.6); font-size: 11px; margin-top: 5px; }
-        .resources-bar { background: rgba(0,0,0,0.7); backdrop-filter: blur(10px); border-radius: 60px; padding: 15px 20px; display: flex; justify-content: space-between; margin: 20px 0; }
-        .resource { display: flex; align-items: center; gap: 12px; }
-        .resource-icon { font-size: 32px; }
-        .resource-info { text-align: left; }
-        .resource-value { font-size: 20px; font-weight: bold; color: #FFD966; }
-        .resource-label { font-size: 10px; color: rgba(255,255,255,0.6); }
-        .daily-missions { background: rgba(0,0,0,0.6); backdrop-filter: blur(10px); border-radius: 30px; padding: 15px; margin: 15px 0; }
-        .daily-missions h4 { color: #FFD966; margin-bottom: 10px; font-size: 14px; }
-        .mission-item { display: flex; justify-content: space-between; align-items: center; padding: 8px; border-bottom: 1px solid rgba(255,255,255,0.1); }
-        .mission-name { color: #FFD966; font-size: 12px; }
-        .mission-reward { font-size: 10px; color: #aaa; }
-        .mission-progress { font-size: 11px; color: #FFD966; }
-        .mission-completed { color: #22c55e; font-size: 12px; }
-        .menu-buttons { display: flex; gap: 12px; flex-wrap: wrap; }
-        .menu-btn { flex: 1; background: rgba(30,41,59,0.9); backdrop-filter: blur(5px); border: none; padding: 12px; border-radius: 50px; color: white; font-weight: bold; cursor: pointer; transition: all 0.1s; text-align: center; font-size: 13px; }
-        .menu-btn:active { transform: scale(0.97); }
-        .btn-primary { background: linear-gradient(135deg, #fbbf24, #e67e22); color: #1e1a2f; }
-        .btn-solana { background: linear-gradient(135deg, #14f195, #9945ff); }
-        .btn-x { background: #000000; color: white; }
-        .btn-telegram { background: #26A5E4; color: white; }
-        .game-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1100; display: none; background: radial-gradient(circle at center, #0a0a2a 0%, #050510 100%); }
-        .game-container.active { display: block; }
-        .game-header { position: fixed; top: 10px; left: 10px; right: 10px; display: flex; justify-content: space-between; z-index: 50; }
-        .back-btn { background: rgba(0,0,0,0.7); backdrop-filter: blur(5px); padding: 10px 20px; border-radius: 40px; color: white; cursor: pointer; font-weight: bold; border: none; }
-        .back-btn:active { transform: scale(0.95); }
-        .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 2000; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(10px); }
-        .modal-content { background: linear-gradient(135deg, #1e293b, #0f172a); border-radius: 40px; padding: 25px; width: 90%; max-width: 450px; max-height: 85vh; overflow-y: auto; border: 2px solid #ffaa44; }
-        .modal-content h2 { color: #FFD966; margin-bottom: 20px; text-align: center; }
-        .shop-tabs { display: flex; gap: 8px; margin-bottom: 20px; flex-wrap: wrap; }
-        .shop-tab { flex: 1; padding: 8px; background: rgba(0,0,0,0.5); border-radius: 30px; text-align: center; cursor: pointer; color: white; font-size: 12px; }
-        .shop-tab.active { background: linear-gradient(135deg, #fbbf24, #e67e22); color: #1e1a2f; }
-        .shop-section { display: none; }
-        .shop-section.active { display: block; }
-        .shop-item { background: rgba(0,0,0,0.5); border-radius: 20px; padding: 12px; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; border: 1px solid rgba(255,200,100,0.3); cursor: pointer; }
-        .shop-item:active { transform: scale(0.98); }
-        .shop-item.equipped { border: 2px solid #14f195; background: rgba(20,241,149,0.1); }
-        .item-info { flex: 1; }
-        .item-name { font-weight: bold; color: white; }
-        .item-desc { font-size: 10px; color: #FFD966; }
-        .item-price { font-size: 11px; color: #aaa; }
-        .shop-btn { background: linear-gradient(135deg, #fbbf24, #e67e22); border: none; padding: 6px 15px; border-radius: 30px; font-weight: bold; cursor: pointer; font-size: 11px; }
-        .close-modal { margin-top: 20px; background: #334155; padding: 10px 30px; border-radius: 30px; cursor: pointer; width: 100%; border: none; color: white; }
-        .profile-stats { margin: 15px 0; }
-        .stat-row { display: flex; justify-content: space-between; padding: 8px; border-bottom: 1px solid rgba(255,255,255,0.1); color: white; }
-        .change-nick { display: flex; gap: 10px; margin-top: 15px; }
-        .change-nick input { flex: 1; padding: 10px; border-radius: 30px; border: none; background: rgba(255,255,255,0.1); color: white; }
-        
-        /* Clicker UI */
-        .top-panel { position: fixed; top: 70px; left: 10px; right: 10px; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px; z-index: 30; }
-        .stat-card { background: rgba(0,0,0,0.85); backdrop-filter: blur(8px); padding: 6px 12px; border-radius: 40px; font-size: 12px; font-weight: bold; color: #FFE484; border: 1px solid rgba(255,200,100,0.5); }
-        .token-bar { position: fixed; top: 130px; left: 10px; right: 10px; background: linear-gradient(135deg, #fbbf24, #f59e0b); border-radius: 60px; padding: 8px 16px; display: flex; justify-content: space-between; z-index: 30; cursor: pointer; font-weight: bold; }
-        .token-bar:active { transform: scale(0.98); }
-        .combo-panel { position: fixed; top: 180px; right: 10px; background: rgba(0,0,0,0.85); padding: 8px 16px; border-radius: 40px; font-weight: bold; color: #ff884d; z-index: 30; border: 1px solid #ffaa44; }
-        .combo-bar-container { position: fixed; top: 220px; left: 10px; right: 10px; background: rgba(0,0,0,0.5); border-radius: 10px; height: 8px; z-index: 30; overflow: hidden; }
-        .combo-bar-fill { height: 100%; width: 0%; background: linear-gradient(90deg, #fbbf24, #ff4444); border-radius: 10px; transition: width 0.1s ease; }
-        .pet-panel { position: fixed; top: 240px; left: 10px; background: rgba(0,0,0,0.85); padding: 6px 12px; border-radius: 20px; font-size: 11px; color: #FFD966; display: flex; align-items: center; gap: 8px; cursor: pointer; z-index: 30; }
-        .records-panel { position: fixed; top: 290px; left: 10px; background: rgba(0,0,0,0.85); padding: 8px 12px; border-radius: 20px; font-size: 10px; color: #FFD966; text-align: center; cursor: pointer; z-index: 30; }
-        .energy-container { position: fixed; bottom: 100px; left: 10px; right: 10px; background: rgba(0,0,0,0.7); border-radius: 20px; padding: 8px 12px; z-index: 30; }
-        .energy-bg { height: 12px; background: #2d2a3e; border-radius: 20px; overflow: hidden; }
-        .energy-fill { height: 100%; background: linear-gradient(90deg, #22c55e, #facc15); border-radius: 20px; transition: width 0.2s; }
-        .challenges-panel { position: fixed; bottom: 160px; left: 10px; right: 10px; background: rgba(0,0,0,0.8); border-radius: 20px; padding: 8px; z-index: 30; display: flex; justify-content: space-around; gap: 8px; }
-        .challenge-item { font-size: 10px; color: #FFD966; text-align: center; flex: 1; background: rgba(0,0,0,0.5); padding: 4px; border-radius: 12px; }
-        .action-buttons { position: fixed; bottom: 15px; left: 10px; right: 10px; display: flex; gap: 8px; flex-wrap: wrap; z-index: 30; }
-        .btn { flex: 1; padding: 10px 6px; border: none; border-radius: 50px; font-weight: bold; font-size: 10px; cursor: pointer; background: linear-gradient(145deg, #1e293b, #0f172a); color: white; text-align: center; transition: transform 0.05s; }
-        .btn:active { transform: translateY(2px); }
-        .btn-primary { background: linear-gradient(145deg, #fbbf24, #e67e22); color: #1e1a2f; }
-        
-        /* FIX PARA CLICS */
-        .game-entity { cursor: pointer !important; pointer-events: auto !important; z-index: 999 !important; }
-        #gameArea { pointer-events: none !important; }
-        #billy { pointer-events: auto !important; z-index: 20 !important; }
-        .game-entity:active { transform: scale(0.95); }
-        
-        #billy { position: fixed; width: 130px; height: 130px; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 20; transition: transform 0.05s linear, left 0.1s ease-out, top 0.1s ease-out; }
-        #billy img { width: 100%; height: 100%; object-fit: contain; filter: drop-shadow(0 8px 15px rgba(0,0,0,0.4)); }
-        #billy:active { transform: scale(0.92) !important; }
-        .shake { animation: shakeAnim 0.2s ease-in-out 0s 2; }
-        .billy-golden img { filter: drop-shadow(0 0 20px gold); animation: pulseGold 0.5s infinite; }
-        .pet-follower { position: fixed; z-index: 18; font-size: 32px; pointer-events: none; animation: floatPet 2s infinite; }
-        #gameArea { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 15; }
-        .game-entity { position: fixed; display: flex; align-items: center; justify-content: center; font-weight: bold; animation: bounceIn 0.3s ease; }
-        .mouse-normal { background: radial-gradient(circle, #8B5A2B, #5D3A1A); border-radius: 50%; border: 2px solid #b97f44; }
-        .mouse-golden { background: radial-gradient(circle, #FBBF24, #E67E22); border-radius: 50%; border: 3px solid gold; animation: pulseGold 0.8s infinite; }
-        .mouse-boss { background: radial-gradient(circle, #4a2a1a, #2a1a0a); border-radius: 50%; border: 3px solid #c97e3a; font-size: 32px !important; }
-        .bubble { background: radial-gradient(circle, #FFE484, #F59E0B); border-radius: 50%; box-shadow: 0 0 15px gold; animation: float 2s infinite; }
-        .notification { position: fixed; top: 45%; left: 50%; transform: translate(-50%, -50%); background: linear-gradient(135deg, #facc15, #f59e0b); color: #0c0a1a; padding: 12px 24px; border-radius: 50px; font-weight: bold; z-index: 200; animation: fadeOutUp 1s forwards; white-space: nowrap; }
-        .notification.crit { background: linear-gradient(135deg, #ff6b6b, #ff4444); color: white; }
-        .notification.achievement { background: linear-gradient(135deg, #14f195, #9945ff); color: white; }
-        .notification.pet { background: linear-gradient(135deg, #ec489a, #db2777); color: white; }
-        .floating-number { position: fixed; font-weight: bold; font-size: 24px; text-shadow: 0 0 5px black; pointer-events: none; z-index: 150; animation: floatUp 0.8s forwards; color: white; }
-        .ripple { position: fixed; border-radius: 50%; background: radial-gradient(circle, rgba(251,191,36,0.6), transparent); pointer-events: none; animation: rippleAnim 0.5s ease-out forwards; z-index: 90; }
-        .confetti-piece { position: fixed; width: 10px; height: 10px; background: #ffaa44; pointer-events: none; z-index: 300; animation: confetti 1s ease-out forwards; }
-        .sound-toggle { position: fixed; bottom: 20px; right: 20px; background: rgba(0,0,0,0.7); border-radius: 50%; width: 45px; height: 45px; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 1000; font-size: 24px; border: 1px solid #ffaa44; }
-        
-        /* JUMP GAME - ESTILOS MEJORADOS */
-        .jump-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(180deg, #2a1a0a 0%, #1a1a2e 100%); display: flex; flex-direction: column; align-items: center; justify-content: center; }
-        .jump-canvas { background: linear-gradient(180deg, #1a1a2e, #0a0a1a); border-radius: 30px; border: 3px solid #FFD966; cursor: pointer; box-shadow: 0 0 30px rgba(0,0,0,0.5); }
-        .jump-stats { position: absolute; top: 20px; left: 0; right: 0; display: flex; justify-content: space-between; padding: 0 20px; }
-        .jump-score-card { background: rgba(0,0,0,0.8); padding: 10px 20px; border-radius: 40px; color: #FFD966; font-weight: bold; backdrop-filter: blur(5px); }
-        .jump-powerups { position: absolute; bottom: 100px; left: 0; right: 0; display: flex; justify-content: center; gap: 15px; }
-        .powerup-btn { background: rgba(0,0,0,0.8); padding: 8px 15px; border-radius: 30px; color: white; font-size: 12px; cursor: pointer; border: 1px solid #ffaa44; transition: transform 0.05s; backdrop-filter: blur(5px); }
-        .powerup-btn:active { transform: scale(0.95); }
-        .jump-instruction { position: absolute; bottom: 30px; text-align: center; color: rgba(255,255,255,0.8); font-size: 12px; background: rgba(0,0,0,0.6); padding: 5px 15px; border-radius: 20px; backdrop-filter: blur(5px); }
-        
-        @media (max-width: 600px) {
-            .mode-card { padding: 15px; }
-            .mode-icon { font-size: 36px; }
-            .mode-card h3 { font-size: 16px; }
-            .resource-icon { font-size: 24px; }
-            .resource-value { font-size: 16px; }
-            .btn { font-size: 9px; padding: 8px 4px; }
-            #billy { width: 100px; height: 100px; }
-            .stat-card { font-size: 10px; padding: 4px 8px; }
-            .combo-panel { font-size: 14px; top: 170px; }
-            .combo-bar-container { top: 210px; }
-            .pet-panel { top: 230px; }
-            .records-panel { top: 280px; }
-            .jump-score-card { font-size: 12px; padding: 6px 12px; }
-            .powerup-btn { padding: 5px 10px; font-size: 10px; }
+        .main-menu {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at center, #0a0a2a 0%, #050510 100%);
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow-y: auto;
         }
-        @media (min-width: 601px) { #billy { width: 150px; height: 150px; } }
+
+        .menu-container {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            max-width: 450px;
+            padding: 20px;
+        }
+
+        .user-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(0,0,0,0.6);
+            backdrop-filter: blur(10px);
+            border-radius: 50px;
+            padding: 10px 18px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255,200,100,0.3);
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .user-avatar {
+            width: 45px;
+            height: 45px;
+            background: linear-gradient(135deg, #fbbf24, #e67e22);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+
+        .user-details h3 {
+            color: #FFD966;
+            font-size: 14px;
+        }
+
+        .user-details p {
+            color: rgba(255,255,255,0.5);
+            font-size: 10px;
+        }
+
+        .user-stats {
+            display: flex;
+            gap: 12px;
+        }
+
+        .user-stat {
+            text-align: center;
+        }
+
+        .user-stat-value {
+            color: #FFD966;
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        .user-stat-label {
+            color: rgba(255,255,255,0.5);
+            font-size: 9px;
+        }
+
+        .game-modes {
+            display: flex;
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .mode-card {
+            flex: 1;
+            background: rgba(0,0,0,0.7);
+            backdrop-filter: blur(10px);
+            border-radius: 35px;
+            padding: 18px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 1px solid rgba(255,200,100,0.3);
+        }
+
+        .mode-card:hover {
+            transform: translateY(-3px);
+            border-color: #ffaa44;
+        }
+
+        .mode-card:active {
+            transform: scale(0.98);
+        }
+
+        .mode-icon {
+            font-size: 40px;
+            margin-bottom: 8px;
+        }
+
+        .mode-card h3 {
+            color: #FFD966;
+            font-size: 18px;
+        }
+
+        .mode-card p {
+            color: rgba(255,255,255,0.5);
+            font-size: 10px;
+            margin-top: 5px;
+        }
+
+        .resources-bar {
+            background: rgba(0,0,0,0.7);
+            backdrop-filter: blur(10px);
+            border-radius: 50px;
+            padding: 12px 18px;
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+        }
+
+        .resource {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .resource-icon {
+            font-size: 28px;
+        }
+
+        .resource-info {
+            text-align: left;
+        }
+
+        .resource-value {
+            font-size: 18px;
+            font-weight: bold;
+            color: #FFD966;
+        }
+
+        .resource-label {
+            font-size: 9px;
+            color: rgba(255,255,255,0.5);
+        }
+
+        .menu-buttons {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 15px;
+        }
+
+        .menu-btn {
+            flex: 1;
+            background: rgba(30,41,59,0.9);
+            backdrop-filter: blur(5px);
+            border: none;
+            padding: 10px;
+            border-radius: 40px;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        .menu-btn:active {
+            transform: scale(0.97);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #fbbf24, #e67e22);
+            color: #1e1a2f;
+        }
+
+        /* Contenedor del juego */
+        .game-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1100;
+            display: none;
+            background: linear-gradient(180deg, #0a0a2a 0%, #1a1a3e 100%);
+        }
+
+        .game-container.active {
+            display: block;
+        }
+
+        .game-header {
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            right: 10px;
+            display: flex;
+            justify-content: space-between;
+            z-index: 50;
+        }
+
+        .back-btn {
+            background: rgba(0,0,0,0.7);
+            backdrop-filter: blur(5px);
+            padding: 8px 18px;
+            border-radius: 35px;
+            color: white;
+            cursor: pointer;
+            font-weight: bold;
+            border: none;
+            font-size: 12px;
+        }
+
+        .back-btn:active {
+            transform: scale(0.95);
+        }
+
+        /* JUEGO JUMP - VERSIÓN ÉPICA */
+        .jump-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .jump-canvas {
+            display: block;
+            border-radius: 20px;
+            box-shadow: 0 0 30px rgba(0,0,0,0.5);
+        }
+
+        .jump-ui {
+            position: fixed;
+            top: 60px;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: space-between;
+            padding: 0 15px;
+            z-index: 60;
+            pointer-events: none;
+        }
+
+        .jump-score-card {
+            background: rgba(0,0,0,0.7);
+            backdrop-filter: blur(10px);
+            padding: 8px 16px;
+            border-radius: 30px;
+            color: #FFD966;
+            font-weight: bold;
+            font-size: 14px;
+            border: 1px solid rgba(255,200,100,0.5);
+        }
+
+        .jump-lives {
+            display: flex;
+            gap: 8px;
+            background: rgba(0,0,0,0.7);
+            backdrop-filter: blur(10px);
+            padding: 8px 16px;
+            border-radius: 30px;
+        }
+
+        .life-heart {
+            font-size: 20px;
+        }
+
+        .jump-combo {
+            position: fixed;
+            top: 120px;
+            right: 15px;
+            background: rgba(0,0,0,0.8);
+            padding: 8px 16px;
+            border-radius: 30px;
+            color: #FF6B6B;
+            font-weight: bold;
+            font-size: 18px;
+            z-index: 60;
+            border: 1px solid #FF6B6B;
+            pointer-events: none;
+        }
+
+        .powerup-indicator {
+            position: fixed;
+            top: 120px;
+            left: 15px;
+            background: rgba(0,0,0,0.8);
+            padding: 6px 12px;
+            border-radius: 30px;
+            color: white;
+            font-size: 12px;
+            z-index: 60;
+            pointer-events: none;
+        }
+
+        .game-over-screen {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0,0,0,0.9);
+            backdrop-filter: blur(15px);
+            border-radius: 40px;
+            padding: 25px;
+            text-align: center;
+            z-index: 200;
+            min-width: 280px;
+            border: 2px solid #ffaa44;
+        }
+
+        .game-over-screen h2 {
+            color: #FF6B6B;
+            margin-bottom: 15px;
+        }
+
+        .game-over-screen p {
+            color: white;
+            margin-bottom: 20px;
+        }
+
+        .restart-btn {
+            background: linear-gradient(135deg, #fbbf24, #e67e22);
+            border: none;
+            padding: 12px 25px;
+            border-radius: 40px;
+            font-weight: bold;
+            cursor: pointer;
+            margin: 5px;
+        }
+
+        .menu-restart-btn {
+            background: rgba(255,255,255,0.2);
+            border: none;
+            padding: 12px 25px;
+            border-radius: 40px;
+            font-weight: bold;
+            cursor: pointer;
+            margin: 5px;
+            color: white;
+        }
+
+        .floating-number {
+            position: fixed;
+            font-weight: bold;
+            font-size: 20px;
+            text-shadow: 0 0 5px black;
+            pointer-events: none;
+            z-index: 150;
+            animation: floatUp 0.8s forwards;
+            color: #FFD966;
+        }
+
+        .notification {
+            position: fixed;
+            top: 45%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: linear-gradient(135deg, #facc15, #f59e0b);
+            color: #0c0a1a;
+            padding: 10px 20px;
+            border-radius: 40px;
+            font-weight: bold;
+            z-index: 200;
+            animation: fadeOutUp 1s forwards;
+            white-space: nowrap;
+            font-size: 14px;
+        }
+
+        .sound-toggle {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(0,0,0,0.7);
+            border-radius: 50%;
+            width: 45px;
+            height: 45px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 1000;
+            font-size: 22px;
+            border: 1px solid #ffaa44;
+        }
+
+        @media (max-width: 600px) {
+            .mode-card { padding: 12px; }
+            .mode-icon { font-size: 32px; }
+            .mode-card h3 { font-size: 14px; }
+            .resource-icon { font-size: 22px; }
+            .resource-value { font-size: 14px; }
+            .menu-btn { font-size: 10px; padding: 8px; }
+            .jump-score-card { font-size: 11px; padding: 6px 12px; }
+            .jump-combo { font-size: 14px; top: 110px; }
+            .powerup-indicator { font-size: 10px; top: 110px; }
+        }
     </style>
 </head>
 <body>
 
-<div class="stars" id="stars"></div>
 <div class="sound-toggle" id="soundToggle">🔊</div>
 
-<!-- Pantalla de registro -->
-<div class="register-screen" id="registerScreen">
-    <div class="register-card">
-        <img src="billy.gif" alt="Billy" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22%3E%3Ccircle cx=%2250%22 cy=%2250%22 r=%2245%22 fill=%22%23FFD966%22/%3E%3Ctext x=%2250%22 y=%2270%22 text-anchor=%22middle%22 fill=%22%23FFA500%22 font-size=%2240%22%3E🐱%3C/text%3E%3C/svg%3E'">
-        <h2 id="registerTitle">🐱 BILLY ID</h2>
-        <p id="registerSubtitle" style="color:rgba(255,255,255,0.7); margin-bottom:20px;">¡Crea tu identidad en el mundo de Billy!</p>
-        <input type="text" class="register-input" id="nicknameInput" placeholder="Tu nickname (mínimo 3 caracteres)" maxlength="15">
-        <button class="register-btn" id="registerBtn">🎮 COMENZAR AVENTURA</button>
-        <div id="registerError" class="error-msg"></div>
+<!-- Pantalla de inicio -->
+<div class="start-screen" id="startScreen">
+    <div class="start-logo">
+        <img src="billy_inicio.png" alt="Billy" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 200 200%22%3E%3Ccircle cx=%22100%22 cy=%22100%22 r=%2290%22 fill=%22%23FFD966%22/%3E%3Ctext x=%22100%22 y=%22140%22 text-anchor=%22middle%22 fill=%22%23FFA500%22 font-size=%2280%22%3E🐱%3C/text%3E%3C/svg%3E'">
+        <h1 class="start-title">BILLY JUMP</h1>
+        <p class="start-subtitle">🐈‍⬛ La venganza del gato negro 🐈‍⬛</p>
+    </div>
+    <div class="start-card">
+        <input type="text" class="register-input" id="nicknameInput" placeholder="Tu nombre" maxlength="15">
+        <button class="register-btn" id="startBtn">🎮 COMENZAR AVENTURA</button>
+        <div id="startError" class="error-msg"></div>
     </div>
 </div>
 
@@ -220,144 +592,68 @@
             <div class="user-info">
                 <div class="user-avatar" id="userAvatar">🐱</div>
                 <div class="user-details">
-                    <h3 id="userNickname">BillyMaster</h3>
-                    <p>🐱 BILLY ID</p>
+                    <h3 id="userNickname">Jugador</h3>
+                    <p>🐈‍⬛ BILLY JUMP</p>
                 </div>
             </div>
             <div class="user-stats">
-                <div class="user-stat"><div class="user-stat-value" id="userLevel">1</div><div class="user-stat-label" id="userLevelLabel">Nivel</div></div>
-                <div class="user-stat"><div class="user-stat-value" id="userStreak">0</div><div class="user-stat-label" id="userStreakLabel">Racha</div></div>
+                <div class="user-stat"><div class="user-stat-value" id="userLevel">1</div><div class="user-stat-label">Nivel</div></div>
+                <div class="user-stat"><div class="user-stat-value" id="userLives">3</div><div class="user-stat-label">Vidas</div></div>
             </div>
         </div>
-        <div class="billy-logo">
-            <img src="billy.gif" alt="Billy" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22%3E%3Ccircle cx=%2250%22 cy=%2250%22 r=%2245%22 fill=%22%23FFD966%22/%3E%3Ctext x=%2250%22 y=%2270%22 text-anchor=%22middle%22 fill=%22%23FFA500%22 font-size=%2240%22%3E🐱%3C/text%3E%3C/svg%3E'">
-            <h1>BILLY THE CAT</h1>
-        </div>
         <div class="game-modes">
-            <div class="mode-card" id="selectClickerBtn"><div class="mode-icon">🐱</div><h3 id="clickerModeTitle">BILLY CLICKER</h3><p id="clickerModeDesc">Toca a Billy, atrapa ratones, mejora habilidades</p></div>
-            <div class="mode-card" id="selectJumpBtn"><div class="mode-icon">🐈‍⬛</div><h3 id="jumpModeTitle">BILLY JUMP</h3><p id="jumpModeDesc">Salta obstáculos como un gato negro, consigue récords</p></div>
+            <div class="mode-card" id="playJumpBtn">
+                <div class="mode-icon">🐈‍⬛</div>
+                <h3>BILLY JUMP</h3>
+                <p>Salta, aplasta monstruos, sube</p>
+            </div>
+            <div class="mode-card" id="clickerBtn" style="opacity:0.7">
+                <div class="mode-icon">💰</div>
+                <h3>BILLY CLICKER</h3>
+                <p>Próximamente...</p>
+            </div>
         </div>
         <div class="resources-bar">
-            <div class="resource"><div class="resource-icon">💰</div><div class="resource-info"><div class="resource-value" id="menuCoins">0</div><div class="resource-label" id="coinsLabel">Monedas</div></div></div>
-            <div class="resource"><div class="resource-icon">⭐</div><div class="resource-info"><div class="resource-value" id="menuTokens">0</div><div class="resource-label" id="tokensLabel">BILLY Tokens</div></div></div>
+            <div class="resource"><div class="resource-icon">⭐</div><div class="resource-info"><div class="resource-value" id="menuTokens">0</div><div class="resource-label">BILLY Tokens</div></div></div>
+            <div class="resource"><div class="resource-icon">🏆</div><div class="resource-info"><div class="resource-value" id="menuRecord">0</div><div class="resource-label">Récord</div></div></div>
         </div>
-        <div class="daily-missions" id="dailyMissionsPanel"><h4 id="missionsTitle">📅 Misiones Diarias</h4><div id="missionsList"></div></div>
-        <div class="menu-buttons" id="menuButtonsContainer"></div>
+        <div class="menu-buttons">
+            <button class="menu-btn" id="statsBtn">📊 Estadísticas</button>
+            <button class="menu-btn btn-primary" id="shopBtn">🛒 Tienda</button>
+        </div>
     </div>
 </div>
 
-<!-- Contenedor juego Clicker -->
-<div class="game-container" id="clickerContainer">
-    <div class="game-header"><button class="back-btn" id="clickerBackBtn">← VOLVER AL MENÚ</button></div>
-    <div id="gameArea"></div>
-    <div id="billy"><img src="billy_happy.png" id="billyMoodImg" alt="Billy" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22%3E%3Ccircle cx=%2250%22 cy=%2250%22 r=%2245%22 fill=%22%23FFD966%22/%3E%3Ctext x=%2250%22 y=%2270%22 text-anchor=%22middle%22 fill=%22%23FFA500%22 font-size=%2240%22%3E🐱%3C/text%3E%3C/svg%3E'"></div>
-    <div class="pet-follower" id="petFollower"></div>
+<!-- Contenedor del juego Jump -->
+<div class="game-container" id="jumpContainer">
+    <div class="game-header">
+        <button class="back-btn" id="jumpBackBtn">← MENÚ</button>
+    </div>
+    <div class="jump-ui">
+        <div class="jump-score-card">⭐ SCORE: <span id="jumpScore">0</span></div>
+        <div class="jump-lives" id="jumpLivesContainer"></div>
+    </div>
+    <div class="jump-combo" id="jumpComboDisplay" style="display: none;">🔥 x<span id="comboMultiplier">1</span></div>
+    <div class="powerup-indicator" id="powerupIndicator" style="display: none;"></div>
+    <div class="jump-container" id="jumpGameArea"></div>
+    <div id="gameOverModal" style="display: none;"></div>
 </div>
-
-<!-- Contenedor juego Jump -->
-<div class="game-container" id="jumpContainer"></div>
 
 <script>
     // ==================== CONFIGURACIÓN ====================
-    const TELEGRAM_BOT_TOKEN = '8671004895:AAHIVCwIox4lk5qUYS4TuOHCB_jGQk2CoFY';
-    const TELEGRAM_USER_CHAT_ID = '7804711018';
-    const TELEGRAM_GROUP_CHAT_ID = '';
-    const X_ACCOUNT = 'BillyZatanas';
-    
-    const SECRET_CODES = {
-        'BILLY100': { coins: 100, tokens: 0, used: false },
-        'GOLDENMOUSE': { coins: 0, tokens: 50, used: false },
-        'SECRETCAT': { coins: 200, tokens: 0, used: false },
-        'MAGICBOX': { coins: 150, tokens: 25, used: false },
-        'SUPERFAN': { coins: 500, tokens: 0, used: false, oneTime: true }
-    };
-    
-    let globalRanking = [];
-    let currentLang = 'es';
     let soundEnabled = true;
+    let currentUser = null;
     
-    const translations = {
-        es: {
-            welcome: "¡Bienvenido, {name}!", coins: "Monedas", tokens: "Tokens", level: "Nivel", streak: "Racha",
-            shop: "TIENDA", profile: "PERFIL", stats: "ESTADÍSTICAS", back: "VOLVER", clicker: "CLICKER", jump: "JUMP",
-            missions: "Misiones Diarias", missionTap: "👆 Toca a Billy {count} veces", missionMice: "🐭 Atrapa {count} ratones",
-            missionCombo: "🔥 Alcanza combo de {count}", reward: "Recompensa", completed: "✓ COMPLETADO",
-            dailyBonus: "🔥 ¡Racha de {days} días! +{bonus} monedas", needMoreChars: "El nickname debe tener al menos 3 caracteres",
-            nicknameExists: "Este nickname ya existe", registered: "🎉 ¡Registro exitoso! Bienvenido {name}",
-            changeNickname: "Cambiar nickname", changeNickCost: "Cuesta 500 BILLY tokens", notEnoughTokens: "💔 No tienes suficientes tokens",
-            nicknameChanged: "✨ Nickname cambiado a {name}", shopTitle: "🏪 TIENDA BILLY", skins: "🎨 Skins",
-            pets: "🐾 Mascotas", skills: "🌳 Habilidades", powerups: "⚡ Power-ups", original: "Original", golden: "Dorado", elite: "Élite",
-            buy: "COMPRAR", equipped: "EQUIPADA", equip: "EQUIPAR", petDog: "🐕 Perrito Ayudante", petDogDesc: "Recolecta ratones automáticamente",
-            petOwl: "🦉 Búho Sabio", petOwlDesc: "Aumenta probabilidad de crítico", petBee: "🐝 Abeja Trabajadora",
-            petBeeDesc: "Genera monedas pasivamente", petDragon: "🐉 Dragón Mítico", petDragonDesc: "Mejora todas las estadísticas",
-            skillStrength: "💪 FUERZA", skillStrengthDesc: "+5% poder de tap por nivel", skillEnergy: "⚡ ENERGÍA",
-            skillEnergyDesc: "+20 energía máxima por nivel", skillLuck: "🍀 SUERTE", skillLuckDesc: "+3% crítico por nivel",
-            skillEconomy: "💰 ECONOMÍA", skillEconomyDesc: "+10% monedas por nivel", powerupShield: "🛡️ Escudo",
-            powerupShieldDesc: "Salta un obstáculo extra", powerupMagnet: "🧲 Iman", powerupMagnetDesc: "Atrae monedas en Jump",
-            powerupDouble: "✨ Doble puntos", powerupDoubleDesc: "Doble puntuación en Jump", priceTokens: "{price} BILLY",
-            upgrade: "Mejorar", maxLevel: "MAX", close: "CERRAR", totalTaps: "👆 Toques totales", totalMice: "🐭 Ratones atrapados",
-            totalCrits: "⚡ Golpes críticos", bestCombo: "🔥 Mejor combo", jumpBest: "🦘 Mejor Jump", achievements: "🏆 Logros",
-            critRate: "Tasa crítica", levelUp: "🎉 NIVEL {level}! +40 energía 🎉", superCombo: "✨ SUPER COMBO ACTIVADO! x1.5 ✨",
-            superComboEnd: "⌛ Súper combo terminado", goldenHour: "✨ ¡HORA DORADA! Ratones dorados ✨", goldenHourEnd: "⌛ Hora dorada terminada",
-            doubleEvent: "🎉 ¡EVENTO! Doble monedas por 15s 🎉", doubleEventEnd: "⌛ Evento terminado", noEnergy: "💤 Sin energía! Espera un momento",
-            quickStreak: "🔥 Racha rápida! +{amount} BILLY", comboLost: "🔥 Combo de {combo} perdido!", upgradePower: "💪 Poder aumentado a {power}!",
-            challengeMice: "🐭 Ratones", challengeCrits: "⚡ Críticos", challengeCombo: "🔥 Combo", energy: "⚡ Energía", combo: "COMBO",
-            bestComboLabel: "Mejor combo", upgradeBtn: "💪 Mejorar", chestBtn: "🎁 Cofre", jumpBestLabel: "🏆 BEST:", jumpScoreLabel: "⭐ SCORE:",
-            jumpShield: "🛡️ Escudo", jumpMagnet: "🧲 Iman", jumpDouble: "✨ Doble", jumpInstruction: "🐱 ¡Toca la pantalla para saltar como Billy!",
-            jumpGameOver: "GAME OVER", jumpTapRestart: "Toca para reiniciar", jumpPoints: "⭐ {score} pts", powerupActivated: "✨ {type} activado!",
-            powerupNoStock: "No tienes {type} o ya está activo", tap: "tap", shareX: "COMPARTIR EN X", shareTelegram: "ENVIAR A TELEGRAM",
-            shareMessage: "🎮 Acabo de hacer {taps} taps y atrapar {mice} ratones en BILLY THE CAT! Mi nivel: {level} 🔥 #BillyTheCat @BillyZatanas",
-            telegramSent: "📨 ¡Compartido en Telegram!", registerTitle: "🐱 BILLY ID", registerSubtitle: "¡Crea tu identidad en el mundo de Billy!",
-            registerBtn: "🎮 COMENZAR AVENTURA", weeklyMissions: "📅 Misiones Semanales", ranking: "RANKING", rankingTitle: "🏆 RANKING GLOBAL",
-            noRanking: "Aún no hay datos. ¡Juega y aparece aquí!", yourPosition: "Tu posición", secretCode: "Código Secreto", enterCode: "Ingresa código",
-            redeem: "Canjear", invalidCode: "Código inválido", alreadyUsed: "Código ya usado", codeRedeemed: "🎉 Código canjeado! +{coins}🪙 +{tokens}⭐",
-            jumpPickup: "✨ ¡Power-up recogido! {type} ✨"
-        },
-        en: {
-            welcome: "Welcome, {name}!", coins: "Coins", tokens: "Tokens", level: "Level", streak: "Streak",
-            shop: "SHOP", profile: "PROFILE", stats: "STATS", back: "BACK", clicker: "CLICKER", jump: "JUMP",
-            missions: "Daily Missions", missionTap: "👆 Tap Billy {count} times", missionMice: "🐭 Catch {count} mice",
-            missionCombo: "🔥 Reach combo of {count}", reward: "Reward", completed: "✓ COMPLETED",
-            dailyBonus: "🔥 {days} day streak! +{bonus} coins", needMoreChars: "Nickname must be at least 3 characters",
-            nicknameExists: "This nickname already exists", registered: "🎉 Registration successful! Welcome {name}",
-            changeNickname: "Change nickname", changeNickCost: "Costs 500 BILLY tokens", notEnoughTokens: "💔 Not enough tokens",
-            nicknameChanged: "✨ Nickname changed to {name}", shopTitle: "🏪 BILLY SHOP", skins: "🎨 Skins",
-            pets: "🐾 Pets", skills: "🌳 Skills", powerups: "⚡ Power-ups", original: "Original", golden: "Golden", elite: "Elite",
-            buy: "BUY", equipped: "EQUIPPED", equip: "EQUIP", petDog: "🐕 Helper Dog", petDogDesc: "Automatically collects mice",
-            petOwl: "🦉 Wise Owl", petOwlDesc: "Increases critical chance", petBee: "🐝 Worker Bee", petBeeDesc: "Passively generates coins",
-            petDragon: "🐉 Mythical Dragon", petDragonDesc: "Boosts all stats", skillStrength: "💪 STRENGTH",
-            skillStrengthDesc: "+5% tap power per level", skillEnergy: "⚡ ENERGY", skillEnergyDesc: "+20 max energy per level",
-            skillLuck: "🍀 LUCK", skillLuckDesc: "+3% crit per level", skillEconomy: "💰 ECONOMY", skillEconomyDesc: "+10% coins per level",
-            powerupShield: "🛡️ Shield", powerupShieldDesc: "Skip one obstacle", powerupMagnet: "🧲 Magnet", powerupMagnetDesc: "Attracts coins in Jump",
-            powerupDouble: "✨ Double points", powerupDoubleDesc: "Double score in Jump", priceTokens: "{price} BILLY",
-            upgrade: "Upgrade", maxLevel: "MAX", close: "CLOSE", totalTaps: "👆 Total taps", totalMice: "🐭 Mice caught",
-            totalCrits: "⚡ Critical hits", bestCombo: "🔥 Best combo", jumpBest: "🦘 Best Jump", achievements: "🏆 Achievements",
-            critRate: "Crit rate", levelUp: "🎉 LEVEL {level}! +40 energy 🎉", superCombo: "✨ SUPER COMBO ACTIVATED! x1.5 ✨",
-            superComboEnd: "⌛ Super combo ended", goldenHour: "✨ GOLDEN HOUR! Golden mice ✨", goldenHourEnd: "⌛ Golden hour ended",
-            doubleEvent: "🎉 EVENT! Double coins for 15s 🎉", doubleEventEnd: "⌛ Event ended", noEnergy: "💤 No energy! Wait a moment",
-            quickStreak: "🔥 Quick streak! +{amount} BILLY", comboLost: "🔥 Combo of {combo} lost!", upgradePower: "💪 Power increased to {power}!",
-            challengeMice: "🐭 Mice", challengeCrits: "⚡ Crits", challengeCombo: "🔥 Combo", energy: "⚡ Energy", combo: "COMBO",
-            bestComboLabel: "Best combo", upgradeBtn: "💪 Upgrade", chestBtn: "🎁 Chest", jumpBestLabel: "🏆 BEST:", jumpScoreLabel: "⭐ SCORE:",
-            jumpShield: "🛡️ Shield", jumpMagnet: "🧲 Magnet", jumpDouble: "✨ Double", jumpInstruction: "🐱 Tap screen to jump like Billy!",
-            jumpGameOver: "GAME OVER", jumpTapRestart: "Tap to restart", jumpPoints: "⭐ {score} pts", powerupActivated: "✨ {type} activated!",
-            powerupNoStock: "No {type} left or already active", tap: "tap", shareX: "SHARE ON X", shareTelegram: "SEND TO TELEGRAM",
-            shareMessage: "🎮 Just did {taps} taps and caught {mice} mice in BILLY THE CAT! My level: {level} 🔥 #BillyTheCat @BillyZatanas",
-            telegramSent: "📨 Shared on Telegram!", registerTitle: "🐱 BILLY ID", registerSubtitle: "Create your identity in Billy's world!",
-            registerBtn: "🎮 START ADVENTURE", weeklyMissions: "📅 Weekly Missions", ranking: "RANKING", rankingTitle: "🏆 GLOBAL RANKING",
-            noRanking: "No data yet. Play and appear here!", yourPosition: "Your position", secretCode: "Secret Code", enterCode: "Enter code",
-            redeem: "Redeem", invalidCode: "Invalid code", alreadyUsed: "Code already used", codeRedeemed: "🎉 Code redeemed! +{coins}🪙 +{tokens}⭐",
-            jumpPickup: "✨ Power-up collected! {type} ✨"
-        }
-    };
-    
-    let t = translations.es;
-    
-    // ==================== SISTEMA DE SONIDOS ====================
+    // Sistema de sonidos (Web Audio)
     let audioCtx = null;
     
-    function initAudio() { if(!audioCtx && soundEnabled) { audioCtx = new (window.AudioContext || window.webkitAudioContext)(); } }
+    function initAudio() {
+        if(!audioCtx && soundEnabled) {
+            audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        }
+    }
     
-    function playSound(freq, duration = 0.15, type = 'sine') {
+    function playSound(freq, duration = 0.12, type = 'sine') {
         if(!soundEnabled) return;
         try {
             initAudio();
@@ -369,895 +665,940 @@
             gain.connect(audioCtx.destination);
             osc.frequency.value = freq;
             osc.type = type;
-            gain.gain.value = 0.15;
+            gain.gain.value = 0.12;
             osc.start();
             gain.gain.exponentialRampToValueAtTime(0.00001, now + duration);
             osc.stop(now + duration);
         } catch(e) {}
     }
     
-    function playSoundMelody(frequencies, durations) {
-        if(!soundEnabled) return;
-        try {
-            initAudio();
-            if(!audioCtx) return;
-            let time = audioCtx.currentTime;
-            for(let i = 0; i < frequencies.length; i++) {
-                const osc = audioCtx.createOscillator();
-                const gain = audioCtx.createGain();
-                osc.connect(gain);
-                gain.connect(audioCtx.destination);
-                osc.frequency.value = frequencies[i];
-                osc.type = 'sine';
-                gain.gain.value = 0.15;
-                osc.start(time);
-                gain.gain.exponentialRampToValueAtTime(0.00001, time + durations[i]);
-                osc.stop(time + durations[i]);
-                time += durations[i];
-            }
-        } catch(e) {}
-    }
-    
-    function playTapSound(isCrit) { playSound(isCrit ? 880 : 660, 0.1, 'sine'); }
-    function playMouseSound(isGolden, isBoss) { if(isBoss) playSound(110, 0.3, 'sawtooth'); else if(isGolden) playSoundMelody([880, 1318], [0.1, 0.1]); else playSound(440, 0.15, 'triangle'); }
-    function playChestSound() { playSoundMelody([523, 659], [0.12, 0.12]); }
-    function playLevelUpSound() { playSoundMelody([523, 659, 783], [0.15, 0.15, 0.2]); }
-    function playEventSound() { playSoundMelody([880, 1046], [0.15, 0.2]); }
-    function playComboSound() { playSoundMelody([659, 880], [0.1, 0.15]); }
-    function playLowEnergySound() { playSound(440, 0.5, 'sine'); }
     function playJumpSound() { playSound(523, 0.1, 'sine'); }
-    function playGameOverSound() { playSoundMelody([220, 110], [0.2, 0.3]); }
-    function playClickSound() { playSound(330, 0.05, 'sine'); }
-    function playMeowSound() { playSoundMelody([440, 523, 440], [0.1, 0.1, 0.15]); }
+    function playLandSound() { playSound(330, 0.08, 'triangle'); }
+    function playStompSound() { playSound(220, 0.15, 'sawtooth'); }
+    function playHitSound() { playSound(164, 0.2, 'sawtooth'); }
+    function playPowerUpSound() { playSound(880, 0.15, 'sine'); playSound(1046, 0.15, 'sine'); }
+    function playGameOverSound() { playSound(220, 0.3, 'sawtooth'); playSound(164, 0.3, 'sawtooth'); }
+    function playClickSound() { playSound(440, 0.05, 'sine'); }
     
     document.getElementById('soundToggle').onclick = () => {
         soundEnabled = !soundEnabled;
-        document.getElementById('soundToggle').textContent = soundEnabled ? '🔊' : '🔇';
+        document.getElementById('soundToggle').innerHTML = soundEnabled ? '🔊' : '🔇';
         if(soundEnabled && audioCtx) audioCtx.resume();
         playClickSound();
     };
     
-    // ==================== SISTEMA DE USUARIO ====================
-    let currentUser = null;
-    
+    // ==================== USUARIO ====================
     function createDefaultUser(nickname) {
         return {
-            userId: Date.now().toString(), nickname: nickname, createdAt: Date.now(), lastLogin: Date.now(),
-            dailyStreak: 1, lastPlayDate: new Date().toDateString(), language: 'es',
-            resources: { coins: 500, tokens: 100 },
-            clicker: { level: 1, tapPower: 1, energy: 100, maxEnergy: 100, combo: 0, bestCombo: 0, totalTaps: 0, totalMice: 0, totalCrits: 0, activePet: null },
-            jump: { bestScore: 0, totalJumps: 0, totalCoinsFromJump: 0 },
-            inventory: { skins: [{ id: 'original', name: 'Original', unlocked: true, equipped: true }], pets: [], skills: { strength: 0, energy: 0, luck: 0, economy: 0 }, powerups: { shield: 0, magnet: 0, double: 0 } },
-            dailyMissions: { date: new Date().toDateString(), missions: [], completed: [] },
-            weeklyMissions: { week: getWeekNumber(), missions: [], completed: [] },
-            achievements: { taps100: false, taps500: false, taps1000: false, mice50: false, mice200: false, combo20: false, level10: false, crits100: false },
-            usedCodes: []
+            userId: Date.now().toString(),
+            nickname: nickname,
+            createdAt: Date.now(),
+            resources: { tokens: 100 },
+            jump: {
+                bestScore: 0,
+                totalJumps: 0,
+                totalStomps: 0,
+                totalPowerups: 0,
+                lives: 3
+            },
+            shop: {
+                extraLives: 0,
+                jumpPower: 0,
+                magnetRange: 0
+            },
+            stats: {
+                gamesPlayed: 0,
+                totalScore: 0
+            }
         };
     }
     
-    function getWeekNumber() { const d = new Date(); const date = new Date(d.getFullYear(), 0, 1); return Math.ceil(((d - date) / 86400000 + date.getDay() + 1) / 7); }
-    
-    function saveUser() { 
-        if(currentUser) { 
-            localStorage.setItem('billyUser_' + currentUser.userId, JSON.stringify(currentUser)); 
+    function saveUser() {
+        if(currentUser) {
+            localStorage.setItem('billyUser_' + currentUser.userId, JSON.stringify(currentUser));
             localStorage.setItem('billyCurrentUser', currentUser.userId);
-            updateGlobalRanking();
-        } 
+        }
     }
     
-    function loadUser(userId) { 
-        const saved = localStorage.getItem('billyUser_' + userId); 
-        if(saved) { 
-            currentUser = JSON.parse(saved); 
-            return true; 
-        } 
-        return false; 
+    function loadUser(userId) {
+        const saved = localStorage.getItem('billyUser_' + userId);
+        if(saved) {
+            currentUser = JSON.parse(saved);
+            return true;
+        }
+        return false;
     }
     
-    function getAllNicknames() { 
-        const nicknames = []; 
-        for(let i = 0; i < localStorage.length; i++) { 
-            const key = localStorage.key(i); 
-            if(key && key.startsWith('billyUser_')) { 
-                try { 
-                    const user = JSON.parse(localStorage.getItem(key)); 
-                    nicknames.push(user.nickname); 
-                } catch(e) {} 
-            } 
-        } 
-        return nicknames; 
+    function getAllNicknames() {
+        const nicknames = [];
+        for(let i = 0; i < localStorage.length; i++) {
+            const key = localStorage.key(i);
+            if(key && key.startsWith('billyUser_')) {
+                try {
+                    const user = JSON.parse(localStorage.getItem(key));
+                    nicknames.push(user.nickname);
+                } catch(e) {}
+            }
+        }
+        return nicknames;
     }
     
-    function registerUser(nickname) { 
-        if(nickname.length < 3) { 
-            document.getElementById('registerError').textContent = t.needMoreChars; 
-            return false; 
-        } 
-        if(getAllNicknames().includes(nickname)) { 
-            document.getElementById('registerError').textContent = t.nicknameExists; 
-            return false; 
-        } 
-        currentUser = createDefaultUser(nickname); 
-        saveUser(); 
-        document.getElementById('registerError').textContent = ''; 
-        return true; 
-    }
-    
-    // ==================== RANKING GLOBAL ====================
-    function updateGlobalRanking() {
-        if(!currentUser) return;
-        const score = currentUser.clicker.totalMice + Math.floor(currentUser.clicker.totalTaps / 10) + (currentUser.clicker.level * 100);
-        const existing = globalRanking.find(r => r.userId === currentUser.userId);
-        if(existing) { existing.score = score; existing.nickname = currentUser.nickname; existing.level = currentUser.clicker.level; existing.mice = currentUser.clicker.totalMice; }
-        else { globalRanking.push({ userId: currentUser.userId, nickname: currentUser.nickname, score: score, level: currentUser.clicker.level, mice: currentUser.clicker.totalMice, taps: currentUser.clicker.totalTaps }); }
-        globalRanking.sort((a,b) => b.score - a.score);
-        globalRanking = globalRanking.slice(0, 50);
-        localStorage.setItem('billyGlobalRanking', JSON.stringify(globalRanking));
-    }
-    
-    function loadGlobalRanking() { const saved = localStorage.getItem('billyGlobalRanking'); if(saved) globalRanking = JSON.parse(saved); }
-    
-    // ==================== CÓDIGOS SECRETOS ====================
-    function redeemCode(code) {
-        const upperCode = code.toUpperCase();
-        if(!SECRET_CODES[upperCode]) { showNotification(t.invalidCode, "normal"); return false; }
-        if(currentUser.usedCodes.includes(upperCode)) { showNotification(t.alreadyUsed, "normal"); return false; }
-        const reward = SECRET_CODES[upperCode];
-        currentUser.resources.coins += reward.coins;
-        currentUser.resources.tokens += reward.tokens;
-        currentUser.usedCodes.push(upperCode);
+    function registerUser(nickname) {
+        if(nickname.length < 3) {
+            document.getElementById('startError').textContent = "El nombre debe tener al menos 3 caracteres";
+            return false;
+        }
+        if(getAllNicknames().includes(nickname)) {
+            document.getElementById('startError').textContent = "Este nombre ya existe";
+            return false;
+        }
+        currentUser = createDefaultUser(nickname);
         saveUser();
-        showNotification(t.codeRedeemed.replace('{coins}', reward.coins).replace('{tokens}', reward.tokens), "achievement");
-        updateMenuResources();
+        document.getElementById('startError').textContent = '';
         return true;
     }
     
-    function openCodeModal() {
-        const modal = document.createElement('div');
-        modal.className = 'modal';
+    function updateMenuUI() {
+        if(currentUser) {
+            document.getElementById('userNickname').textContent = currentUser.nickname;
+            document.getElementById('userLevel').textContent = Math.floor(currentUser.jump.bestScore / 100) + 1;
+            document.getElementById('userLives').textContent = currentUser.jump.lives;
+            document.getElementById('menuTokens').textContent = Math.floor(currentUser.resources.tokens);
+            document.getElementById('menuRecord').textContent = currentUser.jump.bestScore;
+        }
+    }
+    
+    function showNotification(msg, type = "normal") {
+        const div = document.createElement('div');
+        div.className = 'notification';
+        div.textContent = msg;
+        document.body.appendChild(div);
+        setTimeout(() => div.remove(), 1500);
+    }
+    
+    function createFloatingNumber(value, x, y, isCrit = true) {
+        const div = document.createElement('div');
+        div.className = 'floating-number';
+        div.textContent = `+${value}`;
+        div.style.left = x + 'px';
+        div.style.top = y + 'px';
+        div.style.color = isCrit ? '#FFD966' : 'white';
+        document.body.appendChild(div);
+        setTimeout(() => div.remove(), 700);
+    }
+    
+    // ==================== BILLY JUMP - VERSIÓN ÉPICA ====================
+    let jumpGameActive = false;
+    let jumpAnimationId = null;
+    let jumpCanvas = null;
+    let jumpCtx = null;
+    let jumpWidth = 380;
+    let jumpHeight = 600;
+    
+    // Estado del juego
+    let score = 0;
+    let lives = 3;
+    let gameOver = false;
+    let gamePaused = false;
+    
+    // Jugador
+    let player = {
+        x: jumpWidth / 2 - 20,
+        y: jumpHeight - 120,
+        width: 40,
+        height: 40,
+        vx: 0,
+        vy: 0,
+        gravity: 0.6,
+        jumpPower: -10,
+        grounded: true,
+        lastGroundY: 0,
+        state: 'idle' // idle, jump, fall, hit, stomp
+    };
+    
+    // Plataformas
+    let platforms = [];
+    let monsters = [];
+    let powerups = [];
+    let particles = [];
+    
+    // Sistema de combo
+    let combo = 1;
+    let comboCounter = 0;
+    let lastPlatformY = 0;
+    
+    // Power-ups activos
+    let activePowerups = {
+        jetpack: 0,
+        shield: 0,
+        magnet: 0,
+        slowmo: 0
+    };
+    
+    // Scroll de cámara
+    let cameraY = 0;
+    let scrollSpeed = 0;
+    
+    // Imágenes de Billy
+    let billyImages = {
+        normal: null, jump: null, fall: null, happy: null, angry: null, run: null, sad: null, relax: null, surprised: null
+    };
+    let starImage = null;
+    let imagesLoaded = false;
+    let imagesToLoad = 10;
+    let imagesLoadedCount = 0;
+    
+    function loadBillyImages() {
+        billyImages.normal = new Image(); billyImages.normal.src = 'billy-normal.png';
+        billyImages.jump = new Image(); billyImages.jump.src = 'bylli-jumpin.png';
+        billyImages.fall = new Image(); billyImages.fall.src = 'billy-abajo.png';
+        billyImages.happy = new Image(); billyImages.happy.src = 'bylli-alegre.png';
+        billyImages.angry = new Image(); billyImages.angry.src = 'bylli-enojado.png';
+        billyImages.run = new Image(); billyImages.run.src = 'bylli-hacia-delante.png';
+        billyImages.sad = new Image(); billyImages.sad.src = 'bylli-llorando.png';
+        billyImages.relax = new Image(); billyImages.relax.src = 'bylli-relax.png';
+        billyImages.surprised = new Image(); billyImages.surprised.src = 'bylli-sorprendido.png';
+        starImage = new Image(); starImage.src = 'estrella.png';
+        
+        const checkLoad = () => {
+            imagesLoadedCount++;
+            if(imagesLoadedCount >= imagesToLoad) imagesLoaded = true;
+        };
+        
+        Object.values(billyImages).forEach(img => { if(img) img.onload = checkLoad; });
+        if(starImage) starImage.onload = checkLoad;
+    }
+    
+    function getBillySprite() {
+        if(!imagesLoaded) return null;
+        if(activePowerups.shield > 0) return billyImages.surprised;
+        if(player.state === 'hit') return billyImages.angry;
+        if(!player.grounded) {
+            if(player.vy < 0) return billyImages.jump;
+            return billyImages.fall;
+        }
+        if(Math.abs(player.vx) > 1) return billyImages.run;
+        if(combo >= 3) return billyImages.happy;
+        if(combo === 0 && score > 0) return billyImages.relax;
+        return billyImages.normal;
+    }
+    
+    // Tipos de plataformas
+    // 0: normal (verde), 1: rompible (roja), 2: rebote (azul), 3: aceleradora (amarilla), 4: desaparece (naranja)
+    function generatePlatforms() {
+        platforms = [];
+        // Plataforma base
+        platforms.push({
+            x: jumpWidth/2 - 40,
+            y: jumpHeight - 30,
+            width: 80,
+            height: 15,
+            type: 0,
+            originalY: jumpHeight - 30,
+            blinkCounter: 0
+        });
+        
+        // Generar plataformas hacia arriba
+        let lastY = jumpHeight - 80;
+        for(let i = 0; i < 18; i++) {
+            let type = Math.random();
+            let platformType = 0;
+            if(type < 0.6) platformType = 0;
+            else if(type < 0.75) platformType = 1;
+            else if(type < 0.85) platformType = 2;
+            else if(type < 0.93) platformType = 3;
+            else platformType = 4;
+            
+            let x = 20 + Math.random() * (jumpWidth - 100);
+            let y = lastY - (40 + Math.random() * 50);
+            lastY = y;
+            
+            platforms.push({
+                x: x,
+                y: y,
+                width: 65,
+                height: 12,
+                type: platformType,
+                originalY: y,
+                blinkCounter: 0,
+                breaking: false
+            });
+        }
+    }
+    
+    function generateMonster(platform) {
+        if(monsters.length > 8) return;
+        if(Math.random() < 0.35) {
+            monsters.push({
+                x: platform.x + platform.width/2 - 15,
+                y: platform.y - 25,
+                width: 30,
+                height: 25,
+                type: 'monster',
+                platformIndex: platforms.indexOf(platform),
+                patrolDirection: Math.random() > 0.5 ? 1 : -1,
+                patrolX: platform.x + platform.width/2 - 15
+            });
+        }
+    }
+    
+    function generatePowerup(platform) {
+        if(powerups.length > 3) return;
+        if(Math.random() < 0.2) {
+            const types = ['jetpack', 'shield', 'magnet', 'slowmo'];
+            powerups.push({
+                x: platform.x + platform.width/2 - 12,
+                y: platform.y - 28,
+                width: 24,
+                height: 24,
+                type: types[Math.floor(Math.random() * types.length)],
+                floatOffset: 0
+            });
+        }
+    }
+    
+    function resetJumpGame() {
+        score = 0;
+        lives = currentUser?.jump.lives || 3;
+        gameOver = false;
+        gamePaused = false;
+        combo = 1;
+        comboCounter = 0;
+        activePowerups = { jetpack: 0, shield: 0, magnet: 0, slowmo: 0 };
+        
+        player = {
+            x: jumpWidth / 2 - 20,
+            y: jumpHeight - 120,
+            width: 40,
+            height: 40,
+            vx: 0,
+            vy: 0,
+            gravity: 0.6,
+            jumpPower: -10,
+            grounded: true,
+            lastGroundY: 0,
+            state: 'idle'
+        };
+        
+        scrollSpeed = 0;
+        cameraY = 0;
+        monsters = [];
+        powerups = [];
+        particles = [];
+        
+        generatePlatforms();
+        
+        // Añadir monstruos y power-ups a plataformas
+        platforms.forEach((platform, idx) => {
+            if(idx > 0) {
+                generateMonster(platform);
+                generatePowerup(platform);
+            }
+        });
+        
+        updateJumpUI();
+    }
+    
+    function updateJumpUI() {
+        document.getElementById('jumpScore').textContent = score;
+        const livesContainer = document.getElementById('jumpLivesContainer');
+        livesContainer.innerHTML = '';
+        for(let i = 0; i < lives; i++) {
+            const heart = document.createElement('span');
+            heart.className = 'life-heart';
+            heart.textContent = '❤️';
+            livesContainer.appendChild(heart);
+        }
+        
+        const comboDisplay = document.getElementById('jumpComboDisplay');
+        if(combo > 1) {
+            comboDisplay.style.display = 'block';
+            document.getElementById('comboMultiplier').textContent = combo;
+        } else {
+            comboDisplay.style.display = 'none';
+        }
+        
+        const powerIndicator = document.getElementById('powerupIndicator');
+        if(activePowerups.jetpack > 0) powerIndicator.innerHTML = '🚀 JETPACK';
+        else if(activePowerups.shield > 0) powerIndicator.innerHTML = '🛡️ ESCUDO';
+        else if(activePowerups.magnet > 0) powerIndicator.innerHTML = '🧲 IMÁN';
+        else if(activePowerups.slowmo > 0) powerIndicator.innerHTML = '⏱️ CÁMARA LENTA';
+        else powerIndicator.style.display = 'none';
+        
+        if(activePowerups.jetpack > 0 || activePowerups.shield > 0 || activePowerups.magnet > 0 || activePowerups.slowmo > 0) {
+            powerIndicator.style.display = 'block';
+        }
+    }
+    
+    function applyDamage() {
+        if(activePowerups.shield > 0) {
+            activePowerups.shield = 0;
+            showNotification("🛡️ Escudo roto!", "normal");
+            return;
+        }
+        
+        lives--;
+        updateJumpUI();
+        player.state = 'hit';
+        playHitSound();
+        
+        // Vibrar si soporta
+        if(navigator.vibrate) navigator.vibrate(50);
+        
+        // Efecto de partículas de daño
+        for(let i = 0; i < 8; i++) {
+            particles.push({
+                x: player.x + player.width/2,
+                y: player.y + player.height/2,
+                vx: (Math.random() - 0.5) * 5,
+                vy: (Math.random() - 0.5) * 5 - 2,
+                life: 30,
+                color: '#ff4444'
+            });
+        }
+        
+        if(lives <= 0) {
+            gameOver = true;
+            playGameOverSound();
+            if(score > (currentUser?.jump.bestScore || 0)) {
+                currentUser.jump.bestScore = score;
+                currentUser.resources.tokens += Math.floor(score / 10);
+                showNotification(`🏆 NUEVO RÉCORD! +${Math.floor(score/10)} BILLY`, "achievement");
+                saveUser();
+                updateMenuUI();
+            }
+            currentUser.stats.gamesPlayed++;
+            currentUser.stats.totalScore += score;
+            saveUser();
+            showGameOverModal();
+        } else {
+            // Respawnear al jugador
+            player.x = jumpWidth / 2 - 20;
+            player.y = jumpHeight - 120;
+            player.vy = 0;
+            player.vx = 0;
+            player.grounded = true;
+            cameraY = 0;
+            combo = 1;
+            comboCounter = 0;
+            
+            // Regenerar plataformas
+            generatePlatforms();
+            monsters = [];
+            powerups = [];
+            platforms.forEach((platform, idx) => {
+                if(idx > 0) {
+                    generateMonster(platform);
+                    generatePowerup(platform);
+                }
+            });
+        }
+        setTimeout(() => { if(player.state === 'hit') player.state = 'idle'; }, 300);
+    }
+    
+    function showGameOverModal() {
+        const modal = document.getElementById('gameOverModal');
         modal.innerHTML = `
-            <div class="modal-content">
-                <h2>🔑 ${t.secretCode}</h2>
-                <input type="text" id="codeInput" placeholder="${t.enterCode}" style="width:100%;padding:12px;border-radius:30px;border:none;margin-bottom:15px;text-align:center;">
-                <button class="shop-btn" id="redeemCodeBtn" style="width:100%;padding:12px;">${t.redeem}</button>
-                <button class="close-modal" onclick="this.closest('.modal').remove()" style="margin-top:15px;">${t.close}</button>
+            <div class="game-over-screen">
+                <h2>💀 GAME OVER 💀</h2>
+                <p>⭐ Puntuación: ${score}</p>
+                <p>🏆 Récord: ${currentUser?.jump.bestScore || 0}</p>
+                <button class="restart-btn" id="restartGameBtn">🔄 REINTENTAR</button>
+                <button class="menu-restart-btn" id="menuAfterGameBtn">🏠 MENÚ</button>
             </div>
         `;
-        document.body.appendChild(modal);
-        document.getElementById('redeemCodeBtn').onclick = () => {
-            const code = document.getElementById('codeInput').value.trim();
-            redeemCode(code);
-            modal.remove();
+        modal.style.display = 'flex';
+        document.getElementById('restartGameBtn').onclick = () => {
+            modal.style.display = 'none';
+            resetJumpGame();
+        };
+        document.getElementById('menuAfterGameBtn').onclick = () => {
+            modal.style.display = 'none';
+            jumpGameActive = false;
+            if(jumpAnimationId) cancelAnimationFrame(jumpAnimationId);
+            document.getElementById('jumpContainer').classList.remove('active');
+            document.getElementById('mainMenu').style.display = 'flex';
+            updateMenuUI();
         };
     }
     
-    // ==================== MISIONES ====================
-    function generateDailyMissions() {
-        const today = new Date().toDateString();
-        if(!currentUser.dailyMissions || currentUser.dailyMissions.date !== today) {
-            currentUser.dailyMissions = { date: today, missions: [
-                { id: 'tap', type: 'tap', target: 50, progress: 0, reward: 100, completed: false },
-                { id: 'mice', type: 'mice', target: 20, progress: 0, reward: 150, completed: false },
-                { id: 'combo', type: 'combo', target: 15, progress: 0, reward: 200, completed: false }
-            ], completed: [] };
-            saveUser();
+    function updateJumpGame() {
+        if(!jumpCanvas || !jumpCtx || gameOver || gamePaused) {
+            if(jumpAnimationId) requestAnimationFrame(updateJumpGame);
+            return;
         }
-        updateDailyMissionsUI();
-    }
-    
-    function generateWeeklyMissions() {
-        const week = getWeekNumber();
-        if(!currentUser.weeklyMissions || currentUser.weeklyMissions.week !== week) {
-            currentUser.weeklyMissions = { week: week, missions: [
-                { id: 'week_tap', type: 'tap', target: 500, progress: 0, reward: 500, completed: false },
-                { id: 'week_mice', type: 'mice', target: 150, progress: 0, reward: 750, completed: false },
-                { id: 'week_crits', type: 'crits', target: 50, progress: 0, reward: 600, completed: false }
-            ], completed: [] };
-            saveUser();
-        }
-    }
-    
-    function updateDailyMissionsUI() {
-        const container = document.getElementById('missionsList');
-        if(!container || !currentUser?.dailyMissions?.missions) return;
-        container.innerHTML = currentUser.dailyMissions.missions.map(mission => `
-            <div class="mission-item"><div><div class="mission-name">${mission.type === 'tap' ? '👆' : mission.type === 'mice' ? '🐭' : '🔥'} ${mission.type === 'tap' ? t.missionTap.replace('{count}', mission.target) : mission.type === 'mice' ? t.missionMice.replace('{count}', mission.target) : t.missionCombo.replace('{count}', mission.target)}</div><div class="mission-reward">${t.reward}: ${mission.reward} 🪙</div></div><div>${mission.completed ? `<span class="mission-completed">${t.completed}</span>` : `<span class="mission-progress">${mission.progress}/${mission.target}</span>`}</div></div>
-        `).join('');
-    }
-    
-    function updateMissionProgress(type, amount = 1) {
-        if(!currentUser) return;
-        const today = new Date().toDateString();
-        if(currentUser.dailyMissions.date !== today) generateDailyMissions();
-        currentUser.dailyMissions.missions.forEach(mission => {
-            if(mission.type === type && !mission.completed) {
-                mission.progress += amount;
-                if(mission.progress >= mission.target) { mission.completed = true; currentUser.resources.coins += mission.reward; showNotification(`🎉 Misión completada! +${mission.reward} ${t.coins}`, "achievement"); playChestSound(); }
-            }
-        });
-        updateDailyMissionsUI();
-        updateMenuResources();
-        saveUser();
-    }
-    
-    // ==================== FUNCIONES DE UI ====================
-    function updateMenuResources() { if(currentUser) { document.getElementById('menuCoins').textContent = Math.floor(currentUser.resources.coins); document.getElementById('menuTokens').textContent = Math.floor(currentUser.resources.tokens); document.getElementById('userNickname').textContent = currentUser.nickname; document.getElementById('userLevel').textContent = currentUser.clicker.level; document.getElementById('userStreak').textContent = currentUser.dailyStreak; } }
-    
-    function showNotification(msg, type = "normal") { const div = document.createElement('div'); div.className = `notification ${type}`; div.textContent = msg; document.body.appendChild(div); setTimeout(() => div.remove(), 1500); }
-    
-    function createConfetti() { for(let i = 0; i < 50; i++) { const conf = document.createElement('div'); conf.className = 'confetti-piece'; conf.style.left = Math.random() * window.innerWidth + 'px'; conf.style.top = '-10px'; conf.style.backgroundColor = `hsl(${Math.random() * 360}, 100%, 50%)`; conf.style.width = conf.style.height = (5 + Math.random() * 8) + 'px'; document.body.appendChild(conf); setTimeout(() => conf.remove(), 1000); } }
-    
-    function updateDayNightMode() { const hour = new Date().getHours(); const body = document.body; if(hour >= 6 && hour < 18) body.classList.add('day-mode'); else body.classList.remove('day-mode'); }
-    
-    // ==================== TIENDA Y PERFIL ====================
-    function openShop() { playClickSound(); const modal = document.createElement('div'); modal.className = 'modal'; modal.innerHTML = `<div class="modal-content"><h2>${t.shopTitle}</h2><div class="shop-tabs"><div class="shop-tab active" data-tab="skins">${t.skins}</div><div class="shop-tab" data-tab="pets">${t.pets}</div><div class="shop-tab" data-tab="skills">${t.skills}</div><div class="shop-tab" data-tab="powerups">${t.powerups}</div></div><div id="skinsSection" class="shop-section active"><div class="shop-item" onclick="buySkin('original')"><div class="item-info"><div class="item-name">🐱 ${t.original}</div><div class="item-desc">${t.original === 'Original' ? 'The classic Billy' : 'El clásico Billy'}</div></div><button class="shop-btn">${currentUser.inventory.skins.find(s => s.id === 'original')?.unlocked ? (currentUser.inventory.skins.find(s => s.id === 'original')?.equipped ? t.equipped : t.equip) : t.buy}</button></div><div class="shop-item" onclick="buySkin('golden')"><div class="item-info"><div class="item-name">✨ ${t.golden}</div><div class="item-desc">${t.golden === 'Golden' ? 'Golden Billy' : 'Billy dorado'}</div><div class="item-price">${t.priceTokens.replace('{price}', 500)}</div></div><button class="shop-btn">${currentUser.inventory.skins.find(s => s.id === 'golden')?.unlocked ? (currentUser.inventory.skins.find(s => s.id === 'golden')?.equipped ? t.equipped : t.equip) : t.buy}</button></div><div class="shop-item" onclick="buySkin('elite')"><div class="item-info"><div class="item-name">🔥 ${t.elite}</div><div class="item-desc">${t.elite === 'Elite' ? 'Elite Billy' : 'Billy élite'}</div><div class="item-price">${t.priceTokens.replace('{price}', 1500)}</div></div><button class="shop-btn">${currentUser.inventory.skins.find(s => s.id === 'elite')?.unlocked ? (currentUser.inventory.skins.find(s => s.id === 'elite')?.equipped ? t.equipped : t.equip) : t.buy}</button></div></div><div id="petsSection" class="shop-section"><div class="shop-item" onclick="buyPet('dog')"><div class="item-info"><div class="item-name">🐕 ${t.petDog}</div><div class="item-desc">${t.petDogDesc}</div><div class="item-price">${t.priceTokens.replace('{price}', 300)}</div></div><button class="shop-btn">${currentUser.inventory.pets.includes('dog') ? (currentUser.clicker.activePet === 'dog' ? t.equipped : t.equip) : t.buy}</button></div><div class="shop-item" onclick="buyPet('owl')"><div class="item-info"><div class="item-name">🦉 ${t.petOwl}</div><div class="item-desc">${t.petOwlDesc}</div><div class="item-price">${t.priceTokens.replace('{price}', 400)}</div></div><button class="shop-btn">${currentUser.inventory.pets.includes('owl') ? (currentUser.clicker.activePet === 'owl' ? t.equipped : t.equip) : t.buy}</button></div><div class="shop-item" onclick="buyPet('bee')"><div class="item-info"><div class="item-name">🐝 ${t.petBee}</div><div class="item-desc">${t.petBeeDesc}</div><div class="item-price">${t.priceTokens.replace('{price}', 250)}</div></div><button class="shop-btn">${currentUser.inventory.pets.includes('bee') ? (currentUser.clicker.activePet === 'bee' ? t.equipped : t.equip) : t.buy}</button></div><div class="shop-item" onclick="buyPet('dragon')"><div class="item-info"><div class="item-name">🐉 ${t.petDragon}</div><div class="item-desc">${t.petDragonDesc}</div><div class="item-price">${t.priceTokens.replace('{price}', 1000)}</div></div><button class="shop-btn">${currentUser.inventory.pets.includes('dragon') ? (currentUser.clicker.activePet === 'dragon' ? t.equipped : t.equip) : t.buy}</button></div></div><div id="skillsSection" class="shop-section"><div class="shop-item" onclick="upgradeSkill('strength')"><div class="item-info"><div class="item-name">💪 ${t.skillStrength}</div><div class="item-desc">${t.skillStrengthDesc} (${currentUser.inventory.skills.strength}/5)</div></div><button class="shop-btn">${currentUser.inventory.skills.strength >= 5 ? t.maxLevel : `${t.upgrade} (${[40,80,150,300,500][currentUser.inventory.skills.strength]} BILLY)`}</button></div><div class="shop-item" onclick="upgradeSkill('energy')"><div class="item-info"><div class="item-name">⚡ ${t.skillEnergy}</div><div class="item-desc">${t.skillEnergyDesc} (${currentUser.inventory.skills.energy}/5)</div></div><button class="shop-btn">${currentUser.inventory.skills.energy >= 5 ? t.maxLevel : `${t.upgrade} (${[30,60,120,250,400][currentUser.inventory.skills.energy]} BILLY)`}</button></div><div class="shop-item" onclick="upgradeSkill('luck')"><div class="item-info"><div class="item-name">🍀 ${t.skillLuck}</div><div class="item-desc">${t.skillLuckDesc} (${currentUser.inventory.skills.luck}/5)</div></div><button class="shop-btn">${currentUser.inventory.skills.luck >= 5 ? t.maxLevel : `${t.upgrade} (${[50,100,200,400,600][currentUser.inventory.skills.luck]} BILLY)`}</button></div><div class="shop-item" onclick="upgradeSkill('economy')"><div class="item-info"><div class="item-name">💰 ${t.skillEconomy}</div><div class="item-desc">${t.skillEconomyDesc} (${currentUser.inventory.skills.economy}/5)</div></div><button class="shop-btn">${currentUser.inventory.skills.economy >= 5 ? t.maxLevel : `${t.upgrade} (${[40,80,150,300,500][currentUser.inventory.skills.economy]} BILLY)`}</button></div></div><div id="powerupsSection" class="shop-section"><div class="shop-item" onclick="buyPowerup('shield')"><div class="item-info"><div class="item-name">🛡️ ${t.powerupShield}</div><div class="item-desc">${t.powerupShieldDesc}</div><div class="item-price">${t.priceTokens.replace('{price}', 100)}</div></div><button class="shop-btn">${t.buy} (${currentUser.inventory.powerups.shield || 0})</button></div><div class="shop-item" onclick="buyPowerup('magnet')"><div class="item-info"><div class="item-name">🧲 ${t.powerupMagnet}</div><div class="item-desc">${t.powerupMagnetDesc}</div><div class="item-price">${t.priceTokens.replace('{price}', 150)}</div></div><button class="shop-btn">${t.buy} (${currentUser.inventory.powerups.magnet || 0})</button></div><div class="shop-item" onclick="buyPowerup('double')"><div class="item-info"><div class="item-name">✨ ${t.powerupDouble}</div><div class="item-desc">${t.powerupDoubleDesc}</div><div class="item-price">${t.priceTokens.replace('{price}', 200)}</div></div><button class="shop-btn">${t.buy} (${currentUser.inventory.powerups.double || 0})</button></div></div><button class="close-modal" onclick="this.closest('.modal').remove()">${t.close}</button></div>`; document.body.appendChild(modal); const tabs = modal.querySelectorAll('.shop-tab'); const sections = { skins: modal.querySelector('#skinsSection'), pets: modal.querySelector('#petsSection'), skills: modal.querySelector('#skillsSection'), powerups: modal.querySelector('#powerupsSection') }; tabs.forEach(tab => { tab.onclick = () => { tabs.forEach(t => t.classList.remove('active')); tab.classList.add('active'); Object.values(sections).forEach(s => s.classList.remove('active')); sections[tab.dataset.tab].classList.add('active'); }; }); }
-    
-    function buySkin(skinId) { const skinPrices = { golden: 500, elite: 1500 }; const existing = currentUser.inventory.skins.find(s => s.id === skinId); if(existing) { if(!existing.equipped) { currentUser.inventory.skins.forEach(s => s.equipped = false); existing.equipped = true; showNotification(`${skinId} ${t.equipped}`, "achievement"); saveUser(); document.querySelector('.modal')?.remove(); openShop(); updateBillySkin(); } } else { if(currentUser.resources.tokens >= skinPrices[skinId]) { currentUser.resources.tokens -= skinPrices[skinId]; currentUser.inventory.skins.forEach(s => s.equipped = false); currentUser.inventory.skins.push({ id: skinId, name: skinId, unlocked: true, equipped: true }); showNotification(`${skinId} ${t.buy}ed!`, "achievement"); saveUser(); updateMenuResources(); document.querySelector('.modal')?.remove(); openShop(); updateBillySkin(); } else { showNotification(t.notEnoughTokens); } } }
-    
-    function updateBillySkin() { const equippedSkin = currentUser.inventory.skins.find(s => s.equipped); const billyImg = document.getElementById('billyMoodImg'); if(equippedSkin?.id === 'golden') billyImg.style.filter = "drop-shadow(0 0 15px gold)"; else if(equippedSkin?.id === 'elite') billyImg.style.filter = "drop-shadow(0 0 15px #ff6b6b)"; else billyImg.style.filter = "drop-shadow(0 8px 15px rgba(0,0,0,0.4))"; }
-    
-    function buyPet(petId) { const petPrices = { dog: 300, owl: 400, bee: 250, dragon: 1000 }; if(currentUser.inventory.pets.includes(petId)) { currentUser.clicker.activePet = petId; showNotification(`${petId} ${t.equipped}`, "pet"); saveUser(); document.querySelector('.modal')?.remove(); openShop(); startPetEffects(); updatePetFollower(); } else { if(currentUser.resources.tokens >= petPrices[petId]) { currentUser.resources.tokens -= petPrices[petId]; currentUser.inventory.pets.push(petId); currentUser.clicker.activePet = petId; showNotification(`${petId} ${t.buy}ed!`, "achievement"); saveUser(); updateMenuResources(); document.querySelector('.modal')?.remove(); openShop(); startPetEffects(); updatePetFollower(); } else { showNotification(t.notEnoughTokens); } } }
-    
-    function upgradeSkill(skillId) { const costs = { strength: [40,80,150,300,500], energy: [30,60,120,250,400], luck: [50,100,200,400,600], economy: [40,80,150,300,500] }; const currentLevel = currentUser.inventory.skills[skillId]; if(currentLevel < 5) { const cost = costs[skillId][currentLevel]; if(currentUser.resources.tokens >= cost) { currentUser.resources.tokens -= cost; currentUser.inventory.skills[skillId]++; showNotification(`${skillId} ${t.upgrade} a nivel ${currentUser.inventory.skills[skillId]}!`, "achievement"); saveUser(); updateMenuResources(); document.querySelector('.modal')?.remove(); openShop(); updateClickerStats(); } else { showNotification(t.notEnoughTokens); } } }
-    
-    function buyPowerup(powerupId) { const prices = { shield: 100, magnet: 150, double: 200 }; if(currentUser.resources.tokens >= prices[powerupId]) { currentUser.resources.tokens -= prices[powerupId]; currentUser.inventory.powerups[powerupId]++; showNotification(`1x ${powerupId} ${t.buy}ed!`, "achievement"); saveUser(); updateMenuResources(); document.querySelector('.modal')?.remove(); openShop(); } else { showNotification(t.notEnoughTokens); } }
-    
-    function openProfile() { playClickSound(); const modal = document.createElement('div'); modal.className = 'modal'; modal.innerHTML = `<div class="modal-content"><h2>👤 ${t.profile}</h2><div class="profile-stats"><div class="stat-row"><span>🐱 Nickname:</span><span>${currentUser.nickname}</span></div><div class="stat-row"><span>🆔 ID:</span><span>${currentUser.userId.slice(-6)}</span></div><div class="stat-row"><span>📅 ${t.profile === 'PERFIL' ? 'Registro:' : 'Registered:'}</span><span>${new Date(currentUser.createdAt).toLocaleDateString()}</span></div><div class="stat-row"><span>🔥 ${t.streak}:</span><span>${currentUser.dailyStreak} ${t.profile === 'PERFIL' ? 'días' : 'days'}</span></div><div class="stat-row"><span>👆 ${t.totalTaps}:</span><span>${currentUser.clicker.totalTaps}</span></div><div class="stat-row"><span>🐭 ${t.totalMice}:</span><span>${currentUser.clicker.totalMice}</span></div><div class="stat-row"><span>⚡ ${t.bestCombo}:</span><span>${currentUser.clicker.bestCombo}</span></div><div class="stat-row"><span>🦘 ${t.jumpBest}:</span><span>${currentUser.jump.bestScore}</span></div></div><div class="change-nick"><input type="text" id="newNickname" placeholder="${t.changeNickname}" maxlength="15"><button class="shop-btn" id="changeNickBtn">${t.changeNickname} (500 BILLY)</button></div><button class="close-modal" onclick="this.closest('.modal').remove()">${t.close}</button></div>`; document.body.appendChild(modal); document.getElementById('changeNickBtn').onclick = () => { const newNick = document.getElementById('newNickname').value.trim(); if(newNick.length < 3) { showNotification(t.needMoreChars); return; } if(getAllNicknames().includes(newNick) && newNick !== currentUser.nickname) { showNotification(t.nicknameExists); return; } if(currentUser.resources.tokens >= 500) { currentUser.resources.tokens -= 500; currentUser.nickname = newNick; saveUser(); updateMenuResources(); showNotification(t.nicknameChanged.replace('{name}', newNick), "achievement"); modal.remove(); } else { showNotification(t.notEnoughTokens); } }; }
-    
-    function openStats() { playClickSound(); const critRate = currentUser.clicker.totalTaps > 0 ? ((currentUser.clicker.totalCrits / currentUser.clicker.totalTaps) * 100).toFixed(1) : 0; const modal = document.createElement('div'); modal.className = 'modal'; modal.innerHTML = `<div class="modal-content"><h2>📊 ${t.stats}</h2><div class="profile-stats"><div class="stat-row"><span>${t.totalTaps}:</span><span>${currentUser.clicker.totalTaps}</span></div><div class="stat-row"><span>${t.totalMice}:</span><span>${currentUser.clicker.totalMice}</span></div><div class="stat-row"><span>${t.totalCrits}:</span><span>${currentUser.clicker.totalCrits}</span></div><div class="stat-row"><span>${t.critRate}:</span><span>${critRate}%</span></div><div class="stat-row"><span>${t.bestCombo}:</span><span>${currentUser.clicker.bestCombo}</span></div><div class="stat-row"><span>${t.jumpBest}:</span><span>${currentUser.jump.bestScore}</span></div><div class="stat-row"><span>🏆 ${t.achievements}:</span><span></span></div><div class="stat-row"><span>  100 ${t.tap}:</span><span>${currentUser.achievements.taps100 ? '✅' : '❌'}</span></div><div class="stat-row"><span>  500 ${t.tap}:</span><span>${currentUser.achievements.taps500 ? '✅' : '❌'}</span></div><div class="stat-row"><span>  1000 ${t.tap}:</span><span>${currentUser.achievements.taps1000 ? '✅' : '❌'}</span></div><div class="stat-row"><span>  50 ${t.totalMice}:</span><span>${currentUser.achievements.mice50 ? '✅' : '❌'}</span></div><div class="stat-row"><span>  200 ${t.totalMice}:</span><span>${currentUser.achievements.mice200 ? '✅' : '❌'}</span></div><div class="stat-row"><span>  ${t.bestCombo} 20:</span><span>${currentUser.achievements.combo20 ? '✅' : '❌'}</span></div><div class="stat-row"><span>  ${t.level} 10:</span><span>${currentUser.achievements.level10 ? '✅' : '❌'}</span></div><div class="stat-row"><span>  100 ${t.totalCrits}:</span><span>${currentUser.achievements.crits100 ? '✅' : '❌'}</span></div></div><button class="close-modal" onclick="this.closest('.modal').remove()">${t.close}</button></div>`; document.body.appendChild(modal); }
-    
-    function openRanking() { playClickSound(); const userRank = globalRanking.findIndex(r => r.userId === currentUser.userId) + 1; const modal = document.createElement('div'); modal.className = 'modal'; modal.innerHTML = `<div class="modal-content"><h2>${t.rankingTitle}</h2><div class="profile-stats">${globalRanking.slice(0, 10).map((r, i) => `<div class="stat-row"><span>${i+1}. ${r.nickname}</span><span>${r.score} pts (Nv${r.level})</span></div>`).join('')}${globalRanking.length === 0 ? `<div class="stat-row"><span>${t.noRanking}</span></div>` : ''}<div class="stat-row" style="margin-top:10px;border-top:1px solid #ffaa44;"><span>🏆 ${t.yourPosition}:</span><span>${userRank > 0 ? `#${userRank} - ${currentUser.clicker.totalMice} ratones` : 'Aún no clasificado'}</span></div></div><button class="close-modal" onclick="this.closest('.modal').remove()">${t.close}</button></div>`; document.body.appendChild(modal); }
-    
-    function shareToX() { playClickSound(); const msg = t.shareMessage.replace('{taps}', currentUser.clicker.totalTaps).replace('{mice}', currentUser.clicker.totalMice).replace('{level}', currentUser.clicker.level); window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(msg)}`, '_blank', 'width=550,height=420'); }
-    
-    async function sendToTelegram() { playClickSound(); const stats = `🐱 BILLY THE CAT\n👤 ${currentUser.nickname}\n👆 ${t.totalTaps}: ${currentUser.clicker.totalTaps}\n🐭 ${t.totalMice}: ${currentUser.clicker.totalMice}\n🔥 ${t.bestCombo}: ${currentUser.clicker.bestCombo}\n⭐ ${t.level}: ${currentUser.clicker.level}`; try { const url = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`; const response = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ chat_id: TELEGRAM_USER_CHAT_ID, text: stats }) }); if(response.ok) showNotification(t.telegramSent, "achievement"); else showNotification("❌ Error al enviar a Telegram", "normal"); } catch(e) { showNotification("❌ Error de red", "normal"); } }
-    
-    function updateLanguage() { 
-        t = translations[currentLang]; 
-        document.getElementById('registerTitle').textContent = t.registerTitle; 
-        document.getElementById('registerSubtitle').textContent = t.registerSubtitle; 
-        document.getElementById('registerBtn').textContent = t.registerBtn; 
-        document.getElementById('clickerModeTitle').textContent = t.clicker; 
-        document.getElementById('jumpModeTitle').textContent = t.jump; 
-        document.getElementById('coinsLabel').textContent = t.coins; 
-        document.getElementById('tokensLabel').textContent = t.tokens; 
-        document.getElementById('missionsTitle').textContent = `📅 ${t.missions}`; 
-        document.getElementById('userLevelLabel').textContent = t.level; 
-        document.getElementById('userStreakLabel').textContent = t.streak; 
-        const container = document.getElementById('menuButtonsContainer'); 
-        if(container) { 
-            container.innerHTML = `<button class="menu-btn btn-primary" id="shopBtn">🛒 ${t.shop}</button><button class="menu-btn" id="profileBtn">👤 ${t.profile}</button><button class="menu-btn" id="statsBtn">📊 ${t.stats}</button><button class="menu-btn" id="rankingBtn">🏆 ${t.ranking}</button><button class="menu-btn" id="codeBtn">🔑 ${t.secretCode}</button><button class="menu-btn btn-x" id="shareXBtn" style="background:#000;color:#fff;">𝕏 ${t.shareX}</button><button class="menu-btn btn-telegram" id="shareTelegramBtn" style="background:#26A5E4;color:#fff;">📨 ${t.shareTelegram}</button><button class="menu-btn" id="langEsBtn">🇪🇸 ES</button><button class="menu-btn" id="langEnBtn">🇺🇸 EN</button>`; 
-            document.getElementById('shopBtn').onclick = openShop; 
-            document.getElementById('profileBtn').onclick = openProfile; 
-            document.getElementById('statsBtn').onclick = openStats; 
-            document.getElementById('rankingBtn').onclick = openRanking; 
-            document.getElementById('codeBtn').onclick = openCodeModal; 
-            document.getElementById('shareXBtn').onclick = shareToX; 
-            document.getElementById('shareTelegramBtn').onclick = sendToTelegram; 
-            document.getElementById('langEsBtn').onclick = () => { currentLang = 'es'; updateLanguage(); updateClickerUITexts(); if(window.updateJumpUITexts) window.updateJumpUITexts(); }; 
-            document.getElementById('langEnBtn').onclick = () => { currentLang = 'en'; updateLanguage(); updateClickerUITexts(); if(window.updateJumpUITexts) window.updateJumpUITexts(); }; 
-        } 
-        updateDailyMissionsUI(); 
-        updateClickerUITexts(); 
-    }
-    
-    function updateBillyMood(combo, energy) { const billyImg = document.getElementById('billyMoodImg'); if(!billyImg) return; if(combo >= 15) { billyImg.src = 'billy_happy.png'; document.getElementById('billy').classList.add('billy-golden'); } else if(energy <= 20) { billyImg.src = 'billy_Triste.png'; document.getElementById('billy').classList.remove('billy-golden'); if(energy <= 20 && energy > 0 && Math.random() < 0.1) playLowEnergySound(); } else if(combo <= 2 && energy > 50) { billyImg.src = 'billy_Angry.png'; document.getElementById('billy').classList.remove('billy-golden'); } else { billyImg.src = 'billy_happy.png'; document.getElementById('billy').classList.remove('billy-golden'); } billyImg.onerror = function() { this.src = 'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22%3E%3Ccircle cx=%2250%22 cy=%2250%22 r=%2245%22 fill=%22%23FFD966%22/%3E%3Ctext x=%2250%22 y=%2270%22 text-anchor=%22middle%22 fill=%22%23FFA500%22 font-size=%2240%22%3E🐱%3C/text%3E%3C/svg%3E'; }; }
-    
-    function checkDailyStreak() { const today = new Date().toDateString(); const lastPlay = currentUser.lastPlayDate; if(lastPlay !== today) { const yesterday = new Date(); yesterday.setDate(yesterday.getDate() - 1); if(lastPlay === yesterday.toDateString()) { currentUser.dailyStreak++; const bonus = 50 + (currentUser.dailyStreak * 10); currentUser.resources.coins += bonus; showNotification(t.dailyBonus.replace('{days}', currentUser.dailyStreak).replace('{bonus}', bonus), "achievement"); } else { currentUser.dailyStreak = 1; } currentUser.lastPlayDate = today; saveUser(); } document.getElementById('userStreak').textContent = currentUser.dailyStreak; updateMenuResources(); }
-    
-    // ==================== JUEGO CLICKER ====================
-    let clickerGameActive = false, clickerCoins = 0, clickerTokens = 0, clickerLevel = 1, clickerTapPower = 1, clickerEnergy = 100, clickerMaxEnergy = 100, clickerCombo = 0, clickerBestCombo = 0, clickerTotalTaps = 0, clickerTotalMice = 0, clickerTotalCrits = 0, clickerSuperCombo = false, clickerGoldenHour = false, clickerDoubleEvent = false, clickerComboTimer = null, clickerMouseStreak = 0, clickerMice = [], clickerBubbles = [], clickerTargetX = window.innerWidth/2, clickerTargetY = window.innerHeight/2, clickerBillyX = window.innerWidth/2, clickerBillyY = window.innerHeight/2, clickerPetIntervals = [], noCritCounter = 0, clickerChallenges = { mice: 0, crits: 0, maxCombo: 0 }, weeklyRewards = { mice: 25, crits: 15, combo: 12 };
-    
-    function getSkillBonus() { if(!currentUser) return { strength:0, energy:0, luck:0, economy:0 }; return currentUser.inventory.skills; }
-    function getActivePet() { return currentUser?.clicker.activePet || null; }
-    
-    function loadClickerData() { if(currentUser) { clickerCoins = currentUser.resources.coins; clickerTokens = currentUser.resources.tokens; clickerLevel = currentUser.clicker.level; clickerTapPower = currentUser.clicker.tapPower; clickerEnergy = currentUser.clicker.energy; clickerMaxEnergy = currentUser.clicker.maxEnergy; clickerBestCombo = currentUser.clicker.bestCombo; clickerTotalTaps = currentUser.clicker.totalTaps; clickerTotalMice = currentUser.clicker.totalMice; clickerTotalCrits = currentUser.clicker.totalCrits; const skills = getSkillBonus(); clickerMaxEnergy = 100 + Math.floor(clickerLevel / 2) * 5 + (skills.energy * 20); if(clickerEnergy > clickerMaxEnergy) clickerEnergy = clickerMaxEnergy; } updateClickerUI(); }
-    
-    function saveClickerData() { if(currentUser) { currentUser.resources.coins = clickerCoins; currentUser.resources.tokens = clickerTokens; currentUser.clicker.level = clickerLevel; currentUser.clicker.tapPower = clickerTapPower; currentUser.clicker.energy = clickerEnergy; currentUser.clicker.maxEnergy = clickerMaxEnergy; currentUser.clicker.bestCombo = clickerBestCombo; currentUser.clicker.totalTaps = clickerTotalTaps; currentUser.clicker.totalMice = clickerTotalMice; currentUser.clicker.totalCrits = clickerTotalCrits; saveUser(); } }
-    
-    function updateClickerStats() { const skills = getSkillBonus(); clickerMaxEnergy = 100 + Math.floor(clickerLevel / 2) * 5 + (skills.energy * 20); updateClickerUI(); }
-    
-    function updateClickerUI() { 
-        document.getElementById('clickerCoins').textContent = Math.floor(clickerCoins); 
-        document.getElementById('clickerLevel').textContent = clickerLevel; 
-        document.getElementById('clickerTapPower').textContent = clickerTapPower; 
-        document.getElementById('clickerCombo').textContent = clickerCombo; 
-        document.getElementById('clickerEnergy').textContent = Math.floor(clickerEnergy); 
-        document.getElementById('clickerMaxEnergy').textContent = clickerMaxEnergy; 
-        document.getElementById('clickerEnergyFill').style.width = (clickerEnergy / clickerMaxEnergy * 100) + '%'; 
-        document.getElementById('clickerTokens').textContent = Math.floor(clickerTokens); 
-        document.getElementById('clickerBestCombo').textContent = clickerBestCombo; 
-        const comboPercent = Math.min(100, (clickerCombo / 20) * 100); 
-        const comboBar = document.getElementById('comboBarFill');
-        if(comboBar) comboBar.style.width = comboPercent + '%'; 
-        const petPanel = document.getElementById('petPanel'); 
-        const activePet = getActivePet(); 
-        if(activePet) { const petNames = { dog: t.petDog, owl: t.petOwl, bee: t.petBee, dragon: t.petDragon }; petPanel.innerHTML = `<span>${petNames[activePet]}</span>`; } else { petPanel.innerHTML = `<span>🐾 ${t.pets}</span>`; } 
-        const challengesPanel = document.getElementById('clickerChallenges'); 
-        if(challengesPanel) { challengesPanel.innerHTML = `<div class="challenge-item">🐭 ${clickerChallenges.mice}/${weeklyRewards.mice}</div><div class="challenge-item">⚡ ${clickerChallenges.crits}/${weeklyRewards.crits}</div><div class="challenge-item">🔥 ${clickerChallenges.maxCombo}/${weeklyRewards.combo}</div>`; } 
-        updateBillyMood(clickerCombo, clickerEnergy); 
-    }
-    
-    function updateClickerUITexts() { const upgradeBtn = document.getElementById('clickerUpgradeBtn'); if(upgradeBtn) upgradeBtn.textContent = t.upgradeBtn; const chestBtn = document.getElementById('clickerLootBtn'); if(chestBtn) chestBtn.textContent = t.chestBtn; const energyLabel = document.querySelector('.energy-container > div:first-child span:first-child'); if(energyLabel) energyLabel.textContent = t.energy; const comboPanel = document.querySelector('.combo-panel'); if(comboPanel) comboPanel.innerHTML = `🔥 <span id="clickerCombo">0</span> ${t.combo}`; const recordsPanel = document.querySelector('.records-panel'); if(recordsPanel) recordsPanel.innerHTML = `🏆 ${t.bestComboLabel}: <span id="clickerBestCombo">0</span>`; }
-    
-    function checkAchievements() { let newAchievement = false; if(!currentUser.achievements.taps100 && clickerTotalTaps >= 100) { currentUser.achievements.taps100 = true; currentUser.resources.tokens += 100; newAchievement = true; showNotification("🏆 100 taps! +100 BILLY", "achievement"); playEventSound(); } if(!currentUser.achievements.taps500 && clickerTotalTaps >= 500) { currentUser.achievements.taps500 = true; currentUser.resources.tokens += 300; newAchievement = true; showNotification("🏆 500 taps! +300 BILLY", "achievement"); playEventSound(); } if(!currentUser.achievements.taps1000 && clickerTotalTaps >= 1000) { currentUser.achievements.taps1000 = true; currentUser.resources.tokens += 500; newAchievement = true; showNotification("🏆 1000 taps! +500 BILLY", "achievement"); playEventSound(); } if(!currentUser.achievements.mice50 && clickerTotalMice >= 50) { currentUser.achievements.mice50 = true; currentUser.resources.tokens += 150; newAchievement = true; showNotification("🏆 50 ratones! +150 BILLY", "achievement"); playEventSound(); } if(!currentUser.achievements.mice200 && clickerTotalMice >= 200) { currentUser.achievements.mice200 = true; currentUser.resources.tokens += 400; newAchievement = true; showNotification("🏆 200 ratones! +400 BILLY", "achievement"); playEventSound(); } if(!currentUser.achievements.combo20 && clickerBestCombo >= 20) { currentUser.achievements.combo20 = true; currentUser.resources.tokens += 250; newAchievement = true; showNotification("🏆 Combo 20! +250 BILLY", "achievement"); playEventSound(); } if(!currentUser.achievements.level10 && clickerLevel >= 10) { currentUser.achievements.level10 = true; currentUser.resources.tokens += 500; newAchievement = true; showNotification("🏆 Nivel 10! +500 BILLY", "achievement"); playEventSound(); } if(!currentUser.achievements.crits100 && clickerTotalCrits >= 100) { currentUser.achievements.crits100 = true; currentUser.resources.tokens += 200; newAchievement = true; showNotification("🏆 100 críticos! +200 BILLY", "achievement"); playEventSound(); } if(newAchievement) { updateClickerUI(); updateMenuResources(); saveUser(); } }
-    
-    function updateChallenges() { if(clickerChallenges.mice >= weeklyRewards.mice) { clickerCoins += 250; clickerChallenges.mice = 0; showNotification("🏆 Desafío ratones completado! +250 monedas", "achievement"); playChestSound(); } if(clickerChallenges.crits >= weeklyRewards.crits) { clickerCoins += 200; clickerChallenges.crits = 0; showNotification("🏆 Desafío críticos completado! +200 monedas", "achievement"); playChestSound(); } if(clickerChallenges.maxCombo >= weeklyRewards.combo) { clickerCoins += 350; clickerChallenges.maxCombo = 0; showNotification("🏆 Desafío combo completado! +350 monedas", "achievement"); playChestSound(); } updateClickerUI(); }
-    
-    function tapBillyClicker(event) { 
-        if(!clickerGameActive) return; 
-        if(clickerEnergy <= 0) { showNotification(t.noEnergy); return; } 
-        const now = Date.now(); 
-        if(window.lastTapTime && now - window.lastTapTime < 800) { window.quickTapStreak = (window.quickTapStreak || 0) + 1; if(window.quickTapStreak > 10) window.quickTapStreak = 10; } else { window.quickTapStreak = 1; } 
-        window.lastTapTime = now; 
-        const streakBonus = 1 + ((window.quickTapStreak || 1) * 0.05); 
-        if(window.quickTapStreak >= 5 && window.quickTapStreak % 5 === 0) { currentUser.resources.tokens += window.quickTapStreak * 5; showNotification(t.quickStreak.replace('{amount}', window.quickTapStreak * 5), "achievement"); } 
-        clickerCombo++; 
-        if(clickerCombo > clickerBestCombo) { clickerBestCombo = clickerCombo; if(clickerCombo > clickerChallenges.maxCombo) clickerChallenges.maxCombo = clickerCombo; } 
-        clickerTotalTaps++; 
-        const skills = getSkillBonus(); 
-        const activePet = getActivePet(); 
-        let critChance = 10 + skills.luck * 2 + Math.floor(clickerCombo / 3); 
-        if(activePet === 'owl') critChance += 10; 
-        if(noCritCounter >= 8) { critChance = 100; noCritCounter = 0; showNotification("💥 ¡CRÍTICO GARANTIZADO!", "crit"); } 
-        const isCrit = Math.random() * 100 < critChance; 
-        if(isCrit) { noCritCounter = 0; clickerTotalCrits++; clickerChallenges.crits++; } else { noCritCounter++; } 
-        let gain = clickerTapPower * (isCrit ? 3 : 1) * (1 + clickerCombo * 0.02) * streakBonus; 
-        gain *= (1 + skills.strength * 0.05); 
-        gain *= (1 + skills.economy * 0.1); 
-        if(activePet === 'dragon') gain *= 1.1; 
-        if(clickerSuperCombo) gain *= 1.5; 
-        if(clickerDoubleEvent) gain *= 2; 
-        gain = Math.floor(Math.max(1, gain)); 
-        clickerCoins += gain; 
-        clickerTokens += Math.floor(gain / 10); 
-        let energyCost = Math.max(1, Math.floor(clickerCombo / 10)); 
-        clickerEnergy = Math.max(0, clickerEnergy - energyCost); 
-        updateClickerUI(); 
-        updateMissionProgress('tap'); 
-        if(clickerComboTimer) clearTimeout(clickerComboTimer); 
-        clickerComboTimer = setTimeout(() => { if(clickerCombo >= 3) showNotification(t.comboLost.replace('{combo}', clickerCombo)); clickerCombo = 0; clickerSuperCombo = false; updateClickerUI(); }, 2000); 
-        if(clickerCombo >= 12 && !clickerSuperCombo) { clickerSuperCombo = true; showNotification(t.superCombo); playComboSound(); setTimeout(() => { clickerSuperCombo = false; showNotification(t.superComboEnd); }, 5000); } 
-        const billyDiv = document.getElementById('billy'); 
-        billyDiv.style.transform = 'scale(0.92)'; 
-        setTimeout(() => billyDiv.style.transform = 'scale(1)', 100); 
-        const clickX = event.clientX || (event.touches ? event.touches[0].clientX : clickerBillyX); 
-        const clickY = event.clientY || (event.touches ? event.touches[0].clientY : clickerBillyY); 
-        createRipple(clickX, clickY); 
-        createParticles(clickX, clickY, isCrit ? '#FFD966' : '#A5F0A0'); 
-        createFloatingNumber(gain, clickX, clickY, isCrit); 
-        playTapSound(isCrit); 
-        let neededCoins = 100 * Math.pow(1.28, clickerLevel - 1); 
-        if(clickerCoins >= neededCoins) { clickerLevel++; clickerMaxEnergy = 100 + Math.floor(clickerLevel / 2) * 5 + (skills.energy * 20); clickerEnergy = Math.min(clickerMaxEnergy, clickerEnergy + 40); showNotification(t.levelUp.replace('{level}', clickerLevel), "achievement"); playLevelUpSound(); createConfetti(); updateClickerUI(); checkAchievements(); } 
-        checkAchievements(); 
-        updateChallenges(); 
-        saveClickerData(); 
-        updateMenuResources(); 
-    }
-    
-    function createRipple(x, y) { const ripple = document.createElement('div'); ripple.className = 'ripple'; ripple.style.left = (x - 35) + 'px'; ripple.style.top = (y - 35) + 'px'; ripple.style.width = '70px'; ripple.style.height = '70px'; document.body.appendChild(ripple); setTimeout(() => ripple.remove(), 500); }
-    
-    function createParticles(x, y, color) { for(let i = 0; i < 10; i++) { const particle = document.createElement('div'); particle.style.cssText = `position:fixed;left:${x}px;top:${y}px;width:6px;height:6px;background:${color};border-radius:50%;pointer-events:none;z-index:100;`; const angle = Math.random() * Math.PI * 2; const speed = 2 + Math.random() * 4; let vx = Math.cos(angle) * speed; let vy = Math.sin(angle) * speed - 2; let life = 30; document.body.appendChild(particle); function animate() { life--; if(life <= 0) { particle.remove(); return; } particle.style.left = (parseFloat(particle.style.left) + vx) + 'px'; particle.style.top = (parseFloat(particle.style.top) + vy) + 'px'; particle.style.opacity = life / 30; requestAnimationFrame(animate); } animate(); } }
-    
-    function createFloatingNumber(value, x, y, isCrit) { const div = document.createElement('div'); div.className = 'floating-number'; div.textContent = `+${Math.floor(value)}`; div.style.left = x + 'px'; div.style.top = y + 'px'; div.style.color = isCrit ? '#FFD966' : 'white'; document.body.appendChild(div); setTimeout(() => div.remove(), 700); }
-    
-    function createStarParticles(x, y, isGolden) { for(let i = 0; i < 12; i++) { const star = document.createElement('div'); star.textContent = isGolden ? '⭐' : '✨'; star.style.cssText = `position:fixed;left:${x + (Math.random() - 0.5) * 40}px;top:${y + (Math.random() - 0.5) * 40}px;font-size:${16 + Math.random() * 12}px;pointer-events:none;z-index:200;animation:floatUp 0.6s forwards;`; document.body.appendChild(star); setTimeout(() => star.remove(), 600); } }
-    
-    function spawnMouse() { if(!clickerGameActive || clickerMice.length > 10) return; const rand = Math.random(); let isGolden = clickerGoldenHour ? true : rand < 0.12; let isBoss = !isGolden && rand < 0.2 && clickerLevel >= 3; const size = isBoss ? 65 : 42; const yPos = 100 + Math.random() * (window.innerHeight - 200); const fromLeft = Math.random() < 0.5; const xStart = fromLeft ? -60 : window.innerWidth + 60; const dir = fromLeft ? 1 : -1; const skills = getSkillBonus(); let valueMulti = isBoss ? 12 : (isGolden ? 7 : 2.5); const value = Math.floor(clickerTapPower * valueMulti * (1 + skills.economy * 0.1)); clickerMice.push({ x: xStart, y: yPos, size, dir, speed: isBoss ? 1 : 1.5 + Math.random() * 0.8, isGolden, isBoss, value }); }
-    
-    function updateMice() { for(let i = clickerMice.length - 1; i >= 0; i--) { clickerMice[i].x += clickerMice[i].speed * clickerMice[i].dir; if((clickerMice[i].dir === 1 && clickerMice[i].x > window.innerWidth + 100) || (clickerMice[i].dir === -1 && clickerMice[i].x < -100)) clickerMice.splice(i, 1); } }
-    
-    function catchMouse(index, x, y) { if(index >= clickerMice.length) return; const m = clickerMice[index]; const gain = Math.floor(m.value); clickerCoins += gain; clickerTotalMice++; clickerChallenges.mice++; clickerMouseStreak++; createStarParticles(x, y, m.isGolden); createFloatingNumber(gain, x, y, m.isGolden); clickerTokens += Math.floor(gain / 10); playMouseSound(m.isGolden, m.isBoss); if(m.isBoss) { document.getElementById('billy').classList.add('shake'); setTimeout(() => document.getElementById('billy').classList.remove('shake'), 300); } if(clickerMouseStreak >= 3) { let bonus = Math.floor(gain * 0.4); clickerCoins += bonus; createFloatingNumber(bonus, x, y - 30, false); showNotification("🔥 ¡Racha de ratones! +40% bonus"); clickerMouseStreak = 0; } updateClickerUI(); updateMissionProgress('mice'); updateChallenges(); checkAchievements(); clickerMice.splice(index, 1); renderClickerEntities(); saveClickerData(); updateMenuResources(); }
-    
-    function spawnBubble() { if(!clickerGameActive || clickerBubbles.length > 6) return; const size = 45 + Math.random() * 30; const skills = getSkillBonus(); clickerBubbles.push({ x: 40 + Math.random() * (window.innerWidth - size - 40), y: 120 + Math.random() * (window.innerHeight - 240), size, value: Math.floor(clickerTapPower * (2 + Math.random() * 3) * (1 + skills.economy * 0.1)), life: 8000, created: Date.now() }); }
-    
-    function catchBubble(index, x, y) { if(index >= clickerBubbles.length) return; const b = clickerBubbles[index]; clickerCoins += b.value; createStarParticles(x, y, true); createFloatingNumber(b.value, x, y, true); clickerTokens += Math.floor(b.value / 10); playChestSound(); updateClickerUI(); clickerBubbles.splice(index, 1); renderClickerEntities(); saveClickerData(); updateMenuResources(); }
-    
-    function renderClickerEntities() { 
-        const container = document.getElementById('gameArea'); 
-        const existing = container.querySelectorAll('.game-entity'); 
-        existing.forEach(el => el.remove()); 
-        clickerMice.forEach((m, idx) => { 
-            const div = document.createElement('div'); 
-            div.className = `game-entity ${m.isBoss ? 'mouse-boss' : (m.isGolden ? 'mouse-golden' : 'mouse-normal')}`; 
-            div.style.cssText = `left:${m.x - m.size/2}px;top:${m.y - m.size/2}px;width:${m.size}px;height:${m.size}px;font-size:${m.size/2.2}px;cursor:pointer;pointer-events:auto;`; 
-            div.textContent = m.isBoss ? '🐀👑' : (m.isGolden ? '🐭✨' : '🐭'); 
-            div.dataset.type = 'mouse'; 
-            div.dataset.idx = idx; 
-            div.onclick = (e) => { e.stopPropagation(); catchMouse(idx, e.clientX, e.clientY); }; 
-            container.appendChild(div); 
-        }); 
-        clickerBubbles.forEach((b, idx) => { 
-            const div = document.createElement('div'); 
-            div.className = 'game-entity bubble'; 
-            div.style.cssText = `left:${b.x - b.size/2}px;top:${b.y - b.size/2}px;width:${b.size}px;height:${b.size}px;font-size:${b.size/2}px;cursor:pointer;pointer-events:auto;`; 
-            div.textContent = '🎁'; 
-            div.dataset.type = 'bubble'; 
-            div.dataset.idx = idx; 
-            div.onclick = (e) => { e.stopPropagation(); catchBubble(idx, e.clientX, e.clientY); }; 
-            container.appendChild(div); 
-        }); 
-    }
-    
-    function updateBillyPosition() { if(!clickerGameActive) return; clickerBillyX += (clickerTargetX - clickerBillyX) * 0.12; clickerBillyY += (clickerTargetY - clickerBillyY) * 0.12; const billy = document.getElementById('billy'); billy.style.left = (clickerBillyX - billy.offsetWidth/2) + 'px'; billy.style.top = (clickerBillyY - billy.offsetHeight/2) + 'px'; const activePet = getActivePet(); if(activePet) { const follower = document.getElementById('petFollower'); const petEmojis = { dog: '🐕', owl: '🦉', bee: '🐝', dragon: '🐉' }; follower.textContent = petEmojis[activePet]; follower.style.left = (clickerBillyX - 45) + 'px'; follower.style.top = (clickerBillyY - 35) + 'px'; follower.style.display = 'block'; } else { document.getElementById('petFollower').style.display = 'none'; } requestAnimationFrame(updateBillyPosition); }
-    
-    function startPetEffects() { clickerPetIntervals.forEach(clearInterval); clickerPetIntervals = []; const activePet = getActivePet(); if(!activePet) return; if(activePet === 'dog') { const interval = setInterval(() => { if(clickerGameActive && clickerMice.length > 0 && Math.random() < 0.5) { const randomMouse = clickerMice[Math.floor(Math.random() * clickerMice.length)]; if(randomMouse) { const gain = Math.floor(randomMouse.value); clickerCoins += gain; clickerTotalMice++; showNotification(`🐕 ¡Perrito atrapó un ratón! +${gain}`, "pet"); playMouseSound(false, false); clickerMice = clickerMice.filter(m => m !== randomMouse); renderClickerEntities(); updateClickerUI(); updateMissionProgress('mice'); } } }, 10000); clickerPetIntervals.push(interval); } if(activePet === 'bee') { const interval = setInterval(() => { if(clickerGameActive) { const skills = getSkillBonus(); const gain = Math.floor(15 * (1 + skills.economy * 0.1)); clickerCoins += gain; showNotification(`🐝 ¡Abeja generó ${gain} monedas!`, "pet"); updateClickerUI(); } }, 30000); clickerPetIntervals.push(interval); } if(activePet === 'owl') { const interval = setInterval(() => { if(clickerGameActive) showNotification(`🦉 Búho aumenta crítico en +10%`, "pet"); }, 45000); clickerPetIntervals.push(interval); } if(activePet === 'dragon') { const interval = setInterval(() => { if(clickerGameActive) showNotification(`🐉 Dragón mejora todas las estadísticas x1.1`, "pet"); }, 60000); clickerPetIntervals.push(interval); } }
-    
-    function updatePetFollower() { const activePet = getActivePet(); const follower = document.getElementById('petFollower'); if(activePet) { const petEmojis = { dog: '🐕', owl: '🦉', bee: '🐝', dragon: '🐉' }; follower.textContent = petEmojis[activePet]; follower.style.display = 'block'; } else { follower.style.display = 'none'; } }
-    
-    function startClickerGame() { 
-        clickerGameActive = true; 
-        loadClickerData(); 
-        updateClickerUI(); 
-        updateClickerUITexts(); 
-        startPetEffects(); 
-        updatePetFollower(); 
-        document.getElementById('gameArea').innerHTML = ''; 
-        const billy = document.getElementById('billy'); 
-        billy.onclick = tapBillyClicker; 
-        billy.ontouchstart = (e) => { e.preventDefault(); tapBillyClicker(e); }; 
-        document.onmousemove = (e) => { clickerTargetX = e.clientX; clickerTargetY = e.clientY; }; 
-        document.ontouchmove = (e) => { e.preventDefault(); const t = e.touches[0]; clickerTargetX = t.clientX; clickerTargetY = t.clientY; }; 
-        updateBillyPosition(); 
-        setInterval(() => spawnMouse(), 3800); 
-        setInterval(() => spawnBubble(), 6000); 
-        setInterval(() => { updateMice(); renderClickerEntities(); }, 50); 
-        setInterval(() => { if(clickerGameActive) { let regen = Math.max(1, Math.floor(clickerCombo / 8)); clickerEnergy = Math.min(clickerMaxEnergy, clickerEnergy + regen); updateClickerUI(); } }, 2000); 
-        setInterval(() => { if(clickerGameActive && Math.random() < 0.15 && !clickerGoldenHour) { clickerGoldenHour = true; showNotification(t.goldenHour); playEventSound(); setTimeout(() => { clickerGoldenHour = false; showNotification(t.goldenHourEnd); }, 10000); } }, 35000); 
-        setInterval(() => { if(clickerGameActive && Math.random() < 0.1 && !clickerDoubleEvent) { clickerDoubleEvent = true; showNotification(t.doubleEvent); playEventSound(); setTimeout(() => { clickerDoubleEvent = false; showNotification(t.doubleEventEnd); updateClickerUI(); }, 15000); updateClickerUI(); } }, 50000); 
-        setInterval(() => saveClickerData(), 10000); 
-        showNotification("🐱 ¡Toca a Billy para comenzar!"); 
-    }
-    
-    const clickerContainerDiv = document.getElementById('clickerContainer');
-    clickerContainerDiv.insertAdjacentHTML('beforeend', `<div class="top-panel"><div class="stat-card">😺 Nv <span id="clickerLevel">1</span></div><div class="stat-card">💰 <span id="clickerCoins">0</span></div><div class="stat-card">💪 <span id="clickerTapPower">1</span></div></div><div class="token-bar" id="clickerTokenBar">⭐ <span id="clickerTokens">0</span> BILLY</div><div class="combo-panel">🔥 <span id="clickerCombo">0</span> COMBO</div><div class="combo-bar-container"><div class="combo-bar-fill" id="comboBarFill"></div></div><div class="pet-panel" id="petPanel"><span>🐾 Mascota</span></div><div class="records-panel">🏆 Mejor combo: <span id="clickerBestCombo">0</span></div><div class="energy-container"><div style="display:flex; justify-content:space-between;"><span>⚡ Energía</span><span><span id="clickerEnergy">100</span>/<span id="clickerMaxEnergy">100</span></span></div><div class="energy-bg"><div class="energy-fill" id="clickerEnergyFill"></div></div></div><div class="challenges-panel" id="clickerChallenges"><div class="challenge-item">🐭 0/25</div><div class="challenge-item">⚡ 0/15</div><div class="challenge-item">🔥 0/12</div></div><div class="action-buttons"><button class="btn" id="clickerUpgradeBtn">💪 Mejorar</button><button class="btn btn-primary" id="clickerLootBtn">🎁 Cofre</button></div>`);
-    
-    document.getElementById('clickerUpgradeBtn').onclick = () => { let cost = Math.floor(50 * Math.pow(1.4, clickerTapPower - 1)); if(clickerCoins >= cost) { clickerCoins -= cost; clickerTapPower++; updateClickerUI(); saveClickerData(); showNotification(t.upgradePower.replace('{power}', clickerTapPower), "achievement"); playClickSound(); } else { showNotification(`💰 Faltan ${Math.floor(cost - clickerCoins)} monedas`); } };
-    document.getElementById('clickerLootBtn').onclick = () => { if(clickerCoins >= 50) { clickerCoins -= 50; let reward = 80 + Math.floor(Math.random() * 200); clickerCoins += reward; updateClickerUI(); showNotification(`🎁 +${reward} monedas!`, "achievement"); playChestSound(); saveClickerData(); updateMenuResources(); } else { showNotification(`💔 Necesitas 50 monedas`); } };
-    document.getElementById('clickerTokenBar').onclick = () => showNotification(`⭐ ${Math.floor(clickerTokens)} BILLY tokens`);
-    
-    window.startClickerGame = startClickerGame;
-    window.saveClickerGame = saveClickerData;
-    window.updateClickerUITexts = updateClickerUITexts;
-    
-    // ==================== BILLY JUMP - VERSIÓN GATO NEGRO ====================
-    let jumpGameActive = false;
-    let jumpState = { canvas: null, ctx: null, width: 0, height: 0, score: 0, bestScore: 0, gameOver: false, animationId: null, player: { x: 70, y: 0, width: 50, height: 50, vy: 0, gravity: 0.68, jumpPower: -10.5, grounded: true }, obstacles: [], coins: [], powerups: [], spawnCounter: 0, frameCount: 0, activePowerups: { shield: false, magnet: false, double: false }, clouds: [], speed: 3.8, billyImages: { normal: null, happy: null, angry: null, sad: null, current: null }, billyCoinImg: null, imagesLoaded: false };
-    
-    // Precargar imágenes de Billy
-    function loadBillyImages() {
-        jumpState.billyImages.normal = new Image();
-        jumpState.billyImages.normal.src = 'billy.gif';
-        jumpState.billyImages.happy = new Image();
-        jumpState.billyImages.happy.src = 'billy_happy.png';
-        jumpState.billyImages.angry = new Image();
-        jumpState.billyImages.angry.src = 'billy_Angry.png';
-        jumpState.billyImages.sad = new Image();
-        jumpState.billyImages.sad.src = 'billy_Triste.png';
-        jumpState.billyImages.current = jumpState.billyImages.normal;
         
-        jumpState.billyCoinImg = new Image();
-        jumpState.billyCoinImg.src = 'billy_coins.png';
+        const ctx = jumpCtx;
+        const w = jumpWidth;
+        const h = jumpHeight;
         
-        let loadedCount = 0;
-        const checkAllLoaded = () => { loadedCount++; if(loadedCount >= 5) jumpState.imagesLoaded = true; };
-        jumpState.billyImages.normal.onload = checkAllLoaded;
-        jumpState.billyImages.happy.onload = checkAllLoaded;
-        jumpState.billyImages.angry.onload = checkAllLoaded;
-        jumpState.billyImages.sad.onload = checkAllLoaded;
-        jumpState.billyCoinImg.onload = checkAllLoaded;
-    }
-    
-    // Actualizar expresión según estado del juego
-    function updateBillyJumpMood() {
-        if(!jumpState.imagesLoaded) return;
-        if(jumpState.gameOver) {
-            jumpState.billyImages.current = jumpState.billyImages.sad;
-        } else if(!jumpState.player.grounded) {
-            jumpState.billyImages.current = jumpState.billyImages.angry;
-        } else if(jumpState.score > 0 && Math.floor(jumpState.score / 30) % 2 === 0 && jumpState.score > 0) {
-            jumpState.billyImages.current = jumpState.billyImages.happy;
-        } else {
-            jumpState.billyImages.current = jumpState.billyImages.normal;
+        // Limpiar canvas
+        ctx.clearRect(0, 0, w, h);
+        
+        // Fondo con gradiente y estrellas
+        const grad = ctx.createLinearGradient(0, 0, 0, h);
+        grad.addColorStop(0, '#0a0a2a');
+        grad.addColorStop(1, '#1a1a3e');
+        ctx.fillStyle = grad;
+        ctx.fillRect(0, 0, w, h);
+        
+        // Estrellas de fondo
+        for(let i = 0; i < 50; i++) {
+            ctx.fillStyle = `rgba(255,255,200,${0.2 + Math.sin(Date.now()/1000 + i)*0.1})`;
+            ctx.beginPath();
+            ctx.arc((i * 37) % w, 30 + (i * 13) % 80, 1.5, 0, Math.PI*2);
+            ctx.fill();
         }
-    }
-    
-    function drawBlackCat(ctx, x, y, w, h) {
-        if(jumpState.billyImages.current && jumpState.billyImages.current.complete && jumpState.billyImages.current.naturalWidth > 0) {
-            ctx.drawImage(jumpState.billyImages.current, x, y, w, h);
-            // Bigotes animados si está feliz
-            if(jumpState.billyImages.current === jumpState.billyImages.happy) {
-                ctx.beginPath();
-                ctx.strokeStyle = 'white';
-                ctx.lineWidth = 1.5;
-                ctx.moveTo(x + 5, y + h - 12);
-                ctx.lineTo(x - 8, y + h - 8);
-                ctx.moveTo(x + 5, y + h - 8);
-                ctx.lineTo(x - 10, y + h - 4);
-                ctx.moveTo(x + w - 5, y + h - 12);
-                ctx.lineTo(x + w + 8, y + h - 8);
-                ctx.moveTo(x + w - 5, y + h - 8);
-                ctx.lineTo(x + w + 10, y + h - 4);
-                ctx.stroke();
+        
+        // === ACTUALIZAR FÍSICA ===
+        let deltaSpeed = 1;
+        if(activePowerups.slowmo > 0) deltaSpeed = 0.5;
+        
+        // Aplicar gravedad
+        player.vy += player.gravity * deltaSpeed;
+        if(activePowerups.jetpack > 0) {
+            player.vy = -5 * deltaSpeed;
+            activePowerups.jetpack -= deltaSpeed;
+            if(activePowerups.jetpack <= 0) showNotification("⌛ Jetpack terminado", "normal");
+        }
+        
+        player.y += player.vy * deltaSpeed;
+        
+        // Movimiento horizontal
+        if(player.vx !== 0) {
+            player.x += player.vx * deltaSpeed;
+            player.vx *= 0.98;
+        }
+        
+        // Colisión con bordes
+        if(player.x < 0) player.x = 0;
+        if(player.x + player.width > w) player.x = w - player.width;
+        
+        // Scroll de cámara
+        let targetCameraY = 0;
+        if(player.y < h * 0.4) {
+            targetCameraY = Math.min(0, player.y - h * 0.4);
+        }
+        cameraY += (targetCameraY - cameraY) * 0.1;
+        
+        // Colisiones con plataformas
+        player.grounded = false;
+        let landedOnPlatform = false;
+        
+        for(let i = 0; i < platforms.length; i++) {
+            const p = platforms[i];
+            const platformY = p.y + cameraY;
+            
+            // Actualizar plataformas que desaparecen
+            if(p.type === 4 && p.breaking) {
+                p.blinkCounter++;
+                if(p.blinkCounter > 30) {
+                    platforms.splice(i, 1);
+                    i--;
+                    continue;
+                }
             }
+            
+            if(player.vy >= 0 && 
+               player.x + player.width > p.x && 
+               player.x < p.x + p.width &&
+               player.y + player.height > platformY &&
+               player.y + player.height < platformY + p.height + 10 &&
+               player.y + player.height - player.vy <= platformY + p.height) {
+                
+                player.y = platformY - player.height;
+                player.vy = 0;
+                player.grounded = true;
+                player.lastGroundY = player.y;
+                landedOnPlatform = true;
+                
+                // Efecto squash al aterrizar
+                if(player.vy > 5) {
+                    playLandSound();
+                    for(let s = 0; s < 5; s++) {
+                        particles.push({
+                            x: player.x + player.width/2,
+                            y: player.y + player.height,
+                            vx: (Math.random() - 0.5) * 3,
+                            vy: -Math.random() * 3,
+                            life: 20,
+                            color: '#aaa'
+                        });
+                    }
+                }
+                
+                // Combo por saltos seguidos
+                if(p.y < lastPlatformY - 30) {
+                    comboCounter++;
+                    if(comboCounter >= 3) {
+                        combo = Math.min(5, Math.floor(comboCounter / 3) + 1);
+                        showNotification(`🔥 COMBO x${combo}! 🔥`, "normal");
+                    }
+                } else {
+                    comboCounter = Math.max(0, comboCounter - 1);
+                }
+                lastPlatformY = p.y;
+                
+                // Efectos según tipo de plataforma
+                switch(p.type) {
+                    case 1: // Rompible
+                        platforms.splice(i, 1);
+                        i--;
+                        break;
+                    case 2: // Rebote
+                        player.vy = -14;
+                        playJumpSound();
+                        break;
+                    case 3: // Aceleradora
+                        player.vx = Math.sign(player.vx || 1) * 4;
+                        break;
+                    case 4: // Desaparece
+                        p.breaking = true;
+                        break;
+                }
+                
+                // Añadir puntuación
+                let points = 10 * combo;
+                if(activePowerups.double) points *= 2;
+                score += points;
+                createFloatingNumber(points, player.x + player.width/2, player.y, true);
+                updateJumpUI();
+                break;
+            }
+        }
+        
+        if(player.grounded) {
+            player.state = 'idle';
         } else {
-            // Fallback: dibujo de gato negro
-            ctx.save();
+            player.state = 'fall';
+        }
+        
+        // Caída al vacío
+        if(player.y > h + 100) {
+            applyDamage();
+            if(lives > 0) {
+                player.y = jumpHeight - 120;
+                player.vy = 0;
+            }
+        }
+        
+        // Actualizar monstruos
+        for(let i = 0; i < monsters.length; i++) {
+            const m = monsters[i];
+            m.x += (m.patrolDirection * 1.5) * deltaSpeed;
+            // Patrullaje
+            if(m.x < m.patrolX - 25) m.patrolDirection = 1;
+            if(m.x > m.patrolX + 25) m.patrolDirection = -1;
+            
+            // Colisión con jugador
+            if(player.x + player.width > m.x && 
+               player.x < m.x + m.width &&
+               player.y + player.height > m.y + cameraY &&
+               player.y < m.y + m.height + cameraY) {
+                
+                // Aplastar si viene de arriba
+                if(player.vy > 0 && player.y + player.height < m.y + cameraY + m.height/2) {
+                    // APLASTAR MONSTRUO (como Mario)
+                    monsters.splice(i, 1);
+                    i--;
+                    player.vy = -8;
+                    score += 50 * combo;
+                    updateJumpUI();
+                    playStompSound();
+                    createFloatingNumber(50 * combo, m.x + m.width/2, m.y + cameraY, true);
+                    
+                    // Partículas de muerte
+                    for(let s = 0; s < 8; s++) {
+                        particles.push({
+                            x: m.x + m.width/2,
+                            y: m.y + cameraY + m.height/2,
+                            vx: (Math.random() - 0.5) * 4,
+                            vy: (Math.random() - 0.5) * 4,
+                            life: 25,
+                            color: '#ff6666'
+                        });
+                    }
+                } else {
+                    // Daño por contacto lateral
+                    applyDamage();
+                }
+            }
+        }
+        
+        // Actualizar power-ups flotantes
+        for(let i = 0; i < powerups.length; i++) {
+            const p = powerups[i];
+            p.floatOffset = (p.floatOffset || 0) + 0.05;
+            const floatY = Math.sin(p.floatOffset) * 3;
+            
+            if(player.x + player.width > p.x && 
+               player.x < p.x + p.width &&
+               player.y + player.height > p.y + cameraY + floatY &&
+               player.y < p.y + p.height + cameraY + floatY) {
+                
+                // Activar power-up
+                switch(p.type) {
+                    case 'jetpack':
+                        activePowerups.jetpack = 180;
+                        break;
+                    case 'shield':
+                        activePowerups.shield = 300;
+                        break;
+                    case 'magnet':
+                        activePowerups.magnet = 360;
+                        break;
+                    case 'slowmo':
+                        activePowerups.slowmo = 240;
+                        break;
+                }
+                powerups.splice(i, 1);
+                i--;
+                playPowerUpSound();
+                showNotification(`🎁 POWER-UP: ${p.type.toUpperCase()}!`, "achievement");
+                
+                if(currentUser) currentUser.jump.totalPowerups++;
+                updateJumpUI();
+            }
+        }
+        
+        // Actualizar power-ups activos (temporizadores)
+        if(activePowerups.jetpack > 0) activePowerups.jetpack -= deltaSpeed;
+        if(activePowerups.shield > 0) activePowerups.shield -= deltaSpeed;
+        if(activePowerups.magnet > 0) activePowerups.magnet -= deltaSpeed;
+        if(activePowerups.slowmo > 0) activePowerups.slowmo -= deltaSpeed;
+        updateJumpUI();
+        
+        // Imán atrae power-ups
+        if(activePowerups.magnet > 0) {
+            for(let p of powerups) {
+                const dx = (player.x + player.width/2) - (p.x + p.width/2);
+                const dy = (player.y + player.height/2) - (p.y + cameraY + p.height/2);
+                const dist = Math.sqrt(dx*dx + dy*dy);
+                if(dist < 80) {
+                    p.x += dx * 0.1;
+                    p.y += dy * 0.1;
+                }
+            }
+        }
+        
+        // Actualizar partículas
+        for(let i = 0; i < particles.length; i++) {
+            particles[i].x += particles[i].vx;
+            particles[i].y += particles[i].vy;
+            particles[i].life--;
+            if(particles[i].life <= 0) {
+                particles.splice(i, 1);
+                i--;
+            }
+        }
+        
+        // === DIBUJAR ===
+        // Plataformas
+        for(const p of platforms) {
+            const y = p.y + cameraY;
+            if(y > h + 100 || y < -100) continue;
+            
+            // Color según tipo
+            switch(p.type) {
+                case 0: ctx.fillStyle = '#4CAF50'; break;
+                case 1: ctx.fillStyle = '#f44336'; break;
+                case 2: ctx.fillStyle = '#2196F3'; break;
+                case 3: ctx.fillStyle = '#FFC107'; break;
+                case 4: ctx.fillStyle = '#FF9800'; break;
+                default: ctx.fillStyle = '#4CAF50';
+            }
+            
+            if(p.type === 4 && p.breaking) {
+                ctx.globalAlpha = 0.5 + Math.sin(Date.now() * 0.01) * 0.3;
+            }
+            
+            // Sombra de plataforma
+            ctx.shadowBlur = 5;
+            ctx.shadowColor = 'rgba(0,0,0,0.3)';
+            ctx.fillRect(p.x, y, p.width, p.height);
+            ctx.fillStyle = 'rgba(255,255,255,0.3)';
+            ctx.fillRect(p.x, y, p.width, 3);
             ctx.shadowBlur = 0;
+            ctx.globalAlpha = 1;
+        }
+        
+        // Power-ups flotantes
+        for(const p of powerups) {
+            const floatY = Math.sin(p.floatOffset || 0) * 3;
+            const y = p.y + cameraY + floatY;
+            
+            if(starImage && starImage.complete && starImage.naturalWidth > 0) {
+                ctx.drawImage(starImage, p.x, y, p.width, p.height);
+            } else {
+                ctx.fillStyle = '#FFD700';
+                ctx.beginPath();
+                ctx.ellipse(p.x + p.width/2, y + p.height/2, p.width/2, p.height/2, 0, 0, Math.PI*2);
+                ctx.fill();
+            }
+            
+            ctx.fillStyle = 'white';
+            ctx.font = `${p.width-6}px "Segoe UI"`;
+            ctx.fillText(p.type === 'jetpack' ? '🚀' : (p.type === 'shield' ? '🛡️' : (p.type === 'magnet' ? '🧲' : '⏱️')), p.x + 4, y + p.height - 4);
+        }
+        
+        // Monstruos
+        for(const m of monsters) {
+            const y = m.y + cameraY;
+            ctx.fillStyle = '#6B2E2E';
+            ctx.beginPath();
+            ctx.ellipse(m.x + m.width/2, y + m.height/2, m.width/2, m.height/2, 0, 0, Math.PI*2);
+            ctx.fill();
+            ctx.fillStyle = '#4A1A1A';
+            ctx.beginPath();
+            ctx.ellipse(m.x + m.width - 8, y + m.height/2 - 4, 4, 5, 0, 0, Math.PI*2);
+            ctx.fill();
+            ctx.beginPath();
+            ctx.ellipse(m.x + 8, y + m.height/2 - 4, 4, 5, 0, 0, Math.PI*2);
+            ctx.fill();
+            ctx.fillStyle = '#FF4444';
+            ctx.beginPath();
+            ctx.ellipse(m.x + m.width - 9, y + m.height/2 - 5, 2, 2, 0, 0, Math.PI*2);
+            ctx.fill();
+            ctx.beginPath();
+            ctx.ellipse(m.x + 7, y + m.height/2 - 5, 2, 2, 0, 0, Math.PI*2);
+            ctx.fill();
+            // cejas enojadas
+            ctx.fillStyle = '#2A0A0A';
+            ctx.fillRect(m.x + m.width - 13, y + m.height/2 - 12, 8, 2);
+            ctx.fillRect(m.x + 5, y + m.height/2 - 12, 8, 2);
+        }
+        
+        // Partículas
+        for(const p of particles) {
+            ctx.fillStyle = p.color || '#FFD966';
+            ctx.fillRect(p.x, p.y, 3, 3);
+        }
+        
+        // DIBUJAR BILLY
+        const billySprite = getBillySprite();
+        if(billySprite && billySprite.complete && billySprite.naturalWidth > 0) {
+            ctx.drawImage(billySprite, player.x, player.y, player.width, player.height);
+        } else {
+            // Fallback
             ctx.fillStyle = '#1a1a1a';
             ctx.beginPath();
-            ctx.ellipse(x + w/2, y + h/2 - 5, w/2.3, h/2.6, 0, 0, Math.PI*2);
-            ctx.fill();
-            ctx.fillStyle = '#2a2a2a';
-            ctx.beginPath();
-            ctx.ellipse(x + w/2 - 9, y + h/2 - 13, 9, 11, 0, 0, Math.PI*2);
-            ctx.fill();
-            ctx.beginPath();
-            ctx.ellipse(x + w/2 + 9, y + h/2 - 13, 9, 11, 0, 0, Math.PI*2);
+            ctx.ellipse(player.x + player.width/2, player.y + player.height/2 - 5, player.width/2.2, player.height/2.5, 0, 0, Math.PI*2);
             ctx.fill();
             ctx.fillStyle = '#FFD966';
             ctx.beginPath();
-            ctx.arc(x + w/2 - 9, y + h/2 - 15, 3.5, 0, Math.PI*2);
+            ctx.arc(player.x + player.width/2 - 8, player.y + player.height/2 - 12, 4, 0, Math.PI*2);
             ctx.fill();
             ctx.beginPath();
-            ctx.arc(x + w/2 + 9, y + h/2 - 15, 3.5, 0, Math.PI*2);
+            ctx.arc(player.x + player.width/2 + 8, player.y + player.height/2 - 12, 4, 0, Math.PI*2);
             ctx.fill();
-            ctx.fillStyle = '#000';
-            ctx.beginPath();
-            ctx.arc(x + w/2 - 10, y + h/2 - 16, 1.8, 0, Math.PI*2);
-            ctx.fill();
-            ctx.beginPath();
-            ctx.arc(x + w/2 + 8, y + h/2 - 16, 1.8, 0, Math.PI*2);
-            ctx.fill();
-            ctx.fillStyle = '#FFA500';
-            ctx.beginPath();
-            ctx.ellipse(x + w/2, y + h/2 - 9, 4.5, 2.5, 0, 0, Math.PI*2);
-            ctx.fill();
-            ctx.fillStyle = '#fff';
-            for(let i = 0; i < 3; i++) {
-                ctx.beginPath();
-                ctx.moveTo(x + w/2 - 18 + i*6, y + h/2 - 6);
-                ctx.lineTo(x + w/2 - 23 + i*6, y + h/2 - 9);
-                ctx.lineTo(x + w/2 - 13 + i*6, y + h/2 - 9);
-                ctx.fill();
-                ctx.beginPath();
-                ctx.moveTo(x + w/2 + 6 + i*6, y + h/2 - 6);
-                ctx.lineTo(x + w/2 + 1 + i*6, y + h/2 - 9);
-                ctx.lineTo(x + w/2 + 11 + i*6, y + h/2 - 9);
-                ctx.fill();
-            }
-            ctx.restore();
         }
+        
+        // Escudo visual si está activo
+        if(activePowerups.shield > 0) {
+            ctx.beginPath();
+            ctx.arc(player.x + player.width/2, player.y + player.height/2, player.width/2 + 5, 0, Math.PI*2);
+            ctx.strokeStyle = '#4CAF50';
+            ctx.lineWidth = 3;
+            ctx.stroke();
+            ctx.beginPath();
+            ctx.arc(player.x + player.width/2, player.y + player.height/2, player.width/2 + 8, 0, Math.PI*2);
+            ctx.strokeStyle = 'rgba(76,175,80,0.5)';
+            ctx.stroke();
+        }
+        
+        jumpAnimationId = requestAnimationFrame(updateJumpGame);
     }
     
-    function startJumpGame() { 
-        if(jumpGameActive) return; 
+    function startJumpGame() {
+        if(jumpGameActive) return;
+        jumpGameActive = true;
+        
         loadBillyImages();
-        jumpGameActive = true; 
-        jumpState.width = Math.min(window.innerWidth - 40, 420); 
-        jumpState.height = 520; 
-        jumpState.player.y = jumpState.height - 80; 
-        jumpState.score = 0; 
-        jumpState.bestScore = currentUser?.jump.bestScore || 0; 
-        jumpState.gameOver = false; 
-        jumpState.obstacles = []; 
-        jumpState.coins = []; 
-        jumpState.powerups = []; 
-        jumpState.spawnCounter = 0; 
-        jumpState.activePowerups = { shield: false, magnet: false, double: false }; 
-        jumpState.speed = 3.8; 
-        jumpState.clouds = []; 
-        for(let i = 0; i < 3; i++) jumpState.clouds.push({ x: Math.random() * jumpState.width, y: 30 + Math.random() * 100, size: 40 + Math.random() * 30 }); 
-        const container = document.getElementById('jumpContainer'); 
-        container.innerHTML = `<div class="game-header"><button class="back-btn" id="jumpBackBtnGame">← ${t.back}</button></div><div class="jump-container"><div class="jump-stats"><div class="jump-score-card">🏆 ${t.jumpBestLabel} <span id="jumpBestSpan">${jumpState.bestScore}</span></div><div class="jump-score-card">⭐ ${t.jumpScoreLabel} <span id="jumpScore">0</span></div></div><canvas id="jumpCanvas" class="jump-canvas" width="${jumpState.width}" height="${jumpState.height}"></canvas><div class="jump-powerups"><div class="powerup-btn" id="useShield">🛡️ ${t.jumpShield} (${currentUser?.inventory.powerups.shield || 0})</div><div class="powerup-btn" id="useMagnet">🧲 ${t.jumpMagnet} (${currentUser?.inventory.powerups.magnet || 0})</div><div class="powerup-btn" id="useDouble">✨ ${t.jumpDouble} (${currentUser?.inventory.powerups.double || 0})</div></div><div class="jump-instruction">🐱 ${t.jumpInstruction}</div></div>`; 
-        jumpState.canvas = document.getElementById('jumpCanvas'); 
-        jumpState.ctx = jumpState.canvas.getContext('2d'); 
-        document.getElementById('jumpBackBtnGame').onclick = () => { cancelAnimationFrame(jumpState.animationId); jumpGameActive = false; document.getElementById('jumpContainer').classList.remove('active'); document.getElementById('mainMenu').style.display = 'flex'; updateMenuResources(); }; 
-        document.getElementById('useShield').onclick = () => useJumpPowerup('shield'); 
-        document.getElementById('useMagnet').onclick = () => useJumpPowerup('magnet'); 
-        document.getElementById('useDouble').onclick = () => useJumpPowerup('double'); 
-        jumpState.canvas.onclick = () => jumpActionJump(); 
-        jumpState.canvas.ontouchstart = (e) => { e.preventDefault(); jumpActionJump(); }; 
-        jumpState.animationId = requestAnimationFrame(updateJumpGame); 
-        if(window.updateJumpUITexts) window.updateJumpUITexts(); 
+        
+        jumpWidth = Math.min(window.innerWidth - 30, 400);
+        jumpHeight = Math.min(window.innerHeight - 100, 620);
+        
+        const container = document.getElementById('jumpGameArea');
+        container.innerHTML = `<canvas id="jumpMainCanvas" width="${jumpWidth}" height="${jumpHeight}" class="jump-canvas"></canvas>`;
+        jumpCanvas = document.getElementById('jumpMainCanvas');
+        jumpCtx = jumpCanvas.getContext('2d');
+        
+        resetJumpGame();
+        updateJumpUI();
+        
+        // Eventos táctiles
+        jumpCanvas.onclick = () => {
+            if(!gameOver && player.grounded && !activePowerups.jetpack) {
+                player.vy = player.jumpPower;
+                player.grounded = false;
+                playJumpSound();
+                if(currentUser) currentUser.jump.totalJumps++;
+                player.state = 'jump';
+            }
+        };
+        jumpCanvas.ontouchstart = (e) => {
+            e.preventDefault();
+            if(!gameOver && player.grounded && !activePowerups.jetpack) {
+                player.vy = player.jumpPower;
+                player.grounded = false;
+                playJumpSound();
+                if(currentUser) currentUser.jump.totalJumps++;
+                player.state = 'jump';
+            }
+        };
+        
+        // Movimiento horizontal con teclado (opcional)
+        window.onkeydown = (e) => {
+            if(e.key === 'ArrowLeft') player.vx = -4;
+            if(e.key === 'ArrowRight') player.vx = 4;
+        };
+        
+        jumpAnimationId = requestAnimationFrame(updateJumpGame);
     }
-    
-    function useJumpPowerup(type) { 
-        if(currentUser?.inventory.powerups[type] > 0 && !jumpState.activePowerups[type] && !jumpState.gameOver) { 
-            currentUser.inventory.powerups[type]--; 
-            jumpState.activePowerups[type] = true; 
-            saveUser(); 
-            showNotification(t.powerupActivated.replace('{type}', type), "achievement"); 
-            updateJumpUITexts(); 
-            setTimeout(() => { 
-                jumpState.activePowerups[type] = false; 
-                showNotification(`⌛ ${type} ${t.powerupActivated ? 'terminado' : 'ended'}`, "normal");
-            }, 10000); 
-        } else if(!jumpState.gameOver) { 
-            showNotification(t.powerupNoStock.replace('{type}', type)); 
-        } 
-    }
-    
-    function jumpActionJump() { 
-        if(!jumpState.gameOver && jumpState.player.grounded) { 
-            jumpState.player.vy = jumpState.player.jumpPower; 
-            jumpState.player.grounded = false; 
-            playJumpSound();
-            playMeowSound();
-        } else if(jumpState.gameOver) restartJump(); 
-    }
-    
-    function restartJump() { 
-        jumpState.player.y = jumpState.height - 80; 
-        jumpState.player.vy = 0; 
-        jumpState.player.grounded = true; 
-        jumpState.obstacles = []; 
-        jumpState.coins = []; 
-        jumpState.powerups = []; 
-        jumpState.score = 0; 
-        jumpState.gameOver = false; 
-        jumpState.spawnCounter = 0; 
-        jumpState.speed = 3.8; 
-        document.getElementById('jumpScore').textContent = 0; 
-        jumpState.activePowerups = { shield: false, magnet: false, double: false }; 
-        updateJumpUITexts(); 
-    }
-    
-    function updateJumpGame() { 
-        if(!jumpState.canvas) return; 
-        updateBillyJumpMood();
-        const ctx = jumpState.ctx, w = jumpState.width, h = jumpState.height; 
-        ctx.clearRect(0, 0, w, h); 
-        // Fondo nocturno con luna y estrellas
-        const grad = ctx.createLinearGradient(0,0,0,h); 
-        grad.addColorStop(0, '#1a1a3e'); 
-        grad.addColorStop(0.5, '#2a1a3e');
-        grad.addColorStop(1, '#0a0a1a'); 
-        ctx.fillStyle = grad; 
-        ctx.fillRect(0,0,w,h); 
-        
-        // Luna
-        ctx.fillStyle = '#FFF8DC';
-        ctx.beginPath();
-        ctx.arc(w - 50, 50, 30, 0, Math.PI*2);
-        ctx.fill();
-        ctx.fillStyle = '#1a1a3e';
-        ctx.beginPath();
-        ctx.arc(w - 42, 45, 25, 0, Math.PI*2);
-        ctx.fill();
-        
-        // Estrellas
-        for(let i = 0; i < 30; i++) {
-            ctx.fillStyle = `rgba(255,255,200,${0.3 + Math.sin(Date.now()/1000 + i)*0.2})`;
-            ctx.beginPath();
-            ctx.arc((i * 37) % w, 20 + (i * 13) % 60, 1.5, 0, Math.PI*2);
-            ctx.fill();
-        }
-        
-        for(const cloud of jumpState.clouds) { 
-            ctx.fillStyle = 'rgba(80,60,100,0.5)'; 
-            ctx.beginPath(); 
-            ctx.ellipse(cloud.x, cloud.y, cloud.size/2, cloud.size/3, 0, 0, Math.PI*2); 
-            ctx.fill(); 
-            cloud.x -= 0.3; 
-            if(cloud.x + cloud.size < 0) cloud.x = w + cloud.size; 
-        } 
-        
-        ctx.fillStyle = '#2d1a0a'; 
-        ctx.fillRect(0, h-50, w, 50); 
-        ctx.fillStyle = '#4a2a1a'; 
-        ctx.fillRect(0, h-53, w, 3);
-        ctx.fillStyle = '#6a3a1a';
-        for(let i = 0; i < 20; i++) {
-            ctx.fillRect(i*35, h-52, 5, 2);
-        }
-        
-        if(!jumpState.gameOver) { 
-            jumpState.player.vy += jumpState.player.gravity; 
-            jumpState.player.y += jumpState.player.vy; 
-            if(jumpState.player.y >= h-50-jumpState.player.height) { 
-                jumpState.player.y = h-50-jumpState.player.height; 
-                jumpState.player.vy = 0; 
-                jumpState.player.grounded = true; 
-            } 
-            if(jumpState.player.y < 0) { 
-                jumpState.player.y = 0; 
-                if(jumpState.player.vy<0) jumpState.player.vy=0; 
-            } 
-            jumpState.spawnCounter++; 
-            let spawnRate = Math.max(30, 55 - Math.floor(jumpState.score/35)); 
-            if(jumpState.spawnCounter > spawnRate) { 
-                jumpState.spawnCounter = 0; 
-                const type = Math.random(); 
-                if(type < 0.55) jumpState.obstacles.push({ x: w, y: h-50-45, width: 30, height: 45, type: 'rock' }); 
-                else if(type < 0.85) jumpState.obstacles.push({ x: w, y: h-50-40, width: 28, height: 40, type: 'mouse', color: '#8B5A2B' }); 
-                else jumpState.obstacles.push({ x: w, y: h-50-55, width: 25, height: 55, type: 'box' }); 
-                if(Math.random() < 0.35) jumpState.coins.push({ x: w + 20, y: h-50-55 + Math.random() * 45, width: 18, height: 18, collected: false }); 
-                if(Math.random() < 0.15) jumpState.powerups.push({ x: w + 25, y: h-50-65, width: 22, height: 22, type: ['shield','magnet','double'][Math.floor(Math.random()*3)] }); 
-            } 
-            jumpState.speed = 3.8 + Math.floor(jumpState.score / 90); 
-            
-            for(let i=0; i<jumpState.obstacles.length; i++) { 
-                const obs = jumpState.obstacles[i]; 
-                obs.x -= jumpState.speed; 
-                if(obs.x + obs.width < 0) { 
-                    jumpState.obstacles.splice(i,1); 
-                    let addScore = jumpState.activePowerups.double ? 2 : 1; 
-                    jumpState.score += addScore; 
-                    document.getElementById('jumpScore').textContent = jumpState.score; 
-                    i--; 
-                } 
-                if(obs.x < jumpState.player.x + jumpState.player.width && obs.x + obs.width > jumpState.player.x && obs.y < jumpState.player.y + jumpState.player.height && obs.y + obs.height > jumpState.player.y) { 
-                    if(jumpState.activePowerups.shield) { 
-                        jumpState.activePowerups.shield = false; 
-                        jumpState.obstacles.splice(i,1); 
-                        showNotification("🛡️ ¡Escudo usado! Obstáculo evitado", "achievement"); 
-                    } else { 
-                        jumpState.gameOver = true; 
-                        if(jumpState.score > jumpState.bestScore) { 
-                            jumpState.bestScore = jumpState.score; 
-                            if(currentUser) currentUser.jump.bestScore = jumpState.score; 
-                            saveUser(); 
-                            document.getElementById('jumpBestSpan').textContent = jumpState.bestScore;
-                            showNotification(`🏆 ¡NUEVO RÉCORD! ${jumpState.score} puntos`, "achievement");
-                            createConfetti();
-                        } 
-                        const reward = Math.floor(jumpState.score * 6); 
-                        clickerCoins += reward; 
-                        updateClickerUI(); 
-                        saveClickerData(); 
-                        updateMenuResources(); 
-                        showNotification(`🎉 +${reward} ${t.coins} por tu puntuación!`, "achievement"); 
-                        playGameOverSound(); 
-                    } 
-                } 
-            } 
-            
-            for(let i=0; i<jumpState.coins.length; i++) { 
-                const coin = jumpState.coins[i]; 
-                coin.x -= jumpState.speed; 
-                if(jumpState.billyCoinImg && jumpState.billyCoinImg.complete && jumpState.billyCoinImg.naturalWidth > 0) {
-                    ctx.drawImage(jumpState.billyCoinImg, coin.x, coin.y, coin.width, coin.height);
-                } else {
-                    ctx.fillStyle = '#FFD700'; 
-                    ctx.beginPath(); 
-                    ctx.ellipse(coin.x + coin.width/2, coin.y + coin.height/2, coin.width/2, coin.height/2, 0, 0, Math.PI*2); 
-                    ctx.fill(); 
-                    ctx.fillStyle = '#FFA500'; 
-                    ctx.beginPath(); 
-                    ctx.ellipse(coin.x + coin.width/2, coin.y + coin.height/2, coin.width/3, coin.height/3, 0, 0, Math.PI*2); 
-                    ctx.fill();
-                }
-                if(!coin.collected && coin.x < jumpState.player.x + jumpState.player.width && coin.x + coin.width > jumpState.player.x && coin.y < jumpState.player.y + jumpState.player.height && coin.y + coin.height > jumpState.player.y) { 
-                    coin.collected = true; 
-                    const coinValue = 8; 
-                    clickerCoins += coinValue; 
-                    updateClickerUI(); 
-                    saveClickerData(); 
-                    updateMenuResources();
-                    createFloatingNumber(coinValue, coin.x + coin.width/2, coin.y + coin.height/2, true);
-                    showNotification(`🪙 +${coinValue} ${t.coins}!`, "normal"); 
-                    playChestSound(); 
-                } 
-                if(coin.x + coin.width < 0 || coin.collected) { 
-                    jumpState.coins.splice(i,1); 
-                    i--; 
-                } 
-            } 
-            
-            for(let i=0; i<jumpState.powerups.length; i++) { 
-                const p = jumpState.powerups[i]; 
-                p.x -= jumpState.speed; 
-                ctx.fillStyle = p.type === 'shield' ? '#4CAF50' : (p.type === 'magnet' ? '#9C27B0' : '#FF9800'); 
-                ctx.fillRect(p.x, p.y, p.width, p.height); 
-                ctx.fillStyle = 'white'; 
-                ctx.font = `${p.width-4}px "Segoe UI"`; 
-                ctx.fillText(p.type === 'shield' ? '🛡️' : (p.type === 'magnet' ? '🧲' : '✨'), p.x+2, p.y+p.height-5); 
-                if(p.x < jumpState.player.x + jumpState.player.width && p.x + p.width > jumpState.player.x && p.y < jumpState.player.y + jumpState.player.height && p.y + p.height > jumpState.player.y) { 
-                    if(!jumpState.activePowerups[p.type]) { 
-                        jumpState.activePowerups[p.type] = true; 
-                        showNotification(t.jumpPickup.replace('{type}', p.type === 'shield' ? t.jumpShield : (p.type === 'magnet' ? t.jumpMagnet : t.jumpDouble)), "achievement"); 
-                        playEventSound();
-                        setTimeout(() => { 
-                            if(jumpState.activePowerups[p.type]) jumpState.activePowerups[p.type] = false; 
-                            showNotification(`⌛ ${p.type} ${t.powerupActivated ? 'terminado' : 'ended'}`, "normal");
-                        }, 10000); 
-                    } 
-                    jumpState.powerups.splice(i,1); 
-                    i--; 
-                } else if(p.x + p.width < 0) { 
-                    jumpState.powerups.splice(i,1); 
-                    i--; 
-                } 
-            } 
-        } 
-        
-        for(const obs of jumpState.obstacles) { 
-            if(obs.type === 'rock') { 
-                ctx.fillStyle = '#6B4E2E'; 
-                ctx.fillRect(obs.x, obs.y, obs.width, obs.height); 
-                ctx.fillStyle = '#4A2A1A'; 
-                ctx.fillRect(obs.x+8, obs.y+10, 6, 12); 
-                ctx.fillRect(obs.x+16, obs.y+6, 6, 16); 
-            } else if(obs.type === 'mouse') { 
-                ctx.fillStyle = obs.color; 
-                ctx.beginPath(); 
-                ctx.ellipse(obs.x + obs.width/2, obs.y + obs.height/2, obs.width/2, obs.height/2, 0, 0, Math.PI*2); 
-                ctx.fill(); 
-                ctx.fillStyle = '#000'; 
-                ctx.beginPath(); 
-                ctx.arc(obs.x + obs.width-8, obs.y + obs.height/2-4, 2.5, 0, Math.PI*2); 
-                ctx.fill(); 
-                ctx.beginPath(); 
-                ctx.arc(obs.x + 8, obs.y + obs.height/2-4, 2.5, 0, Math.PI*2); 
-                ctx.fill(); 
-            } else { 
-                ctx.fillStyle = '#8B4513'; 
-                ctx.fillRect(obs.x, obs.y, obs.width, obs.height); 
-                ctx.fillStyle = '#A0522D'; 
-                ctx.fillRect(obs.x+6, obs.y-4, obs.width-12, 6); 
-            } 
-        } 
-        
-        drawBlackCat(ctx, jumpState.player.x, jumpState.player.y, jumpState.player.width, jumpState.player.height); 
-        
-        if(jumpState.gameOver) { 
-            ctx.fillStyle = 'rgba(0,0,0,0.8)'; 
-            ctx.fillRect(0,0,w,h); 
-            ctx.fillStyle = '#FFD966'; 
-            ctx.font = 'bold 26px "Segoe UI"'; 
-            ctx.textAlign = 'center'; 
-            ctx.fillText(`${t.jumpGameOver}`, w/2, h/2-40); 
-            ctx.fillStyle = 'white'; 
-            ctx.font = '16px "Segoe UI"'; 
-            ctx.fillText(t.jumpTapRestart, w/2, h/2+20); 
-            ctx.fillStyle = '#FFD966'; 
-            ctx.font = 'bold 20px "Segoe UI"'; 
-            ctx.fillText(t.jumpPoints.replace('{score}', jumpState.score), w/2, h/2+80); 
-        } 
-        jumpState.animationId = requestAnimationFrame(updateJumpGame); 
-    }
-    
-    function updateJumpUITexts() { 
-        const jumpScoreLabel = document.querySelector('#jumpContainer .jump-stats .jump-score-card:last-child'); 
-        if(jumpScoreLabel && jumpState) jumpScoreLabel.innerHTML = `⭐ ${t.jumpScoreLabel} <span id="jumpScore">${jumpState.score}</span>`; 
-        const jumpBestLabel = document.querySelector('#jumpContainer .jump-stats .jump-score-card:first-child'); 
-        if(jumpBestLabel && jumpState) jumpBestLabel.innerHTML = `🏆 ${t.jumpBestLabel} <span id="jumpBestSpan">${jumpState.bestScore}</span>`; 
-        const powerupBtns = document.querySelectorAll('#jumpContainer .powerup-btn'); 
-        if(powerupBtns.length >= 3 && currentUser) { 
-            powerupBtns[0].innerHTML = `🛡️ ${t.jumpShield} (${currentUser.inventory.powerups.shield || 0})`; 
-            powerupBtns[1].innerHTML = `🧲 ${t.jumpMagnet} (${currentUser.inventory.powerups.magnet || 0})`; 
-            powerupBtns[2].innerHTML = `✨ ${t.jumpDouble} (${currentUser.inventory.powerups.double || 0})`; 
-        } 
-        const instruction = document.querySelector('#jumpContainer .jump-instruction'); 
-        if(instruction) instruction.textContent = `🐱 ${t.jumpInstruction}`; 
-    }
-    
-    window.startJumpGame = startJumpGame;
-    window.updateJumpUITexts = updateJumpUITexts;
     
     // ==================== INICIALIZACIÓN ====================
-    function generateStars() { const starsDiv = document.getElementById('stars'); for(let i = 0; i < 150; i++) { const star = document.createElement('div'); star.className = 'star'; star.style.left = Math.random() * 100 + '%'; star.style.top = Math.random() * 100 + '%'; star.style.width = star.style.height = (1 + Math.random() * 2) + 'px'; star.style.animationDelay = Math.random() * 2 + 's'; starsDiv.appendChild(star); } }
-    generateStars(); loadGlobalRanking(); updateDayNightMode(); setInterval(updateDayNightMode, 60000);
+    document.getElementById('startBtn').onclick = () => {
+        const nickname = document.getElementById('nicknameInput').value.trim();
+        if(registerUser(nickname)) {
+            showNotification(`🎉 Bienvenido ${nickname}!`, "achievement");
+            document.getElementById('startScreen').style.display = 'none';
+            document.getElementById('mainMenu').style.display = 'flex';
+            updateMenuUI();
+            playClickSound();
+        }
+    };
     
-    document.getElementById('registerBtn').onclick = () => { const nickname = document.getElementById('nicknameInput').value.trim(); if(registerUser(nickname)) { showNotification(t.registered.replace('{name}', nickname), "achievement"); document.getElementById('registerScreen').style.display = 'none'; document.getElementById('mainMenu').style.display = 'flex'; updateMenuResources(); generateDailyMissions(); generateWeeklyMissions(); checkDailyStreak(); updateBillyMood(0, 100); updateLanguage(); playClickSound(); } };
-    document.getElementById('selectClickerBtn').onclick = () => { document.getElementById('mainMenu').style.display = 'none'; document.getElementById('clickerContainer').classList.add('active'); if(typeof startClickerGame === 'function') startClickerGame(); playClickSound(); };
-    document.getElementById('selectJumpBtn').onclick = () => { document.getElementById('mainMenu').style.display = 'none'; document.getElementById('jumpContainer').classList.add('active'); if(typeof startJumpGame === 'function') startJumpGame(); playClickSound(); };
-    document.getElementById('clickerBackBtn').onclick = () => { document.getElementById('clickerContainer').classList.remove('active'); document.getElementById('mainMenu').style.display = 'flex'; if(typeof saveClickerGame === 'function') saveClickerGame(); updateMenuResources(); checkDailyStreak(); playClickSound(); };
+    document.getElementById('playJumpBtn').onclick = () => {
+        document.getElementById('mainMenu').style.display = 'none';
+        document.getElementById('jumpContainer').classList.add('active');
+        startJumpGame();
+        playClickSound();
+    };
+    
+    document.getElementById('jumpBackBtn').onclick = () => {
+        jumpGameActive = false;
+        if(jumpAnimationId) cancelAnimationFrame(jumpAnimationId);
+        document.getElementById('jumpContainer').classList.remove('active');
+        document.getElementById('mainMenu').style.display = 'flex';
+        updateMenuUI();
+        playClickSound();
+    };
+    
+    document.getElementById('statsBtn').onclick = () => {
+        if(!currentUser) return;
+        showNotification(`📊 Partidas: ${currentUser.stats.gamesPlayed} | 🏆 Total: ${currentUser.stats.totalScore} | 💀 Aplastados: ${currentUser.jump.totalStomps}`, "normal");
+    };
+    
+    document.getElementById('shopBtn').onclick = () => {
+        showNotification("🛒 Tienda próximamente! Por ahora gana tokens jugando", "normal");
+    };
     
     const savedUserId = localStorage.getItem('billyCurrentUser');
-    if(savedUserId && loadUser(savedUserId)) { document.getElementById('registerScreen').style.display = 'none'; document.getElementById('mainMenu').style.display = 'flex'; updateMenuResources(); generateDailyMissions(); generateWeeklyMissions(); checkDailyStreak(); updateLanguage(); }
-    
-    window.updateMissionProgress = updateMissionProgress;
-    window.getUser = () => currentUser;
-    window.saveUser = saveUser;
-    window.showNotification = showNotification;
-    window.updateBillyMood = updateBillyMood;
-    window.buySkin = buySkin;
-    window.buyPet = buyPet;
-    window.upgradeSkill = upgradeSkill;
-    window.buyPowerup = buyPowerup;
-    window.t = t;
+    if(savedUserId && loadUser(savedUserId)) {
+        document.getElementById('startScreen').style.display = 'none';
+        document.getElementById('mainMenu').style.display = 'flex';
+        updateMenuUI();
+    }
 </script>
 </body>
 </html>
